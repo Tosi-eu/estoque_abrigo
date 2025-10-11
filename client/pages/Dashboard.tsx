@@ -5,7 +5,7 @@ export default function Dashboard() {
     { label: "Quantidade de medicamentos em estoque", value: "623" },
     { label: "Medicamentos vencidos", value: "2" },
     { label: "Medicamentos próximo do estoque mínimo", value: "2" },
-    { label: "Validade", value: "72%" },
+    { label: "Ocupação do estoque este mês", value: "72%" },
   ];
 
   const expiringMedications = [
@@ -50,11 +50,10 @@ export default function Dashboard() {
         {/* Dashboard Title */}
         <div>
           <h1 className="text-[28px] font-bold text-gray-900 mb-6">
-            Dashboard Abrigo – Desktop
+            Painel de Controle
           </h1>
         </div>
 
-        {/* Vision General */}
         <div>
           <h2 className="text-2xl font-bold text-gray-900 mb-6">Visão Geral</h2>
 

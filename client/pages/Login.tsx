@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import logo from "../../public/logo.png";
 
 export default function Login() {
   const navigate = useNavigate();
@@ -9,17 +10,15 @@ export default function Login() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // For demo purposes, just navigate to dashboard
     navigate("/dashboard");
   };
 
   return (
     <div className="min-h-screen bg-white">
-      {/* Header */}
       <header className="bg-gray-50 border-b border-gray-300">
         <div className="max-w-[1651px] mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-14">
-            <div className="text-lg font-normal text-gray-900">Logo</div>
+          <div className="flex items-center justify-between h-20">
+            <img src={logo} alt="Logo" className="h-20 w-auto" />
             <h1 className="text-[32px] font-bold text-gray-900 hidden md:block">
               Abrigo Helena Dornfeld
             </h1>
@@ -27,7 +26,6 @@ export default function Login() {
         </div>
       </header>
 
-      {/* Login Form */}
       <div className="max-w-[1651px] mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col items-center justify-center py-12 sm:py-20">
           <div className="w-full max-w-md">
