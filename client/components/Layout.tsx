@@ -25,13 +25,18 @@ export default function Layout({ children, title }: LayoutProps) {
         <div className="max-w-[1651px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-14">
             <div className="flex items-center gap-8">
-              <Link to="/dashboard" className="text-lg font-normal text-gray-900">
+              <Link
+                to="/dashboard"
+                className="text-lg font-normal text-gray-900"
+              >
                 Logo
               </Link>
               <nav className="hidden md:flex items-center gap-6">
                 {navigation.map((item) => {
-                  const isActive = location.pathname === item.href || 
-                    (item.href !== '/dashboard' && location.pathname.startsWith(item.href));
+                  const isActive =
+                    location.pathname === item.href ||
+                    (item.href !== "/dashboard" &&
+                      location.pathname.startsWith(item.href));
                   return (
                     <Link
                       key={item.name}

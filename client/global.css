@@ -78,7 +78,7 @@
     --border: 0 0% 17.5%;
     --input: 0 0% 17.5%;
     --ring: 262 51% 48%;
-    
+
     --sidebar-background: 0 0% 10%;
     --sidebar-foreground: 0 0% 95.9%;
     --sidebar-primary: 262 51% 48%;
@@ -97,6 +97,14 @@
 
   body {
     @apply bg-background text-foreground font-sans;
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    font-family:
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Helvetica,
+      Arial,
+      sans-serif;
   }
 }
