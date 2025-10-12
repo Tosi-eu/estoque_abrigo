@@ -1,25 +1,10 @@
 import Layout from "@/components/Layout";
-import { Link } from "react-router-dom";
 import { transactions } from "../../mocks/transactions";
 
 export default function Transactions() {
   return (
     <Layout title="Movimentações de Estoque">
       <div className="space-y-6">
-        <div className="flex flex-wrap gap-3">
-          <Link
-            to="/stock/entry"
-            className="px-6 py-3 bg-gray-100 border border-gray-700 rounded text-base font-bold text-gray-900 hover:bg-gray-200"
-          >
-            Registrar Entrada
-          </Link>
-          <Link
-            to="/stock/out"
-            className="px-6 py-3 bg-gray-100 border border-gray-700 rounded text-base font-bold text-gray-900 hover:bg-gray-200"
-          >
-            Registrar Saída
-          </Link>
-        </div>
 
         <div className="bg-gray-100 border border-gray-400 rounded-lg overflow-hidden">
           <div className="overflow-x-auto">

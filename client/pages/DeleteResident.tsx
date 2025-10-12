@@ -3,19 +3,19 @@ import Layout from "@/components/Layout";
 import { useNavigate } from "react-router-dom";
 
 export default function DeleteResident() {
-  const [nome, setNome] = useState("");
+  const [name, setName] = useState("");
   const [casela, setCasela] = useState("");
-  const [erro, setErro] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (nome.toLowerCase() !== "alfredo barros") {
-      setErro("Paciente não encontrado!");
+    if (name.toLowerCase() !== "alfredo barros") {
+      setError("Paciente não encontrado!");
       return;
     }
-    setErro("");
-    console.log("Excluindo residente:", nome);
+    setError("");
+    console.log("Excluindo residente:", name);
     navigate("/resident");
   };
 
@@ -32,14 +32,14 @@ export default function DeleteResident() {
             </label>
             <input
               type="text"
-              value={nome}
-              onChange={(e) => setNome(e.target.value)}
+              value={name}
+              onChange={(e) => setName(e.target.value)}
               className="w-full border border-gray-400 rounded-md p-2 text-sm"
-              placeholder="Digite o nome do residente"
+              placeholder="Digite o name do residente"
             />
-            {erro && (
+            {error && (
               <p className="text-red-600 text-xs font-medium mt-1">
-                ⚠️ {erro}
+                ⚠️ {error}
               </p>
             )}
           </div>

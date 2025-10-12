@@ -2,8 +2,6 @@ export const hospitalItems = [
     {
       name: "Seringa 5ml",
       category: "Material de Injeção",
-      manufacturer: "HospitalTech",
-      batch: "S2024A",
       expiry: "2027-03-01",
       unit: "Unidade",
       form: "Plástico",
@@ -12,8 +10,6 @@ export const hospitalItems = [
     {
       name: "Luva Cirúrgica M",
       category: "EPI",
-      manufacturer: "Medicare",
-      batch: "LUXM2024",
       expiry: "2026-06-15",
       unit: "Par",
       form: "Látex",
@@ -22,8 +18,6 @@ export const hospitalItems = [
     {
       name: "Máscara Cirúrgica Tripla",
       category: "EPI",
-      manufacturer: "BioProtect",
-      batch: "MASK2025",
       expiry: "2026-01-01",
       unit: "Caixa (50un)",
       form: "TNT",
@@ -32,8 +26,6 @@ export const hospitalItems = [
     {
       name: "Gaze Estéril 7,5x7,5cm",
       category: "Curativo",
-      manufacturer: "CleanCare",
-      batch: "GZ2025",
       expiry: "2028-04-10",
       unit: "Pacote (10un)",
       form: "Algodão",
@@ -42,8 +34,6 @@ export const hospitalItems = [
     {
       name: "Cateter Intravenoso 22G",
       category: "Material Hospitalar",
-      manufacturer: "MedFlow",
-      batch: "CIV22-2025",
       expiry: "2029-01-01",
       unit: "Unidade",
       form: "Plástico",
