@@ -26,7 +26,7 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
     }));
   };
 
-  const existentsWardrobes = ["1", "2", "3", "4"].map((num) => ({ value: num, label: num }));
+  const existentCabinets = ["1", "2", "3", "4"].map((num) => ({ value: num, label: num }));
 
   return (
     <div className="space-y-6">
@@ -115,7 +115,7 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
         <CreatableSelect
           isClearable
           placeholder="Selecione ou digite um armário"
-          options={existentsWardrobes}
+          options={existentCabinets}
           value={formData.armario ? { value: formData.armario, label: formData.armario } : null}
           onChange={(newValue) => setFormData({ ...formData, armario: newValue ? newValue.value : "" })}
         />

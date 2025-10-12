@@ -16,7 +16,6 @@ export default function Layout({ children, title }: LayoutProps) {
   const navigation = [
     { name: "Painel", href: "/dashboard" },
     { name: "Movimentações", href: "/transactions" },
-    { name: "Notificar", href: "/notify" },
     {
       name: "Medicamentos",
       href: "/medicines",
@@ -54,6 +53,14 @@ export default function Layout({ children, title }: LayoutProps) {
         { name: "Deletar Residente", href: "/resident/delete" },
       ],
     },
+    {
+      name: "Outros",
+      href: "#",
+      subRoutes: [
+        { name: "Notificar", href: "/notify" },
+        { name: "Cadastrar Armário", href: "/cabinet/register" }
+      ],
+    }
   ];
 
   const handleMouseEnter = (name: string) => {

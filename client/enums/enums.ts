@@ -15,5 +15,13 @@ export enum EntryType {
     DOACAO = "Doação",
     REPOSICAO = "Reposição",
   }
+
+export enum CabinetCategory {
+    MEDICACAO_GERAL = "Medicação geral",
+    PSICOTROPICOS_E_INJECOES = "Psicotrópicos e injeções",
+    MEDICAMENTOS_DOADOS = "Medicamentos doados / Fitas / Dersane / Clorexidina",
+    DIVERSOS = "Lactulose / Hipratrópio / Pomadas / Domperidona / Materiais de glicemia"
+}
+  
   
   

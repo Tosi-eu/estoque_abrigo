@@ -28,6 +28,7 @@ import SignUpEquipment from "./pages/SignUpEquipment";
 import EditEquipment from "./pages/EditEquipment";
 import DeleteEquipment from "./pages/DeleteEquipment";
 import Medicines from "./pages/Medicines";
+import RegisterCabinet from "./pages/RegisterCabinet";
 
 const queryClient = new QueryClient();
 
@@ -60,6 +61,8 @@ const App = () => (
           <Route path="/equipments/register/new" element={<RegisterEquipment />} />
           <Route path="/equipments/edit" element={<EditEquipment />} />
           <Route path="/equipments/delete" element={<DeleteEquipment />} />
+          <Route path="/cabinet/register" element={<RegisterCabinet />} />
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
