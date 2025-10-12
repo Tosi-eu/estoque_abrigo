@@ -21,6 +21,18 @@ export default function RegisterCabinet() {
           Cadastro de Armário
         </h2>
         <form onSubmit={handleSubmit} className="space-y-6">
+        <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              Número do Armário
+            </label>
+            <input
+              type="number"
+              value={descricao}
+              onChange={(e) => setDescricao(e.target.value)}
+              className="w-full border border-gray-400 rounded-md p-2 text-sm"
+              placeholder="4,5,6,7..."
+            />
+          </div>
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Categoria
