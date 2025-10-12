@@ -1,22 +1,21 @@
 import Layout from "@/components/Layout";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { OperationType } from "../enums/enums";
+import { OperationType } from "@/enums/enums";
 import { MedicineForm } from "@/components/MedicineForm";
 import { EquipmentForm } from "@/components/EquipmentForm";
 
-export default function StockOut() {
+export default function StockIn() {
   const [operationType, setOperationType] = useState<OperationType | "">("");
-  const navigate = useNavigate();
 
   return (
-    <Layout title="Saída de Estoque">
-      <div className="max-w-lg mx-auto mt-10 bg-gray-50 border border-gray-300 rounded-xl p-8 space-y-6">
-        <h2 className="text-lg font-semibold text-gray-900">Registrar Saída</h2>
+    <Layout title="Entrada de Estoque">
+      <div className="max-w-lg mx-auto bg-gray-50 border border-gray-300 rounded-xl p-8 space-y-6">
+        <h2 className="text-lg font-semibold text-gray-900">Registrar Entrada</h2>
 
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">
-            Tipo de saída
+            Tipo de entrada
           </label>
           <select
             value={operationType}
@@ -29,30 +28,19 @@ export default function StockOut() {
           </select>
         </div>
 
-        {/* Renderização condicional do formulário */}
         {operationType === OperationType.MEDICINE && (
           <div>
             <h3 className="text-md font-semibold text-gray-800 mb-3">Medicamento</h3>
-            <MedicineForm onSubmit={(data) => console.log("Saída de medicamento:", data)} />
+            <MedicineForm onSubmit={(data) => console.log("Entrada de medicamento:", data)} />
           </div>
         )}
 
         {operationType === OperationType.EQUIPMENT && (
           <div>
             <h3 className="text-md font-semibold text-gray-800 mb-3">Equipamento</h3>
-            <EquipmentForm onSubmit={(data) => console.log("Saída de equipamento:", data)} />
+            <EquipmentForm onSubmit={(data) => console.log("Entrada de equipamento:", data)} />
           </div>
         )}
-
-        <div className="flex justify-center pt-4">
-          <button
-            type="button"
-            onClick={() => navigate("/stock")}
-            className="px-6 py-2 border border-gray-600 rounded-md text-sm font-semibold hover:bg-gray-100"
-          >
-            Voltar
-          </button>
-        </div>
       </div>
     </Layout>
   );

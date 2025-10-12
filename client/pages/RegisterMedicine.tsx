@@ -32,18 +32,20 @@ export default function RegisterMedicine() {
     setClassType("");
     setDosage("");
     setUnit("mg");
+    navigate("/transactions");
   };
 
   return (
     <Layout title="Cadastro de Novo Medicamento">
-      <div className="max-w -lg mx-auto mt-10 bg-gray-50 border border-gray-300 rounded-xl p-8">
+      <div className="max-w-lg mx-auto mt-10 bg-gray-50 border border-gray-300 rounded-xl p-8">
         <h2 className="text-lg font-semibold text-gray-900 mb-6">
           Registro de Medicamento
         </h2>
+
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Medicamento
+              Nome do Medicamento
             </label>
             <input
               type="text"
@@ -56,7 +58,7 @@ export default function RegisterMedicine() {
 
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Classe terapêutica
+              Classe Terapêutica
             </label>
             <input
               type="text"
@@ -71,7 +73,7 @@ export default function RegisterMedicine() {
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Dosagem
             </label>
-            <div className="flex gap-2 items-center">
+            <div className="flex items-center gap-3">
               <input
                 type="text"
                 value={dosage}
@@ -99,26 +101,25 @@ export default function RegisterMedicine() {
 
           <div className="flex justify-center gap-4 mt-6">
             <button
-                type="button"
-                onClick={() => {
+              type="button"
+              onClick={() => {
                 setMedicine("");
                 setClassType("");
                 setDosage("");
                 setUnit("mg");
-                navigate("/transactions"); 
-                }}
-                className="px-5 py-2 border border-gray-600 rounded-md text-sm font-semibold hover:bg-gray-100"
+                navigate("/transactions");
+              }}
+              className="px-5 py-2 border border-gray-600 rounded-md text-sm font-semibold hover:bg-gray-100"
             >
-                Cancelar
+              Cancelar
             </button>
             <button
-                type="submit"
-                onClick={() => navigate("/transactions")} 
-                className="px-5 py-2 bg-gray-800 text-white rounded-md text-sm font-semibold hover:bg-gray-900"
+              type="submit"
+              className="px-5 py-2 bg-gray-800 text-white rounded-md text-sm font-semibold hover:bg-gray-900"
             >
-                Registrar Medicamento
+              Registrar Medicamento
             </button>
-            </div>
+          </div>
         </form>
       </div>
     </Layout>

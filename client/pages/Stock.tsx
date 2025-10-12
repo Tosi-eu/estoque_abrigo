@@ -1,6 +1,5 @@
 import { useState, useMemo } from "react";
 import Layout from "@/components/Layout";
-import { Link } from "react-router-dom";
 import { medicines } from "../../mocks/medicines";
 import { hospitalItems } from "../../mocks/hospitalItems";
 
@@ -8,7 +7,6 @@ export default function Estoque() {
   const [search, setSearch] = useState("");
   const [category, setCategory] = useState("all");
 
-  // unifica os dois mocks em um único array padronizado
   const stock = useMemo(() => {
     const meds = medicines.map((m) => ({
       type: "Medicamento",
@@ -26,8 +24,6 @@ export default function Estoque() {
       type: "Item Hospitalar",
       name: h.name,
       category: h.category || "Hospitalar",
-      manufacturer: h.manufacturer,
-      batch: h.batch,
       expiry: h.expiry,
       dosage: h.unit || "-",
       form: h.form || "-",
@@ -41,8 +37,7 @@ export default function Estoque() {
     return stock.filter((item) => {
       const matchesSearch =
         item.name.toLowerCase().includes(search.toLowerCase()) ||
-        item.category.toLowerCase().includes(search.toLowerCase()) ||
-        item.manufacturer.toLowerCase().includes(search.toLowerCase());
+        item.category.toLowerCase().includes(search.toLowerCase());
       const matchesCategory =
         category === "all" || item.type === category || item.category === category;
       return matchesSearch && matchesCategory;
@@ -53,19 +48,6 @@ export default function Estoque() {
     <Layout title="Estoque de Medicamentos e Itens Hospitalares">
       <div className="space-y-8">
         <div className="flex flex-wrap gap-3">
-          <Link
-            to="/stock/entry"
-            className="px-6 py-3 bg-gray-100 border-[1.5px] border-gray-700 rounded text-base font-bold text-gray-900 hover:bg-gray-200 transition-colors"
-          >
-            Registrar Entrada
-          </Link>
-          <Link
-            to="/stock/out"
-            className="px-6 py-3 bg-gray-100 border-[1.5px] border-gray-700 rounded text-base font-bold text-gray-900 hover:bg-gray-200 transition-colors"
-          >
-            Registrar Saida
-          </Link>
-          
           <button className="px-6 py-3 bg-gray-100 border-[1.5px] border-gray-700 rounded text-base font-bold text-gray-900 hover:bg-gray-200 transition-colors">
             Gerar Relatório
           </button>
@@ -104,8 +86,6 @@ export default function Estoque() {
                     <th className="px-4 py-3 text-center text-sm font-bold">Tipo</th>
                     <th className="px-4 py-3 text-center text-sm font-bold">Nome</th>
                     <th className="px-4 py-3 text-center text-sm font-bold">Categoria</th>
-                    <th className="px-4 py-3 text-center text-sm font-bold">Fabricante</th>
-                    <th className="px-4 py-3 text-center text-sm font-bold">Lote</th>
                     <th className="px-4 py-3 text-center text-sm font-bold">Validade</th>
                     <th className="px-4 py-3 text-center text-sm font-bold">Dosagem/Unidade</th>
                     <th className="px-4 py-3 text-center text-sm font-bold">Forma</th>
@@ -121,8 +101,6 @@ export default function Estoque() {
                       <td className="px-4 py-3 text-xs">{item.type}</td>
                       <td className="px-4 py-3 text-xs">{item.name}</td>
                       <td className="px-4 py-3 text-xs">{item.category}</td>
-                      <td className="px-4 py-3 text-xs">{item.manufacturer}</td>
-                      <td className="px-4 py-3 text-xs">{item.batch}</td>
                       <td className="px-4 py-3 text-xs">{item.expiry}</td>
                       <td className="px-4 py-3 text-xs">{item.dosage}</td>
                       <td className="px-4 py-3 text-xs">{item.form}</td>
