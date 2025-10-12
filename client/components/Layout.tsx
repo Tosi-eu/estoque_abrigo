@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 import { Link, useLocation } from "react-router-dom";
-import logo from "../../public/logo.png";
+import logo from "/logo.png";
 
 interface LayoutProps {
   children: ReactNode;
@@ -12,11 +12,10 @@ export default function Layout({ children, title }: LayoutProps) {
 
   const navigation = [
     { name: "Painel", href: "/dashboard" },
-    { name: "Medicamentos", href: "/medicamentos" },
-    { name: "Movimentações", href: "/movimentacoes" },
-    { name: "Estoque", href: "/estoque" },
-    { name: "Notificar", href: "/notificar" },
-    { name: "Residente", href: "/residente" },
+    { name: "Movimentações", href: "/transactions" },
+    { name: "Estoque", href: "/stock" },
+    { name: "Notificar", href: "/notify" },
+    { name: "Residente", href: "/resident" },
   ];
 
   return (

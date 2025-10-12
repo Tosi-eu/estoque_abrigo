@@ -8,14 +8,20 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Medicamentos from "./pages/Medicamentos";
-import CadastrarMedicamento from "./pages/CadastrarMedicamento";
-import Movimentacoes from "./pages/Movimentacoes";
-import Estoque from "./pages/Estoque";
-import EntradaEstoque from "./pages/EntradaEstoque";
-import Notificar from "./pages/Notificar";
-import Residente from "./pages/Residente";
+import SignUpMedicine from "./pages/SignUpMedicine";
+import RegisterMedicine from "./pages/RegisterMedicine";
+import Transactions from "./pages/Transactions";
+import Stock from "./pages/Stock";
+import StockEntry from "./pages/StockEntry";
+import NotifyDispatch from "./pages/Notify";
+import Resident from "./pages/Resident";
 import NotFound from "./pages/NotFound";
+import RegisterResident from "./pages/RegisterResident";
+import DeleteResident from "./pages/DeleteResident";
+import EditResident from "./pages/EditResident";
+import StockOut from "./pages/StockOut";
+import EditMedicine from "./pages/EditMedicine";
+import DeleteMedicine from "./pages/DeleteMedicine";
 
 const queryClient = new QueryClient();
 
@@ -29,17 +35,19 @@ const App = () => (
           <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/medicamentos" element={<Medicamentos />} />
-          <Route
-            path="/medicamentos/cadastrar"
-            element={<CadastrarMedicamento />}
-          />
-          <Route path="/movimentacoes" element={<Movimentacoes />} />
-          <Route path="/estoque" element={<Estoque />} />
-          <Route path="/estoque/entrada" element={<EntradaEstoque />} />
-          <Route path="/notificar" element={<Notificar />} />
-          <Route path="/residente" element={<Residente />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+          <Route path="/transactions" element={<Transactions />} />
+          <Route path="/notify" element={<NotifyDispatch />} />
+          <Route path="/medicines/register" element={<SignUpMedicine />} />
+          <Route path="/medicines/register/new" element={<RegisterMedicine />} />
+          <Route path="/medicines/edit" element={<EditMedicine />} />
+          <Route path="/medicines/delete" element={<DeleteMedicine />} />
+          <Route path="/stock" element={<Stock />} />
+          <Route path="/stock/entry" element={<StockEntry />} />
+          <Route path="/stock/out" element={<StockOut />} />
+          <Route path="/resident" element={<Resident />} />
+          <Route path="/resident/register" element={<RegisterResident />} />
+          <Route path="/resident/edit" element={<EditResident />} />
+          <Route path="/resident/delete" element={<DeleteResident />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
