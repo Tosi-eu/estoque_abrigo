@@ -20,7 +20,6 @@ export default function Layout({ children, title }: LayoutProps) {
       name: "Medicamentos",
       href: "/medicines",
       subRoutes: [
-        { name: "Registrar Novo Medicamento", href: "/medicines/register/new" },
         { name: "Cadastrar Medicamento", href: "/medicines/register" },
         { name: "Editar Medicamento", href: "/medicines/edit" },
         { name: "Deletar Medicamento", href: "/medicines/delete" },
@@ -30,7 +29,6 @@ export default function Layout({ children, title }: LayoutProps) {
       name: "Equipamentos",
       href: "/equipments",
       subRoutes: [
-        { name: "Registrar Novo Equipamento", href: "/equipments/register/new" },
         { name: "Cadastrar Equipamento", href: "/equipments/register" },
         { name: "Editar Equipamento", href: "/equipments/edit" },
         { name: "Deletar Equipamento", href: "/equipments/delete" },
@@ -54,11 +52,12 @@ export default function Layout({ children, title }: LayoutProps) {
       ],
     },
     {
-      name: "Outros",
+      name: "Armários",
       href: "#",
       subRoutes: [
-        { name: "Notificar", href: "/notify" },
-        { name: "Cadastrar Armário", href: "/cabinet/register" }
+        { name: "Cadastrar Armário", href: "/cabinet/register" },
+        { name: "Editar Armário", href: "/cabinet/edit" },
+        { name: "Deletar Armário", href: "/cabinet/delete" },
       ],
     }
   ];

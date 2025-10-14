@@ -9,9 +9,6 @@ export default function EditEquipment() {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
-    expiry: "",
-    unit: "",
-    form: "",
     quantity: 0,
   });
   const navigate = useNavigate();
@@ -67,10 +64,8 @@ export default function EditEquipment() {
           {selectedEquipment && (
             <>
               {[
+                { label: "Nome", field: "name", type: "text" },
                 { label: "Categoria", field: "category", type: "text" },
-                { label: "Validade", field: "expiry", type: "date" },
-                { label: "Unidade", field: "unit", type: "text" },
-                { label: "Material/Composição", field: "form", type: "text" },
                 { label: "Quantidade", field: "quantity", type: "number" },
               ].map(({ label, field, type }) => (
                 <div key={field}>

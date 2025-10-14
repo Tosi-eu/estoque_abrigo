@@ -42,22 +42,18 @@ export default function Equipments() {
               <thead>
                 <tr className="border-b-2 border-gray-400">
                   <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Nome</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Categoria</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Validade</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Unidade</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Material</th>
                   <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Quantidade</th>
+                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Armário</th>
+                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Descrição</th>
                 </tr>
               </thead>
               <tbody>
                 {hospitalItems.map((item, i) => (
                   <tr key={i} className="border-b border-gray-300 text-center hover:bg-gray-50">
                     <td className="px-4 py-3 text-xs text-gray-900">{item.name}</td>
-                    <td className="px-4 py-3 text-xs text-gray-900">{item.category}</td>
-                    <td className="px-4 py-3 text-xs text-gray-900">{item.expiry}</td>
-                    <td className="px-4 py-3 text-xs text-gray-900">{item.unit}</td>
-                    <td className="px-4 py-3 text-xs text-gray-900">{item.form}</td>
                     <td className="px-4 py-3 text-xs text-gray-900">{item.quantity}</td>
+                    <td className="px-4 py-3 text-xs text-gray-900">{item.cabinet}</td>
+                    <td className="px-4 py-3 text-xs text-gray-900">{item.description}</td>
                   </tr>
                 ))}
               </tbody>

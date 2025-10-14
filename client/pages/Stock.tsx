@@ -5,15 +5,14 @@ import { hospitalItems } from "../../mocks/hospitalItems";
 
 export default function Estoque() {
   const [search, setSearch] = useState("");
-  const [category, setCategory] = useState("all");
+  const [description, setdescription] = useState("all");
 
   const stock = useMemo(() => {
     const meds = medicines.map((m) => ({
       type: "Medicamento",
       name: m.name,
-      category: m.active || "Medicamento",
+      description: m.active || "Medicamento",
       manufacturer: m.manufacturer,
-      batch: m.batch,
       expiry: m.expiry,
       dosage: m.dosage || "-",
       form: m.form || "-",
@@ -21,12 +20,13 @@ export default function Estoque() {
     }));
 
     const hosp = hospitalItems.map((h) => ({
-      type: "Item Hospitalar",
+      type: "Equipamento",
       name: h.name,
-      category: h.category || "Hospitalar",
-      expiry: h.expiry,
-      dosage: h.unit || "-",
-      form: h.form || "-",
+      description: h.description || "Hospitalar",
+      manufacturer: "-",
+      expiry: "-",
+      dosage: "-",
+      form: "-",
       quantity: h.quantity,
     }));
 
@@ -35,14 +35,20 @@ export default function Estoque() {
 
   const filteredStock = useMemo(() => {
     return stock.filter((item) => {
+      const searchTerm = search.toLowerCase();
       const matchesSearch =
-        item.name.toLowerCase().includes(search.toLowerCase()) ||
-        item.category.toLowerCase().includes(search.toLowerCase());
-      const matchesCategory =
-        category === "all" || item.type === category || item.category === category;
-      return matchesSearch && matchesCategory;
+        item.name.toLowerCase().includes(searchTerm) ||
+        item.description.toLowerCase().includes(searchTerm) ||
+        item.manufacturer.toLowerCase().includes(searchTerm);
+
+      const matchesdescription =
+        description === "all" ||
+        (description === "Medicamento" && item.type === "Medicamento") ||
+        (description === "Equipamento" && item.type === "Equipamento");
+
+      return matchesSearch && matchesdescription;
     });
-  }, [stock, search, category]);
+  }, [stock, search, description]);
 
   return (
     <Layout title="Estoque de Medicamentos e Itens Hospitalares">
@@ -63,13 +69,13 @@ export default function Estoque() {
           />
 
           <select
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
+            value={description}
+            onChange={(e) => setdescription(e.target.value)}
             className="px-3 py-2 border border-gray-400 rounded focus:outline-none focus:ring-1 focus:ring-gray-600"
           >
             <option value="all">Todos os Tipos</option>
             <option value="Medicamento">Medicamentos</option>
-            <option value="Item Hospitalar">Itens Hospitalares</option>
+            <option value="Equipamento">Itens Hospitalares</option>
           </select>
         </div>
 
@@ -83,13 +89,13 @@ export default function Estoque() {
               <table className="w-full text-center">
                 <thead>
                   <tr className="border-b-2 border-gray-400 bg-gray-200">
-                    <th className="px-4 py-3 text-center text-sm font-bold">Tipo</th>
-                    <th className="px-4 py-3 text-center text-sm font-bold">Nome</th>
-                    <th className="px-4 py-3 text-center text-sm font-bold">Categoria</th>
-                    <th className="px-4 py-3 text-center text-sm font-bold">Validade</th>
-                    <th className="px-4 py-3 text-center text-sm font-bold">Dosagem/Unidade</th>
-                    <th className="px-4 py-3 text-center text-sm font-bold">Forma</th>
-                    <th className="px-4 py-3 text-center text-sm font-bold">Quantidade</th>
+                    <th className="px-4 py-3 text-sm font-bold">Tipo</th>
+                    <th className="px-4 py-3 text-sm font-bold">Nome</th>
+                    <th className="px-4 py-3 text-sm font-bold">Categoria</th>
+                    <th className="px-4 py-3 text-sm font-bold">Fabricante</th>
+                    <th className="px-4 py-3 text-sm font-bold">Validade</th>
+                    <th className="px-4 py-3 text-sm font-bold">Dosagem/Forma</th>
+                    <th className="px-4 py-3 text-sm font-bold">Quantidade</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -100,10 +106,12 @@ export default function Estoque() {
                     >
                       <td className="px-4 py-3 text-xs">{item.type}</td>
                       <td className="px-4 py-3 text-xs">{item.name}</td>
-                      <td className="px-4 py-3 text-xs">{item.category}</td>
+                      <td className="px-4 py-3 text-xs">{item.description}</td>
+                      <td className="px-4 py-3 text-xs">{item.manufacturer}</td>
                       <td className="px-4 py-3 text-xs">{item.expiry}</td>
-                      <td className="px-4 py-3 text-xs">{item.dosage}</td>
-                      <td className="px-4 py-3 text-xs">{item.form}</td>
+                      <td className="px-4 py-3 text-xs">
+                        {item.dosage} {item.form !== "-" ? `(${item.form})` : ""}
+                      </td>
                       <td className="px-4 py-3 text-xs">{item.quantity}</td>
                     </tr>
                   ))}
@@ -111,7 +119,7 @@ export default function Estoque() {
                   {filteredStock.length === 0 && (
                     <tr>
                       <td
-                        colSpan={9}
+                        colSpan={7}
                         className="text-center py-4 text-sm text-gray-600"
                       >
                         Nenhum item encontrado.

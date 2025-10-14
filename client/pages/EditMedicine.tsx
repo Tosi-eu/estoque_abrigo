@@ -10,7 +10,6 @@ export default function EditMedicine() {
     name: "",
     active: "",
     manufacturer: "",
-    batch: "",
     expiry: "",
     dosage: "",
     form: "",
@@ -101,17 +100,6 @@ export default function EditMedicine() {
               </div>
 
               <div className="flex gap-2">
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    Lote
-                  </label>
-                  <input
-                    type="text"
-                    value={formData.batch}
-                    onChange={(e) => handleChange("batch", e.target.value)}
-                    className="w-full border border-gray-400 rounded-md p-2 text-sm"
-                  />
-                </div>
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-gray-700 mb-1">
                     Validade

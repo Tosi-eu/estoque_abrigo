@@ -22,7 +22,7 @@ export default function RegisterResident() {
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Residente
+              Nome do Residente
             </label>
             <input
               type="text"

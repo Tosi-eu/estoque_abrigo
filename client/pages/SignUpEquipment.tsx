@@ -7,10 +7,6 @@ export default function SignUpEquipment() {
   const [formData, setFormData] = useState({
     name: "",
     category: "",
-    expiry: "",
-    unit: "",
-    form: "",
-    quantity: "",
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -27,10 +23,6 @@ export default function SignUpEquipment() {
           {[
             { label: "Nome do Equipamento", field: "name", type: "text", placeholder: "Seringa 5ml" },
             { label: "Categoria", field: "category", type: "text", placeholder: "Material de Injeção" },
-            { label: "Validade", field: "expiry", type: "date", placeholder: "" },
-            { label: "Unidade", field: "unit", type: "text", placeholder: "Unidade, Caixa, Par..." },
-            { label: "Material/Composição", field: "form", type: "text", placeholder: "Plástico, TNT..." },
-            { label: "Quantidade", field: "quantity", type: "number", placeholder: "100" },
           ].map(({ label, field, type, placeholder }) => (
             <div key={field}>
               <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>

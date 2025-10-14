@@ -7,10 +7,7 @@ export default function EditResident() {
   const [selectedResident, setSelectedResident] = useState<any>(null);
   const [formData, setFormData] = useState({
     name: "",
-    age: "",
-    room: "",
-    condition: "",
-    admissionDate: "",
+    casela: null,
   });
 
   const handleSelectChange = (selectedOption: any) => {
@@ -19,10 +16,7 @@ export default function EditResident() {
       setSelectedResident(resident);
       setFormData({
         name: resident.name,
-        age: resident.age.toString(),
-        room: resident.room,
-        condition: resident.condition,
-        admissionDate: resident.admissionDate,
+        casela: resident.casela,
       });
     }
   };
@@ -41,7 +35,6 @@ export default function EditResident() {
   return (
     <Layout title="Editar Residente">
       <div className="space-y-6 max-w-2xl mx-auto">
-        {/* Seletor de Residente */}
         <div>
           <label className="block text-sm font-bold text-gray-900 mb-2">
             Selecionar Residente
@@ -57,7 +50,6 @@ export default function EditResident() {
           />
         </div>
 
-        {/* Formulário de Edição */}
         {selectedResident && (
           <div className="space-y-4 mt-6 p-6 bg-gray-50 border border-gray-300 rounded-lg">
             <div>
@@ -75,51 +67,12 @@ export default function EditResident() {
 
             <div>
               <label className="block text-sm font-bold text-gray-900 mb-1">
-                Idade
-              </label>
-              <input
-                type="number"
-                name="age"
-                value={formData.age}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-gray-900 mb-1">
-                Quarto
+                Casela
               </label>
               <input
                 type="text"
-                name="room"
-                value={formData.room}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-gray-900 mb-1">
-                Condição
-              </label>
-              <input
-                type="text"
-                name="condition"
-                value={formData.condition}
-                onChange={handleChange}
-                className="w-full border border-gray-300 rounded-md px-3 py-2"
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-bold text-gray-900 mb-1">
-                Data de Admissão
-              </label>
-              <input
-                type="date"
-                name="admissionDate"
-                value={formData.admissionDate}
+                name="casela"
+                value={formData.casela}
                 onChange={handleChange}
                 className="w-full border border-gray-300 rounded-md px-3 py-2"
               />

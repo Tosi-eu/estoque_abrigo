@@ -43,7 +43,6 @@ export default function Medicines() {
                   <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Nome</th>
                   <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Princípio Ativo</th>
                   <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Fabricante</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Lote</th>
                   <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Validade</th>
                   <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Forma</th>
                   <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Quantidade</th>
@@ -55,7 +54,6 @@ export default function Medicines() {
                     <td className="px-4 py-3 text-xs text-gray-900">{m.name}</td>
                     <td className="px-4 py-3 text-xs text-gray-900">{m.active}</td>
                     <td className="px-4 py-3 text-xs text-gray-900">{m.manufacturer}</td>
-                    <td className="px-4 py-3 text-xs text-gray-900">{m.batch}</td>
                     <td className="px-4 py-3 text-xs text-gray-900">{m.expiry}</td>
                     <td className="px-4 py-3 text-xs text-gray-900">{m.form}</td>
                     <td className="px-4 py-3 text-xs text-gray-900">{m.quantity}</td>

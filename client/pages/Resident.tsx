@@ -34,20 +34,14 @@ export default function Resident() {
               <thead>
                 <tr className="border-b-2 border-gray-400">
                   <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Nome</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Idade</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Quarto</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Condição</th>
-                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Data de Admissão</th>
+                  <th className="px-4 py-3 text-center text-sm font-bold text-gray-900">Casela</th>
                 </tr>
               </thead>
               <tbody>
                 {residents.map((r) => (
                   <tr key={r.id} className="border-b border-gray-300 hover:bg-gray-50">
                     <td className="px-4 py-3 text-xs text-gray-900">{r.name}</td>
-                    <td className="px-4 py-3 text-xs text-gray-900">{r.age}</td>
-                    <td className="px-4 py-3 text-xs text-gray-900">{r.room}</td>
-                    <td className="px-4 py-3 text-xs text-gray-900">{r.condition}</td>
-                    <td className="px-4 py-3 text-xs text-gray-900">{r.admissionDate}</td>
+                    <td className="px-4 py-3 text-xs text-gray-900">{r.casela}</td>
                   </tr>
                 ))}
               </tbody>

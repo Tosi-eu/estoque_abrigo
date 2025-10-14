@@ -85,7 +85,6 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
         </div>
       </div>
 
-      {formData.stockType.individual && (
         <div className="flex gap-4">
           <div className="flex-1">
             <label className="block text-sm font-medium text-gray-700 mb-1">Residente</label>
@@ -107,8 +106,7 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
               className="w-full border border-gray-400 rounded-md p-2 text-sm"
             />
           </div>
-        </div>
-      )}
+        </div>  
 
       <div>
         <label className="block text-sm font-medium text-gray-700 mb-1">Armário</label>
