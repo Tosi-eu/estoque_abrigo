@@ -8,7 +8,7 @@ export default function EditResident() {
   const [formData, setFormData] = useState({ name: "", casela: null });
 
   const handleSelectChange = (selectedOption: any) => {
-    const resident = residents.find((r) => r.id === selectedOption.value);
+    const resident = residents.find((r) => r.casela === selectedOption.value);
     if (resident) {
       setSelectedResident(resident);
       setFormData({ name: resident.name, casela: resident.casela });
@@ -32,7 +32,7 @@ export default function EditResident() {
         <div>
           <label className="block text-sm font-bold text-slate-800 mb-2">Selecionar Residente</label>
           <Select
-            options={residents.map((r) => ({ value: r.id, label: r.name }))}
+            options={residents.map((r) => ({ value: r.casela, label: r.name }))}
             placeholder="Escolha um residente..."
             onChange={handleSelectChange}
             className="text-sm"
