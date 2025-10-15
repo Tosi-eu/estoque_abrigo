@@ -10,7 +10,9 @@ export default function Resident() {
 
   return (
     <Layout title="Residentes">
-      <EditableTable data={residents} columns={columns} />
+      <div className="max-w-3xl mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
+        <EditableTable data={residents} columns={columns} />
+      </div>
     </Layout>
   );
 }

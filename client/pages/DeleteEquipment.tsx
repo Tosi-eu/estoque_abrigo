@@ -30,18 +30,20 @@ export default function DeleteEquipment() {
 
   return (
     <Layout title="Exclusão de Equipamento">
-      <div className="max-w-lg mx-auto mt-10 bg-gray-50 border border-gray-300 rounded-xl p-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">Deletar Equipamento</h2>
+      <div className="max-w-lg mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
+        <h2 className="text-lg font-semibold text-slate-800 mb-6">
+          Deletar Equipamento
+        </h2>
 
         <div className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
+            <label className="block text-sm font-medium text-slate-700 mb-1">
               Selecione o equipamento
             </label>
             <select
               value={selectedEquipment}
               onChange={(e) => setSelectedEquipment(e.target.value)}
-              className="w-full border border-gray-400 rounded-md p-2 text-sm"
+              className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
             >
               <option value="">-- Escolha --</option>
               {hospitalItems.map((eq) => (
@@ -56,14 +58,14 @@ export default function DeleteEquipment() {
             <button
               type="button"
               onClick={() => navigate("/equipments")}
-              className="px-5 py-2 border border-gray-600 rounded-md text-sm font-semibold hover:bg-gray-100"
+              className="px-5 py-2 border border-slate-400 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-100 transition"
             >
               Cancelar
             </button>
             <button
               type="button"
               onClick={handleDelete}
-              className="px-5 py-2 bg-red-600 text-white rounded-md text-sm font-semibold hover:bg-red-700"
+              className="px-5 py-2 bg-red-600 text-white rounded-lg text-sm font-semibold hover:bg-red-700 transition"
             >
               Deletar
             </button>

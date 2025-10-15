@@ -17,7 +17,7 @@ export default function Equipments() {
         <div className="flex flex-wrap gap-3">
           <Link
             to="/equipments/register/new"
-            className="px-6 py-3 bg-gray-100 border border-gray-700 rounded text-base font-bold text-gray-900 hover:bg-gray-200"
+            className="px-6 py-3 bg-sky-600 text-white rounded-lg font-bold hover:bg-sky-700 transition-colors"
           >
             Registrar Novo Equipamento
           </Link>
