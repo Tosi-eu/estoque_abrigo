@@ -1,4 +1,3 @@
-// RegisterCabinet.tsx
 import { useState } from "react";
 import Layout from "@/components/Layout";
 import { useNavigate } from "react-router-dom";
@@ -11,8 +10,14 @@ export default function RegisterCabinet() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!descricao || !categoria) {
+      alert("Preencha todos os campos antes de continuar.");
+      return;
+    }
+
     console.log({ categoria, descricao });
-    navigate("/transactions"); 
+    navigate("/transactions");
   };
 
   return (
@@ -39,17 +44,18 @@ export default function RegisterCabinet() {
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Categoria
             </label>
-            <select
+            <input
+              list="categorias"
               value={categoria}
               onChange={(e) => setCategoria(e.target.value as CabinetCategory)}
               className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-              required
-            >
-              <option value="">Selecione a categoria</option>
-              {Object.entries(CabinetCategory).map(([key, label]) => (
-                <option key={key} value={label}>{label}</option>
+              placeholder="Selecione ou digite uma categoria"
+            />
+            <datalist id="categorias">
+              {Object.values(CabinetCategory).map((label) => (
+                <option key={label} value={label} />
               ))}
-            </select>
+            </datalist>
           </div>
 
           <div className="flex justify-between pt-4">

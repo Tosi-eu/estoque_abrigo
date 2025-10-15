@@ -18,15 +18,15 @@ export const medicines = [
       form: "Comprimido",
     },
     {
-      name: "Dipirona 500mg",
+      name: "Dipirona 500mcg",
       active: "Dipirona",
-      dosage: "500mg",
+      dosage: "500mcg",
       form: "Comprimido",
     },
     {
-      name: "Lorazepam 2mg",
+      name: "Lorazepam 2g",
       active: "Lorazepam",
-      dosage: "2mg",
+      dosage: "2g",
       form: "Comprimido",
     },
   ];
