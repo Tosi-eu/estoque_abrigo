@@ -1,11 +1,13 @@
-import { useState, useMemo } from "react";
+// pages/Estoque.tsx
 import Layout from "@/components/Layout";
+import { useState, useMemo } from "react";
+import EditableTable from "@/components/EditableTable";
 import { medicines } from "../../mocks/medicines";
 import { hospitalItems } from "../../mocks/hospitalItems";
 
 export default function Estoque() {
   const [search, setSearch] = useState("");
-  const [description, setdescription] = useState("all");
+  const [description, setDescription] = useState("all");
 
   const stock = useMemo(() => {
     const meds = medicines.map((m) => ({
@@ -14,7 +16,6 @@ export default function Estoque() {
       description: m.active || "Medicamento",
       manufacturer: m.manufacturer,
       expiry: m.expiry,
-      dosage: m.dosage || "-",
       form: m.form || "-",
       quantity: m.quantity,
     }));
@@ -25,7 +26,6 @@ export default function Estoque() {
       description: h.description || "Hospitalar",
       manufacturer: "-",
       expiry: "-",
-      dosage: "-",
       form: "-",
       quantity: h.quantity,
     }));
@@ -41,14 +41,23 @@ export default function Estoque() {
         item.description.toLowerCase().includes(searchTerm) ||
         item.manufacturer.toLowerCase().includes(searchTerm);
 
-      const matchesdescription =
+      const matchesDescription =
         description === "all" ||
         (description === "Medicamento" && item.type === "Medicamento") ||
         (description === "Equipamento" && item.type === "Equipamento");
 
-      return matchesSearch && matchesdescription;
+      return matchesSearch && matchesDescription;
     });
   }, [stock, search, description]);
+
+  const columns = [
+    { key: "name", label: "Nome", editable: true },
+    { key: "description", label: "Categoria", editable: true },
+    { key: "manufacturer", label: "Fabricante", editable: true },
+    { key: "expiry", label: "Validade", editable: true },
+    { key: "form", label: "Dosagem/Forma", editable: true },
+    { key: "quantity", label: "Quantidade", editable: true },
+  ];
 
   return (
     <Layout title="Estoque de Medicamentos e Itens Hospitalares">
@@ -70,7 +79,7 @@ export default function Estoque() {
 
           <select
             value={description}
-            onChange={(e) => setdescription(e.target.value)}
+            onChange={(e) => setDescription(e.target.value)}
             className="px-3 py-2 border border-gray-400 rounded focus:outline-none focus:ring-1 focus:ring-gray-600"
           >
             <option value="all">Todos os Tipos</option>
@@ -79,58 +88,7 @@ export default function Estoque() {
           </select>
         </div>
 
-        <div>
-          <h2 className="text-lg font-semibold text-gray-900 mb-3">
-            Itens em Estoque ({filteredStock.length})
-          </h2>
-
-          <div className="bg-gray-100 border border-gray-400 rounded-lg overflow-hidden">
-            <div className="overflow-x-auto">
-              <table className="w-full text-center">
-                <thead>
-                  <tr className="border-b-2 border-gray-400 bg-gray-200">
-                    <th className="px-4 py-3 text-sm font-bold">Tipo</th>
-                    <th className="px-4 py-3 text-sm font-bold">Nome</th>
-                    <th className="px-4 py-3 text-sm font-bold">Categoria</th>
-                    <th className="px-4 py-3 text-sm font-bold">Fabricante</th>
-                    <th className="px-4 py-3 text-sm font-bold">Validade</th>
-                    <th className="px-4 py-3 text-sm font-bold">Dosagem/Forma</th>
-                    <th className="px-4 py-3 text-sm font-bold">Quantidade</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {filteredStock.map((item, index) => (
-                    <tr
-                      key={index}
-                      className="border-b border-gray-300 hover:bg-gray-50"
-                    >
-                      <td className="px-4 py-3 text-xs">{item.type}</td>
-                      <td className="px-4 py-3 text-xs">{item.name}</td>
-                      <td className="px-4 py-3 text-xs">{item.description}</td>
-                      <td className="px-4 py-3 text-xs">{item.manufacturer}</td>
-                      <td className="px-4 py-3 text-xs">{item.expiry}</td>
-                      <td className="px-4 py-3 text-xs">
-                        {item.dosage} {item.form !== "-" ? `(${item.form})` : ""}
-                      </td>
-                      <td className="px-4 py-3 text-xs">{item.quantity}</td>
-                    </tr>
-                  ))}
-
-                  {filteredStock.length === 0 && (
-                    <tr>
-                      <td
-                        colSpan={7}
-                        className="text-center py-4 text-sm text-gray-600"
-                      >
-                        Nenhum item encontrado.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
+        <EditableTable data={filteredStock} columns={columns} />
       </div>
     </Layout>
   );

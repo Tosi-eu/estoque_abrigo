@@ -8,7 +8,7 @@ export default function EditEquipment() {
   const [selectedEquipment, setSelectedEquipment] = useState("");
   const [formData, setFormData] = useState({
     name: "",
-    category: "",
+    description: "",
     quantity: 0,
   });
   const navigate = useNavigate();

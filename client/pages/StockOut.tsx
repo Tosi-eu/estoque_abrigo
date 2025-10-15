@@ -6,7 +6,7 @@ import { MedicineForm } from "@/components/MedicineForm";
 import { EquipmentForm } from "@/components/EquipmentForm";
 
 export default function StockOut() {
-  const [operationType, setOperationType] = useState<OperationType | "">("");
+  const [operationType, setOperationType] = useState<OperationType | "">(OperationType.EQUIPMENT);
   const navigate = useNavigate();
 
   return (
