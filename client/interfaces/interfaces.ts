@@ -2,7 +2,7 @@ export interface Column {
   key: string;
   label: string;
   editable?: boolean;
-  type?: "text" | "number" | "date";
+  type?: "text" | "date";
   enum?: string[];
 }
 

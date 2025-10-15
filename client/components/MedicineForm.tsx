@@ -14,9 +14,9 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
     entryType: "",
     expirationDate: null as Date | null,
     date: null as Date | null,
-    residente: "",
+    resident: "",
     casela: "",
-    armario: "",
+    cabinet: "",
   });
 
   const handleStockTypeChange = (type: "geral" | "individual") => {
@@ -91,11 +91,11 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
 
       <div className="flex gap-4">
         <div className="flex-1">
-          <label className="block text-sm font-medium text-slate-700 mb-1">Residente</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Resident</label>
           <input
             type="text"
-            value={formData.residente}
-            onChange={(e) => setFormData({ ...formData, residente: e.target.value })}
+            value={formData.resident}
+            onChange={(e) => setFormData({ ...formData, resident: e.target.value })}
             placeholder="Nome do paciente"
             className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
           />
@@ -118,9 +118,9 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
           isClearable
           placeholder="Selecione ou digite um armário"
           options={existentCabinets}
-          value={formData.armario ? { value: formData.armario, label: formData.armario } : null}
+          value={formData.cabinet ? { value: formData.cabinet, label: formData.cabinet } : null}
           onChange={(newValue) =>
-            setFormData({ ...formData, armario: newValue ? newValue.value : "" })
+            setFormData({ ...formData, cabinet: newValue ? newValue.value : "" })
           }
         />
       </div>

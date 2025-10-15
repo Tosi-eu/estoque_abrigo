@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Pencil, Trash2, Plus } from "lucide-react";
 import { EditableTableProps } from "@/interfaces/interfaces";
 import { useToast } from "@/hooks/use-toast";
@@ -9,7 +9,6 @@ export default function EditableTable({ data, columns, onAdd, onEdit, onDelete }
   const [hoveredRow, setHoveredRow] = useState<number | null>(null);
   const { toast } = useToast();
 
-  // Sincroniza rows com os dados externos (filtrados)
   useEffect(() => {
     setRows(data);
   }, [data]);
@@ -89,41 +88,66 @@ export default function EditableTable({ data, columns, onAdd, onEdit, onDelete }
                 {columns.map((col, index) => (
                   <td
                     key={col.key}
-                    className={`px-4 py-3 text-xs text-slate-800 relative ${
+                    className={`px-4 py-3 text-xs text-slate-800 relative overflow-visible ${
                       index !== columns.length - 1 ? "border-r border-slate-200" : ""
                     }`}
                   >
-                    {editingIndex === i && col.editable ? (
+
+                  {editingIndex === i && col.editable ? (
+                    <div className="flex justify-center items-center">
                       <input
-                        type={col.type || "text"}
+                        type="text"
                         value={row[col.key]}
                         onChange={(e) => handleChange(i, col.key, e.target.value)}
-                        className="border border-slate-300 rounded-md px-2 py-1 text-xs focus:ring-2 focus:ring-sky-300 focus:outline-none"
+                        ref={(el) => {
+                          if (el) {
+                            const span = document.createElement("span");
+                            span.style.visibility = "hidden";
+                            span.style.whiteSpace = "pre";
+                            span.style.font = getComputedStyle(el).font;
+                            span.textContent = el.value || el.placeholder || "";
+                            document.body.appendChild(span);
+
+                            const width = Math.max(span.offsetWidth + 20, 60);
+                            el.style.width = `${width}px`;
+
+                            document.body.removeChild(span);
+                          }
+                        }}
+                        className="border border-slate-300 rounded-md px-2 py-1 text-xs focus:ring-2 focus:ring-sky-300 focus:outline-none bg-white transition-all text-center"
                       />
-                    ) : (
-                      row[col.key]
-                    )}
+                    </div>
+                  ) : (
+                    row[col.key]
+                  )}
 
                     {index === columns.length - 1 && hoveredRow === i && (
-                      <div className="absolute right-2 top-1/2 -translate-y-1/2 flex items-center gap-2">
+                      <div
+                        className="absolute flex items-center gap-3 px-2"
+                        style={{
+                          right: "4px",
+                          top: "50%",
+                          transform: "translateY(-50%)",
+                        }}
+                      >
                         {editingIndex === i ? (
                           <button
                             onClick={() => handleSave(i)}
-                            className="bg-sky-600 text-white px-3 py-1 rounded-md text-xs font-semibold hover:bg-sky-700 transition-colors"
+                            className="text-sky-700 font-semibold text-xs hover:text-sky-900 transition-colors"
                           >
                             Salvar
                           </button>
                         ) : (
                           <button
                             onClick={() => setEditingIndex(i)}
-                            className="text-sky-700 hover:text-sky-900"
+                            className="text-sky-700 hover:text-sky-900 transition-colors"
                           >
                             <Pencil size={16} />
                           </button>
                         )}
                         <button
                           onClick={() => handleDelete(i)}
-                          className="bg-red-600 text-white px-3 py-1 rounded-md text-xs font-semibold hover:bg-red-700 transition-colors"
+                          className="text-red-600 hover:text-red-800 transition-colors"
                         >
                           <Trash2 size={16} />
                         </button>

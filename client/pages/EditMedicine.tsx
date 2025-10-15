@@ -9,11 +9,8 @@ export default function EditMedicine() {
   const [formData, setFormData] = useState({
     name: "",
     active: "",
-    manufacturer: "",
-    expiry: "",
     dosage: "",
     form: "",
-    quantity: 0,
   });
   const navigate = useNavigate();
 
@@ -87,32 +84,6 @@ export default function EditMedicine() {
                 />
               </div>
 
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Fabricante
-                </label>
-                <input
-                  type="text"
-                  value={formData.manufacturer}
-                  onChange={(e) => handleChange("manufacturer", e.target.value)}
-                  className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
-                />
-              </div>
-
-              <div className="flex gap-2">
-                <div className="flex-1">
-                  <label className="block text-sm font-medium text-slate-700 mb-1">
-                    Validade
-                  </label>
-                  <input
-                    type="date"
-                    value={formData.expiry}
-                    onChange={(e) => handleChange("expiry", e.target.value)}
-                    className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
-                  />
-                </div>
-              </div>
-
               <div className="flex gap-2">
                 <div className="flex-1">
                   <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -136,20 +107,6 @@ export default function EditMedicine() {
                     className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
                   />
                 </div>
-              </div>
-
-              <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1">
-                  Quantidade
-                </label>
-                <input
-                  type="number"
-                  value={formData.quantity}
-                  onChange={(e) =>
-                    handleChange("quantity", Number(e.target.value))
-                  }
-                  className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
-                />
               </div>
             </>
           )}

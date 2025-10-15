@@ -1,44 +1,46 @@
 import Layout from "@/components/Layout";
 import { useState, useMemo } from "react";
 import EditableTable from "@/components/EditableTable";
-import { medicines } from "../../mocks/medicines";
+import { stock } from "../../mocks/stock";
 import { hospitalItems } from "../../mocks/hospitalItems";
+import { medicines } from "../../mocks/medicines";
+import { StockCategory } from "@/enums/enums";
 
 export default function Stock() {
   const [search, setSearch] = useState("");
   const [typeFilter, setTypeFilter] = useState("all");
 
-  const stock = useMemo(() => {
-    const meds = medicines.map((m) => ({
+
+const items = useMemo(() => {
+  const meds = stock.map((entry) => {
+    const med = medicines.find((m) => m.name === entry.medicine.name);
+    return {
       type: "Medicamento",
-      name: m.name,
-      description: m.active || "Medicamento",
-      manufacturer: m.manufacturer,
-      expiry: m.expiry,
-      form: m.form || "-",
-      quantity: m.quantity,
-    }));
+      name: med?.name || entry.medicine.name,
+      description: med?.active || "-",
+      form: med?.form || "-",
+      expiry: entry.expiry,
+      quantity: entry.quantity,
+    };
+  });
 
-    const hosp = hospitalItems.map((h) => ({
-      type: "Equipamento",
-      name: h.name,
-      description: h.description || "Hospitalar",
-      manufacturer: "-",
-      expiry: "-",
-      form: "-",
-      quantity: h.quantity,
-    }));
+  const hosp = hospitalItems.map((h) => ({
+    type: "Equipamento",
+    name: h.name,
+    description: h.description || "Hospitalar",
+    expiry: "-",
+    form: "-",
+    quantity: h.quantity,
+  }));
 
-    return [...meds, ...hosp];
-  }, []);
+  return [...meds, ...hosp];
+}, []);
 
   const filteredStock = useMemo(() => {
-    return stock.filter((item) => {
+    return items.filter((item) => {
       const term = search.toLowerCase();
       const matchesSearch =
-        item.name.toLowerCase().includes(term) ||
-        item.description.toLowerCase().includes(term) ||
-        item.manufacturer.toLowerCase().includes(term);
+        item.name.includes(term);
 
       const matchesType =
         typeFilter === "all" ||
@@ -50,8 +52,7 @@ export default function Stock() {
 
   const columns = [
     { key: "name", label: "Nome", editable: true },
-    { key: "description", label: "Categoria", editable: true },
-    { key: "manufacturer", label: "Fabricante", editable: true },
+    { key: "description", label: typeFilter === StockCategory.EQUIPMENT ? "Descrição" : "Princípio Ativo", editable: true },
     { key: "expiry", label: "Validade", editable: true },
     { key: "form", label: "Dosagem/Forma", editable: true },
     { key: "quantity", label: "Quantidade", editable: true },

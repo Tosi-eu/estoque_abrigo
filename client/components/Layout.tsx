@@ -73,7 +73,7 @@ export default function Layout({ children, title }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-slate-50 text-slate-800">
+    <div className="min-h-screen bg-white text-slate-800">
       <header className="bg-sky-50 border-b border-slate-200 shadow-sm relative z-20">
         <div className="max-w-[1651px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
