@@ -43,12 +43,26 @@ export default function DeleteEquipment() {
             <select
               value={selectedEquipment}
               onChange={(e) => setSelectedEquipment(e.target.value)}
-              className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+              className="
+                w-full
+                border border-slate-300
+                rounded-lg
+                p-2.5
+                text-sm
+                bg-white
+                text-slate-800
+                shadow-sm
+                transition
+                focus:outline-none
+                focus:ring-2
+                focus:ring-sky-300
+                hover:border-slate-400
+              "
             >
-              <option value="">-- Escolha --</option>
-              {hospitalItems.map((eq) => (
-                <option key={eq.name} value={eq.name}>
-                  {eq.name}
+              <option value="">Escolha</option>
+              {hospitalItems.map((m) => (
+                <option key={m.name} value={m.name}>  
+                  {m.name}
                 </option>
               ))}
             </select>

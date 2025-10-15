@@ -4,19 +4,19 @@ import { useNavigate } from "react-router-dom";
 import { CabinetCategory } from "@/enums/enums";
 
 export default function RegisterCabinet() {
-  const [categoria, setCategoria] = useState<CabinetCategory | "">("");
+  const [category, setCategory] = useState<CabinetCategory | "">("");
   const [descricao, setDescricao] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!descricao || !categoria) {
+    if (!descricao || !category) {
       alert("Preencha todos os campos antes de continuar.");
       return;
     }
 
-    console.log({ categoria, descricao });
+    console.log({ category, descricao });
     navigate("/transactions");
   };
 
@@ -45,13 +45,13 @@ export default function RegisterCabinet() {
               Categoria
             </label>
             <input
-              list="categorias"
-              value={categoria}
-              onChange={(e) => setCategoria(e.target.value as CabinetCategory)}
+              list="categories"
+              value={category}
+              onChange={(e) => setCategory(e.target.value as CabinetCategory)}
               className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
               placeholder="Selecione ou digite uma categoria"
             />
-            <datalist id="categorias">
+            <datalist id="categories">
               {Object.values(CabinetCategory).map((label) => (
                 <option key={label} value={label} />
               ))}

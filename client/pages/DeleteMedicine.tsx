@@ -43,11 +43,25 @@ export default function DeleteMedicine() {
             <select
               value={selectedMedicine}
               onChange={(e) => setSelectedMedicine(e.target.value)}
-              className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+              className="
+                w-full
+                border border-slate-300
+                rounded-lg
+                p-2.5
+                text-sm
+                bg-white
+                text-slate-800
+                shadow-sm
+                transition
+                focus:outline-none
+                focus:ring-2
+                focus:ring-sky-300
+                hover:border-slate-400
+              "
             >
-              <option value="">-- Escolha --</option>
+              <option value="">Escolha</option>
               {medicines.map((m) => (
-                <option key={m.name} value={m.name}>
+                <option key={m.name} value={m.name}>  
                   {m.name}
                 </option>
               ))}

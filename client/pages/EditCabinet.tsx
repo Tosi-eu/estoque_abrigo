@@ -1,7 +1,5 @@
-// EditCabinet.tsx
 import { useState } from "react";
 import Layout from "@/components/Layout";
-import Select from "react-select";
 import { cabinets } from "../../mocks/cabinets";
 import { CabinetCategory } from "@/enums/enums";
 
@@ -13,8 +11,8 @@ export default function EditCabinet() {
     description: "",
   });
 
-  const handleSelectChange = (selectedOption: any) => {
-    const cabinet = cabinets.find((c) => c.id === selectedOption.value);
+  const handleSelectChange = (value: string) => {
+    const cabinet = cabinets.find((c) => c.id === parseInt(value));
     if (cabinet) {
       setSelectedCabinet(cabinet);
       setFormData({
@@ -22,6 +20,9 @@ export default function EditCabinet() {
         category: cabinet.category,
         description: cabinet.description || "",
       });
+    } else {
+      setSelectedCabinet(null);
+      setFormData({ id: 0, category: "", description: "" });
     }
   };
 
@@ -32,32 +33,38 @@ export default function EditCabinet() {
 
   const handleSave = () => {
     if (!selectedCabinet) return alert("Selecione um armário primeiro.");
-    console.log("Armário atualizado:", formData);
     alert(`Armário ${formData.id} atualizado com sucesso!`);
   };
 
   return (
     <Layout title="Editar Armário">
-      <div className="space-y-6 max-w-2xl mx-auto">
+      <div className="max-w-lg mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-8 shadow-sm space-y-6">
+        <h2 className="text-lg font-semibold text-slate-800 mb-6">
+          Edição de Armário
+        </h2>
+
         <div>
-          <label className="block text-sm font-bold text-slate-800 mb-2">
+          <label className="block text-sm font-medium text-slate-700 mb-1">
             Selecionar Armário
           </label>
-          <Select
-            options={cabinets.map((c) => ({
-              value: c.id,
-              label: `Armário ${c.id} (${c.category})`,
-            }))}
-            placeholder="Escolha um armário..."
-            onChange={handleSelectChange}
-            className="text-sm"
-          />
+          <select
+            value={selectedCabinet?.id || ""}
+            onChange={(e) => handleSelectChange(e.target.value)}
+            className="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white text-slate-800 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-sky-300 hover:border-slate-400"
+          >
+            <option value="">Escolha</option>
+            {cabinets.map((c) => (
+              <option key={c.id} value={c.id}>
+                Armário {c.id} ({c.category})
+              </option>
+            ))}
+          </select>
         </div>
 
         {selectedCabinet && (
-          <div className="space-y-4 mt-6 p-6 bg-white border border-slate-200 rounded-xl shadow-sm">
+          <div className="space-y-5 pt-4 border-t border-slate-100">
             <div>
-              <label className="block text-sm font-bold text-slate-800 mb-1">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
                 Número do Armário
               </label>
               <input
@@ -65,28 +72,30 @@ export default function EditCabinet() {
                 name="id"
                 value={formData.id}
                 onChange={handleChange}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-slate-800 mb-1">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
                 Categoria
               </label>
               <select
                 name="category"
                 value={formData.category}
                 onChange={handleChange}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
               >
                 {Object.entries(CabinetCategory).map(([key, label]) => (
-                  <option key={key} value={label}>{label}</option>
+                  <option key={key} value={label}>
+                    {label}
+                  </option>
                 ))}
               </select>
             </div>
 
             <div>
-              <label className="block text-sm font-bold text-slate-800 mb-1">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
                 Descrição
               </label>
               <input
@@ -94,16 +103,25 @@ export default function EditCabinet() {
                 name="description"
                 value={formData.description}
                 onChange={handleChange}
-                className="w-full border border-slate-300 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-sky-300"
+                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
               />
             </div>
 
-            <button
-              onClick={handleSave}
-              className="mt-4 w-full bg-sky-600 text-white py-2 rounded-lg font-bold hover:bg-sky-700 transition"
-            >
-              Salvar Alterações
-            </button>
+            <div className="flex justify-between pt-4">
+              <button
+                type="button"
+                onClick={() => setSelectedCabinet(null)}
+                className="px-5 py-2 border border-slate-400 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-100 transition"
+              >
+                Cancelar
+              </button>
+              <button
+                onClick={handleSave}
+                className="px-5 py-2 bg-sky-600 text-white rounded-lg text-sm font-semibold hover:bg-sky-700 transition"
+              >
+                Salvar Alterações
+              </button>
+            </div>
           </div>
         )}
       </div>

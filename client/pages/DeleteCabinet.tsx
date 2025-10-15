@@ -1,4 +1,3 @@
-// DeleteCabinet.tsx
 import { useState } from "react";
 import Layout from "@/components/Layout";
 import { toast } from "@/hooks/use-toast";
@@ -39,17 +38,31 @@ export default function DeleteCabinet() {
         <div className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Selecione o armário
+              Selecione o medicamento
             </label>
             <select
               value={selectedCabinet}
               onChange={(e) => setSelectedCabinet(e.target.value)}
-              className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+              className="
+                w-full
+                border border-slate-300
+                rounded-lg
+                p-2.5
+                text-sm
+                bg-white
+                text-slate-800
+                shadow-sm
+                transition
+                focus:outline-none
+                focus:ring-2
+                focus:ring-sky-300
+                hover:border-slate-400
+              "
             >
-              <option value="">-- Escolha --</option>
-              {cabinets.map((c) => (
-                <option key={c.id} value={c.id}>
-                  Armário {c.id} ({c.category})
+              <option value="">Escolha</option>
+              {cabinets.map((m) => (
+                <option key={m.id} value={m.id}>  
+                  {m.category}
                 </option>
               ))}
             </select>
