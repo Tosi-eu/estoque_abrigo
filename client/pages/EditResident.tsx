@@ -8,7 +8,6 @@ export default function EditResident() {
   const [formData, setFormData] = useState({ name: "", casela: "" });
 
   const handleSelectChange = (value: string) => {
-    // Procurar residente pelo nome ou casela
     const resident = residents.find(
       (r) => r.name === value || r.casela.toString() === value
     );
@@ -20,7 +19,7 @@ export default function EditResident() {
       });
     } else {
       setSelectedResident(null);
-      setFormData({ name: value, casela: "" }); // valor customizado
+      setFormData({ name: value, casela: "" });
     }
   };
 
@@ -53,42 +52,24 @@ export default function EditResident() {
           Edição de Residente
         </h2>
 
-        {/* Seleção de residente com autocomplete */}
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            Selecione ou digite um residente
+            Selecionar Armário
           </label>
-          <input
-            list="residents-lista"
-            value={formData.name}
+          <select
+            value={selectedResident?.id || ""}
             onChange={(e) => handleSelectChange(e.target.value)}
-            className="
-              w-full
-              border border-slate-300
-              rounded-lg
-              p-2.5
-              text-sm
-              bg-white
-              text-slate-800
-              shadow-sm
-              transition
-              focus:outline-none
-              focus:ring-2
-              focus:ring-sky-300
-              hover:border-slate-400
-            "
-            placeholder="Digite ou selecione um residente..."
-          />
-          <datalist id="residents-lista">
-            {residents.map((r) => (
-              <option key={r.casela} value={r.name}>
-                {r.name} ({r.casela})
+            className="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white text-slate-800 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-sky-300 hover:border-slate-400"
+          >
+            <option value="">Escolha</option>
+            {residents.map((c) => (
+              <option key={c.casela} value={c.casela}>
+                {c.name}
               </option>
             ))}
-          </datalist>
+          </select>
         </div>
 
-        {/* Campos de edição */}
         {formData.name && (
           <div className="space-y-5 pt-4 border-t border-slate-100">
             <div>
@@ -117,7 +98,6 @@ export default function EditResident() {
               />
             </div>
 
-            {/* Botões */}
             <div className="flex justify-between pt-4">
               <button
                 type="button"

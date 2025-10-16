@@ -131,7 +131,7 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
           <select
             value={formData.origin}
             onChange={(e) => setFormData({ ...formData, origin: e.target.value })}
-            className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+            className="w-full border bg-white rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
           >
             <option value="">Selecione</option>
             {Object.values(OriginType).map((v) => (
@@ -144,7 +144,7 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
           <select
             value={formData.entryType}
             onChange={(e) => setFormData({ ...formData, entryType: e.target.value })}
-            className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+            className="w-full border bg-white rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
           >
             <option value="">Selecione</option>
             {Object.values(EntryType).map((v) => (
