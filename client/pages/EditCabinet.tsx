@@ -1,55 +1,46 @@
 import { useState } from "react";
 import Layout from "@/components/Layout";
-import { residents } from "../../mocks/residents";
-import { toast } from "@/hooks/use-toast";
+import { cabinets } from "../../mocks/cabinets";
+import { CabinetCategory } from "@/enums/enums";
 
-export default function EditResident() {
-  const [selectedResident, setSelectedResident] = useState<any>(null);
-  const [formData, setFormData] = useState({ name: "", casela: "" });
+export default function EditCabinet() {
+  const [selectedCabinet, setSelectedCabinet] = useState<any>(null);
+  const [formData, setFormData] = useState({
+    id: 0,
+    category: "",
+    description: "",
+  });
 
   const handleSelectChange = (value: string) => {
-    const resident = residents.find(
-      (r) => r.name === value || r.casela.toString() === value
-    );
-    if (resident) {
-      setSelectedResident(resident);
+    const cabinet = cabinets.find((c) => c.id === parseInt(value));
+    if (cabinet) {
+      setSelectedCabinet(cabinet);
       setFormData({
-        name: resident.name,
-        casela: resident.casela.toString(),
+        id: cabinet.id,
+        category: cabinet.category,
+        description: cabinet.description || "",
       });
     } else {
-      setSelectedResident(null);
-      setFormData({ name: value, casela: "" });
+      setSelectedCabinet(null);
+      setFormData({ id: 0, category: "", description: "" });
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSave = () => {
-    if (!formData.name || !formData.casela) {
-      toast({
-        title: "Erro",
-        description: "Preencha todos os campos antes de salvar.",
-        variant: "warning",
-      });
-      return;
-    }
-
-    toast({
-      title: "Sucesso",
-      description: `Residente ${formData.name} atualizado com sucesso!`,
-      variant: "success",
-    });
+    if (!selectedCabinet) return alert("Selecione um armário primeiro.");
+    alert(`Armário ${formData.id} atualizado com sucesso!`);
   };
 
   return (
-    <Layout title="Editar Residente">
+    <Layout title="Editar Armário">
       <div className="max-w-lg mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-8 shadow-sm space-y-6">
         <h2 className="text-lg font-semibold text-slate-800 mb-6">
-          Edição de Residente
+          Edição de Armário
         </h2>
 
         <div>
@@ -57,29 +48,29 @@ export default function EditResident() {
             Selecionar Armário
           </label>
           <select
-            value={selectedResident?.id || ""}
+            value={selectedCabinet?.id || ""}
             onChange={(e) => handleSelectChange(e.target.value)}
             className="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white text-slate-800 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-sky-300 hover:border-slate-400"
           >
             <option value="">Escolha</option>
-            {residents.map((c) => (
-              <option key={c.casela} value={c.casela}>
-                {c.name}
+            {cabinets.map((c) => (
+              <option key={c.id} value={c.id}>
+                Armário {c.id} ({c.category})
               </option>
             ))}
           </select>
         </div>
 
-        {formData.name && (
+        {selectedCabinet && (
           <div className="space-y-5 pt-4 border-t border-slate-100">
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                Nome
+                Número do Armário
               </label>
               <input
-                type="text"
-                name="name"
-                value={formData.name}
+                type="number"
+                name="id"
+                value={formData.id}
                 onChange={handleChange}
                 className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
               />
@@ -87,12 +78,30 @@ export default function EditResident() {
 
             <div>
               <label className="block text-sm font-medium text-slate-700 mb-1">
-                Casela
+                Categoria
+              </label>
+              <select
+                name="category"
+                value={formData.category}
+                onChange={handleChange}
+                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+              >
+                {Object.entries(CabinetCategory).map(([key, label]) => (
+                  <option key={key} value={label}>
+                    {label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Descrição
               </label>
               <input
                 type="text"
-                name="casela"
-                value={formData.casela}
+                name="description"
+                value={formData.description}
                 onChange={handleChange}
                 className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
               />
@@ -101,10 +110,7 @@ export default function EditResident() {
             <div className="flex justify-between pt-4">
               <button
                 type="button"
-                onClick={() => {
-                  setSelectedResident(null);
-                  setFormData({ name: "", casela: "" });
-                }}
+                onClick={() => setSelectedCabinet(null)}
                 className="px-5 py-2 border border-slate-400 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-100 transition"
               >
                 Cancelar

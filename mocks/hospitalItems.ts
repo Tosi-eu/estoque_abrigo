@@ -1,42 +1,32 @@
 export const hospitalItems = [
     {
       name: "Seringa 5ml",
-      category: "Material de Injeção",
-      expiry: "2027-03-01",
-      unit: "Unidade",
-      form: "Plástico",
+      description: "Material de Injeção",
       quantity: 500,
+      cabinet: 3
     },
     {
       name: "Luva Cirúrgica M",
-      category: "EPI",
-      expiry: "2026-06-15",
-      unit: "Par",
-      form: "Látex",
+      description: "EPI",
       quantity: 200,
+      cabinet: 2
     },
     {
       name: "Máscara Cirúrgica Tripla",
-      category: "EPI",
-      expiry: "2026-01-01",
-      unit: "Caixa (50un)",
-      form: "TNT",
+      description: "EPI",
       quantity: 80,
+      cabinet: 2
     },
     {
       name: "Gaze Estéril 7,5x7,5cm",
-      category: "Curativo",
-      expiry: "2028-04-10",
-      unit: "Pacote (10un)",
-      form: "Algodão",
+      description: "Curativo",
       quantity: 120,
+      cabinet: 1
     },
     {
       name: "Cateter Intravenoso 22G",
-      category: "Material Hospitalar",
-      expiry: "2029-01-01",
-      unit: "Unidade",
-      form: "Plástico",
+      description: "Material Hospitalar",
       quantity: 150,
+      cabinet: 4
     },
   ];
