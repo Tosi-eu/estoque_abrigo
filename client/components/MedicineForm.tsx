@@ -91,7 +91,7 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
 
       <div className="flex gap-4">
         <div className="flex-1">
-          <label className="block text-sm font-medium text-slate-700 mb-1">Resident</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">Residente</label>
           <input
             type="text"
             value={formData.resident}

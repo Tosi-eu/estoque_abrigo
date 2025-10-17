@@ -4,7 +4,6 @@ import EditableTable from "@/components/EditableTable";
 import { stock } from "../../mocks/stock";
 import { hospitalItems } from "../../mocks/hospitalItems";
 import { medicines } from "../../mocks/medicines";
-import { OperationType, StockCategory } from "@/enums/enums";
 
 export default function Stock() {
   const [search, setSearch] = useState("");
@@ -15,7 +14,6 @@ export default function Stock() {
     expiry: "",
     form: "",
     quantity: "",
-    dosage: "",
   });
 
   const handleFilterChange = (field: string, value: string) => {
@@ -30,7 +28,6 @@ export default function Stock() {
         name: med?.name || entry.medicine.name,
         description: med?.active || "-",
         form: med?.form,
-        dosage: med?.dosage,
         expiry: entry.expiry,
         quantity: entry.quantity,
       };
@@ -42,7 +39,6 @@ export default function Stock() {
       description: h.description || "Hospitalar",
       expiry: "-",
       form: "-",
-      dosage: '-',
       quantity: h.quantity,
     }));
 
@@ -59,7 +55,6 @@ export default function Stock() {
       if (filters.description && item.description !== filters.description) return false;
       if (filters.expiry && item.expiry !== filters.expiry) return false;
       if (filters.form && item.form !== filters.form) return false;
-      if (filters.dosage && item.dosage !== filters.dosage) return false;
       if (filters.quantity && item.quantity !== Number(filters.quantity)) return false;
 
       return true;
@@ -74,7 +69,6 @@ export default function Stock() {
       editable: true,
     },
     { key: "expiry", label: "Validade", editable: true },
-    { key: "dosage", label: "Dosagem", editable: true },
      { key: "form", label: "Forma", editable: true },
     { key: "quantity", label: "Quantidade", editable: true },
   ];
@@ -158,23 +152,6 @@ export default function Stock() {
                 />
                 <datalist id="forms">
                   {uniqueValues("form").map((v) => (
-                    <option key={v} value={v} />
-                  ))}
-                </datalist>
-              </div>
-            )}
-
-            {(typeFilter === "all" || typeFilter === "Medicamento") && (
-              <div>
-                <input
-                  list="dosages"
-                  placeholder="Dosagem"
-                  value={filters.dosage}
-                  onChange={(e) => handleFilterChange("dosage", e.target.value)}
-                  className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-                />
-                <datalist id="dosages">
-                  {uniqueValues("dosage").map((v) => (
                     <option key={v} value={v} />
                   ))}
                 </datalist>

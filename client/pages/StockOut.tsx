@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import { useState } from "react";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { OperationType } from "@/enums/enums";
 import { MedicineForm } from "@/components/MedicineForm";
 import { EquipmentForm } from "@/components/EquipmentForm";

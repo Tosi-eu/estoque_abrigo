@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/Layout";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 import { hospitalItems } from "../../mocks/hospitalItems";
 

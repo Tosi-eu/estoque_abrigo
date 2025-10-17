@@ -21,13 +21,13 @@ import StockOut from "./pages/StockOut";
 import EditMedicine from "./pages/EditMedicine";
 import DeleteMedicine from "./pages/DeleteMedicine";
 import Equipments from "./pages/Equipments";
-import SignUpEquipment from "./pages/RegisterEquipment";
 import EditEquipment from "./pages/EditEquipment";
 import DeleteEquipment from "./pages/DeleteEquipment";
 import Medicines from "./pages/Medicines";
 import RegisterCabinet from "./pages/RegisterCabinet";
 import EditCabinet from "./pages/EditCabinet";
 import DeleteCabinet from "./pages/DeleteCabinet";
+import RegisterEquipment from "./pages/RegisterEquipment";
 
 const queryClient = new QueryClient();
 
@@ -54,7 +54,7 @@ const App = () => (
           <Route path="/resident/edit" element={<EditResident />} />
           <Route path="/resident/delete" element={<DeleteResident />} />
           <Route path="/equipments" element={<Equipments />} />
-          <Route path="/equipments/register" element={<SignUpEquipment />} />
+          <Route path="/equipments/register" element={<RegisterEquipment />} />
           <Route path="/equipments/edit" element={<EditEquipment />} />
           <Route path="/equipments/delete" element={<DeleteEquipment />} />
           <Route path="/cabinet/register" element={<RegisterCabinet />} />

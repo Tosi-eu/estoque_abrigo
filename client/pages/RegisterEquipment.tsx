@@ -1,9 +1,9 @@
 import { useState } from "react";
 import Layout from "@/components/Layout";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
 
-export default function SignUpEquipment() {
+export default function RegisterEquipment() {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",

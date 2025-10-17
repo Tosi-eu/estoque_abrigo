@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { toast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { medicines } from "../../mocks/medicines";
 
 export default function EditMedicine() {
@@ -21,17 +21,6 @@ export default function EditMedicine() {
 
   const handleChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const handleMedicineSelect = (value: string) => {
-    const med = medicines.find((m) => m.name === value);
-    if (med) {
-      setSelectedMedicine(med.name);
-      setFormData(med);
-    } else {
-      setSelectedMedicine(value);
-      setFormData({ ...formData, name: value });
-    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
