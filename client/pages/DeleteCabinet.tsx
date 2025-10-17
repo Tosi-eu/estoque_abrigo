@@ -38,7 +38,7 @@ export default function DeleteCabinet() {
         <div className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Selecione o medicamento
+              Selecione o armário
             </label>
             <select
               value={selectedCabinet}
@@ -62,7 +62,7 @@ export default function DeleteCabinet() {
               <option value="">Escolha</option>
               {cabinets.map((m) => (
                 <option key={m.id} value={m.id}>  
-                  {m.category}
+                  {m.id} - {m.description}
                 </option>
               ))}
             </select>

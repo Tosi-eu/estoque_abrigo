@@ -16,10 +16,10 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 
-const typeMap = {
-  Medicamento: 'medicines',
-  Equipamento: 'equipments'
-}
+const typeMap: Record<string, string> = {
+  Medicamento: "medicines",
+  Equipamento: "equipments",
+};
 
 export default function EditableTable({
   data,
@@ -55,9 +55,7 @@ export default function EditableTable({
 
   const handleSave = (index: number) => {
     const row = rows[index];
-    const emptyField = columns.find(
-      (col) => col.editable && !row[col.key]
-    );
+    const emptyField = columns.find((col) => col.editable && !row[col.key]);
     if (emptyField) {
       toast({
         title: "Campo obrigatório vazio",
@@ -83,8 +81,11 @@ export default function EditableTable({
   const handleDeleteCancel = () => setDeleteIndex(null);
 
   const handleEditClick = (row: any) => {
-    console.log(row)
-    if (!row?.type && !entityType) {
+    console.log(row);
+    console.log(entityType);
+    const type = entityType || typeMap[row?.type];
+
+    if (!type) {
       toast({
         title: "Tipo indefinido",
         description: "Nenhum tipo de entidade foi informado.",
@@ -92,8 +93,6 @@ export default function EditableTable({
       });
       return;
     }
-
-    const type = typeMap[row?.type] || entityType;
 
     navigate(`/${type}/edit`, { state: { item: row } });
   };
@@ -118,25 +117,17 @@ export default function EditableTable({
     let colorClasses = "";
 
     if (diffDays < 0) {
-      label = "EXPIRADO";
       tooltipText = `Vencido há ${Math.abs(diffDays)} dias`;
-      colorClasses =
-        "bg-red-100 text-red-700 border border-red-300";
+      colorClasses = "bg-red-100 text-red-700 border border-red-300";
     } else if (diffDays <= 30) {
-      label = "VENCE";
       tooltipText = `Vencerá em ${diffDays} dias`;
-      colorClasses =
-        "bg-orange-100 text-orange-700 border border-orange-300";
+      colorClasses = "bg-orange-100 text-orange-700 border border-orange-300";
     } else if (diffDays <= 60) {
-      label = "EN";
       tooltipText = `Vencerá em ${diffDays} dias`;
-      colorClasses =
-        "bg-yellow-100 text-yellow-700 border border-yellow-300";
+      colorClasses = "bg-yellow-100 text-yellow-700 border border-yellow-300";
     } else {
-      label = "OK";
-      tooltipText = `Vence em ${diffDays} dias`;
-      colorClasses =
-        "bg-green-100 text-green-700 border border-green-300";
+      tooltipText = `Vencerá em ${diffDays} dias`;
+      colorClasses = "bg-green-100 text-green-700 border border-green-300";
     }
 
     return (
@@ -150,7 +141,7 @@ export default function EditableTable({
             </span>
           </TooltipTrigger>
           <TooltipContent side="top" className="text-xs">
-            {tooltipText} ({label})
+            {tooltipText}
           </TooltipContent>
         </Tooltip>
       </TooltipProvider>
@@ -212,9 +203,7 @@ export default function EditableTable({
                   <th
                     key={col.key}
                     className={`px-4 py-3 text-sm font-semibold text-slate-800 ${
-                      index !== columns.length - 1
-                        ? "border-r border-slate-200"
-                        : ""
+                      index !== columns.length - 1 ? "border-r border-slate-200" : ""
                     }`}
                   >
                     {col.key === "itemName" ? "Nome do Produto" : col.label}
@@ -236,18 +225,14 @@ export default function EditableTable({
                     <td
                       key={col.key}
                       className={`px-4 py-3 text-xs text-slate-800 ${
-                        index !== columns.length - 1
-                          ? "border-r border-slate-100"
-                          : ""
+                        index !== columns.length - 1 ? "border-r border-slate-100" : ""
                       }`}
                     >
                       {editingIndex === i && col.editable ? (
                         <input
                           type="text"
                           value={row[col.key]}
-                          onChange={(e) =>
-                            handleChange(i, col.key, e.target.value)
-                          }
+                          onChange={(e) => handleChange(i, col.key, e.target.value)}
                           className="border border-slate-300 rounded-md px-2 py-1 text-xs focus:ring-2 focus:ring-sky-300 focus:outline-none bg-white text-center"
                         />
                       ) : col.key === "expiry" ? (
@@ -277,10 +262,7 @@ export default function EditableTable({
 
               {rowsFiltered.length === 0 && (
                 <tr>
-                  <td
-                    colSpan={columns.length + 1}
-                    className="text-center py-4 text-sm text-slate-600"
-                  >
+                  <td colSpan={columns.length + 1} className="text-center py-4 text-sm text-slate-600">
                     Nenhum item encontrado.
                   </td>
                 </tr>
@@ -293,13 +275,7 @@ export default function EditableTable({
       <Dialog
         open={deleteIndex !== null}
         onClose={handleDeleteCancel}
-        sx={{
-          "& .MuiDialog-paper": {
-            padding: 2,
-            minWidth: 300,
-            fontFamily: "'Inter', sans-serif",
-          },
-        }}
+        sx={{ "& .MuiDialog-paper": { padding: 2, minWidth: 300, fontFamily: "'Inter', sans-serif" } }}
       >
         <DialogTitle sx={{ fontSize: 18 }}>Confirmar exclusão</DialogTitle>
         <DialogContent sx={{ py: 1 }}>
@@ -311,12 +287,7 @@ export default function EditableTable({
           <Button onClick={handleDeleteCancel} color="inherit" size="small">
             Não
           </Button>
-          <Button
-            onClick={handleDeleteConfirmed}
-            color="error"
-            size="small"
-            variant="contained"
-          >
+          <Button onClick={handleDeleteConfirmed} color="error" size="small" variant="contained">
             Sim
           </Button>
         </DialogActions>

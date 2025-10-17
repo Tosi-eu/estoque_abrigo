@@ -13,7 +13,7 @@ export default function Equipments() {
   return (
     <Layout title="Equipamentos">
       <div className="space-y-6">
-        <EditableTable data={hospitalItems} columns={columns} />
+        <EditableTable data={hospitalItems} columns={columns} entityType="equipments" />
       </div>
     </Layout>
   );

@@ -7,7 +7,6 @@ import { medicines } from "../../mocks/medicines";
 
 export default function Stock() {
   const [search, setSearch] = useState("");
-  const [typeFilter, setTypeFilter] = useState("all");
   const [filters, setFilters] = useState({
     name: "",
     description: "",
@@ -27,7 +26,7 @@ export default function Stock() {
         type: "Medicamento",
         name: med?.name || entry.medicine.name,
         description: med?.active || "-",
-        form: med?.form,
+        form: med?.form || "-",
         expiry: entry.expiry,
         quantity: entry.quantity,
       };
@@ -37,8 +36,8 @@ export default function Stock() {
       type: "Equipamento",
       name: h.name,
       description: h.description || "Hospitalar",
-      expiry: "-",
       form: "-",
+      expiry: "-",
       quantity: h.quantity,
     }));
 
@@ -48,7 +47,6 @@ export default function Stock() {
   const filteredStock = useMemo(() => {
     return items.filter((item) => {
       const term = search.toLowerCase();
-      if (typeFilter !== "all" && item.type !== typeFilter) return false;
       if (search && !item.name.toLowerCase().includes(term)) return false;
 
       if (filters.name && item.name !== filters.name) return false;
@@ -59,17 +57,18 @@ export default function Stock() {
 
       return true;
     });
-  }, [items, search, typeFilter, filters]);
+  }, [items, search, filters]);
 
   const columns = [
     { key: "name", label: "Nome", editable: true },
     {
       key: "description",
-      label: typeFilter === "Equipamento" ? "Descrição" : "Princípio Ativo",
+      label: "Descrição / Princípio Ativo",
       editable: true,
+      render: (row: any) => (row.expiry == null ? "Descrição" : "Princípio Ativo"),
     },
     { key: "expiry", label: "Validade", editable: true },
-     { key: "form", label: "Forma", editable: true },
+    { key: "form", label: "Forma", editable: true },
     { key: "quantity", label: "Quantidade", editable: true },
   ];
 
@@ -84,80 +83,74 @@ export default function Stock() {
             Gerar Relatório
           </button>
         </div>
-          <div className="flex flex-wrap gap-4 bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
-            <div>
-              <select
-                value={typeFilter}
-                onChange={(e) => setTypeFilter(e.target.value)}
-                className="px-3 py-2 border bg-white rounded-lg focus:outline-none focus:ring-2 focus:ring-sky-300 text-sm"
-              >
-                <option value="all">Todos os Tipos</option>
-                <option value="Medicamento">Medicamentos</option>
-                <option value="Equipamento">Itens Hospitalares</option>
-              </select>
-            </div>
 
-            <div>
-              <input
-                list="names"
-                placeholder="Nome"
-                value={filters.name}
-                onChange={(e) => handleFilterChange("name", e.target.value)}
-                className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-              />
-              <datalist id="names">
-                {uniqueValues("name").map((v) => (
-                  <option key={v} value={v} />
-                ))}
-              </datalist>
-            </div>
-
-            {(typeFilter === "all" || typeFilter === "Medicamento") && (
-              <div>
-                <input
-                  list="descriptions"
-                  placeholder={typeFilter === "Medicamento" ? "Princípio Ativo" : "Descrição"}
-                  value={filters.description}
-                  onChange={(e) => handleFilterChange("description", e.target.value)}
-                  className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-                />
-                <datalist id="descriptions">
-                  {uniqueValues("description").map((v) => (
-                    <option key={v} value={v} />
-                  ))}
-                </datalist>
-              </div>
-            )}
-
-            {(typeFilter === "all" || typeFilter === "Medicamento") && (
-              <div>
-                <input
-                  type="date"
-                  placeholder="Validade"
-                  value={filters.expiry}
-                  onChange={(e) => handleFilterChange("expiry", e.target.value)}
-                  className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-                />
-              </div>
-            )}
-
-            {(typeFilter === "all" || typeFilter === "Medicamento") && (
-              <div>
-                <input
-                  list="forms"
-                  placeholder="Forma"
-                  value={filters.form}
-                  onChange={(e) => handleFilterChange("form", e.target.value)}
-                  className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-                />
-                <datalist id="forms">
-                  {uniqueValues("form").map((v) => (
-                    <option key={v} value={v} />
-                  ))}
-                </datalist>
-              </div>
-            )}
+        <div className="flex flex-wrap gap-4 bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
+          <div>
+            <input
+              list="names"
+              placeholder="Nome"
+              value={filters.name}
+              onChange={(e) => handleFilterChange("name", e.target.value)}
+              className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
+            <datalist id="names">
+              {uniqueValues("name").map((v) => (
+                <option key={v} value={v} />
+              ))}
+            </datalist>
           </div>
+
+          <div>
+            <input
+              list="descriptions"
+              placeholder="Descrição / Princípio Ativo"
+              value={filters.description}
+              onChange={(e) => handleFilterChange("description", e.target.value)}
+              className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
+            <datalist id="descriptions">
+              {uniqueValues("description").map((v) => (
+                <option key={v} value={v} />
+              ))}
+            </datalist>
+          </div>
+
+          <div>
+            <input
+              type="date"
+              placeholder="Validade"
+              value={filters.expiry}
+              onChange={(e) => handleFilterChange("expiry", e.target.value)}
+              className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
+          </div>
+
+          <div>
+            <input
+              list="forms"
+              placeholder="Forma"
+              value={filters.form}
+              onChange={(e) => handleFilterChange("form", e.target.value)}
+              className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
+            <datalist id="forms">
+              {uniqueValues("form").map((v) => (
+                <option key={v} value={v} />
+              ))}
+            </datalist>
+          </div>
+
+          <div>
+            <input
+              type="number"
+              placeholder="Quantidade"
+              value={filters.quantity}
+              onChange={(e) => handleFilterChange("quantity", e.target.value)}
+              className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+            />
+          </div>
+        </div>
+
         <EditableTable
           data={filteredStock}
           columns={columns}

@@ -1,11 +1,25 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import Layout from "@/components/Layout";
 import { residents } from "../../mocks/residents";
 import { toast } from "@/hooks/use-toast";
 
 export default function EditResident() {
+  const location = useLocation();
+  const item = location.state?.item;
+
   const [selectedResident, setSelectedResident] = useState<any>(null);
   const [formData, setFormData] = useState({ name: "", casela: "" });
+
+  useEffect(() => {
+    if (item) {
+      setSelectedResident(item);
+      setFormData({
+        name: item.name || "",
+        casela: item.casela?.toString() || "",
+      });
+    }
+  }, [item]);
 
   const handleSelectChange = (value: string) => {
     const resident = residents.find(
@@ -57,7 +71,7 @@ export default function EditResident() {
             Selecionar Armário
           </label>
           <select
-            value={selectedResident?.id || ""}
+            value={selectedResident?.casela || ""}
             onChange={(e) => handleSelectChange(e.target.value)}
             className="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white text-slate-800 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-sky-300 hover:border-slate-400"
           >
