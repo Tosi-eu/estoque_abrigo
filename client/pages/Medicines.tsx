@@ -16,6 +16,7 @@ export default function Medicines() {
         onAdd={(row) => console.log("Nova linha:", row)}
         onEdit={(row, i) => console.log("Editado:", row, "na linha", i)}
         onDelete={(i) => console.log("Excluído na linha:", i)}
+        entityType="medicines"
       />
     </Layout>
   );

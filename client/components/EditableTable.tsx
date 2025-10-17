@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
 import { Pencil, Trash2, Plus } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 import { EditableTableProps } from "@/interfaces/interfaces";
 import { useToast } from "@/hooks/use-toast";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
@@ -10,12 +16,26 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import Button from "@mui/material/Button";
 
-export default function EditableTable({ data, columns, onAdd, onEdit, onDelete }: EditableTableProps) {
+const typeMap = {
+  Medicamento: 'medicines',
+  Equipamento: 'equipments'
+}
+
+export default function EditableTable({
+  data,
+  columns,
+  onAdd,
+  onEdit,
+  onDelete,
+  entityType,
+}: EditableTableProps & { entityType?: string }) {
   const [rows, setRows] = useState(data);
+  const [filterType, setFilterType] = useState("Todos");
   const [editingIndex, setEditingIndex] = useState<number | null>(null);
-  const [hoveredRow, setHoveredRow] = useState<number | null>(null);
   const [deleteIndex, setDeleteIndex] = useState<number | null>(null);
+  const [recordsPerPage, setRecordsPerPage] = useState(10);
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   useEffect(() => setRows(data), [data]);
 
@@ -24,7 +44,6 @@ export default function EditableTable({ data, columns, onAdd, onEdit, onDelete }
     columns.forEach((col) => (newRow[col.key] = ""));
     const updated = [...rows, newRow];
     setRows(updated);
-    setEditingIndex(updated.length - 1);
     if (onAdd) onAdd(newRow);
   };
 
@@ -36,7 +55,9 @@ export default function EditableTable({ data, columns, onAdd, onEdit, onDelete }
 
   const handleSave = (index: number) => {
     const row = rows[index];
-    const emptyField = columns.find((col) => col.editable && !row[col.key]);
+    const emptyField = columns.find(
+      (col) => col.editable && !row[col.key]
+    );
     if (emptyField) {
       toast({
         title: "Campo obrigatório vazio",
@@ -61,34 +82,61 @@ export default function EditableTable({ data, columns, onAdd, onEdit, onDelete }
 
   const handleDeleteCancel = () => setDeleteIndex(null);
 
+  const handleEditClick = (row: any) => {
+    console.log(row)
+    if (!row?.type && !entityType) {
+      toast({
+        title: "Tipo indefinido",
+        description: "Nenhum tipo de entidade foi informado.",
+        variant: "error",
+      });
+      return;
+    }
+
+    const type = typeMap[row?.type] || entityType;
+
+    navigate(`/${type}/edit`, { state: { item: row } });
+  };
+
+  const rowsFiltered =
+    filterType === "Todos"
+      ? rows
+      : rows.filter((r) => r.type === filterType);
+
   const renderExpiryTag = (value: string) => {
     if (!value) return "-";
     const today = new Date();
     const expiryDate = new Date(value);
     if (isNaN(expiryDate.getTime())) return value;
 
-    const diffDays = Math.ceil((expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    const diffDays = Math.ceil(
+      (expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    );
 
     let label = "";
     let tooltipText = "";
     let colorClasses = "";
 
     if (diffDays < 0) {
-      label = "ESPIRADO";
+      label = "EXPIRADO";
       tooltipText = `Vencido há ${Math.abs(diffDays)} dias`;
-      colorClasses = "bg-red-100 text-red-700 border border-red-300";
+      colorClasses =
+        "bg-red-100 text-red-700 border border-red-300";
     } else if (diffDays <= 30) {
       label = "VENCE";
       tooltipText = `Vencerá em ${diffDays} dias`;
-      colorClasses = "bg-orange-100 text-orange-700 border border-orange-300";
+      colorClasses =
+        "bg-orange-100 text-orange-700 border border-orange-300";
     } else if (diffDays <= 60) {
       label = "EN";
       tooltipText = `Vencerá em ${diffDays} dias`;
-      colorClasses = "bg-yellow-100 text-yellow-700 border border-yellow-300";
+      colorClasses =
+        "bg-yellow-100 text-yellow-700 border border-yellow-300";
     } else {
       label = "OK";
       tooltipText = `Vence em ${diffDays} dias`;
-      colorClasses = "bg-green-100 text-green-700 border border-green-300";
+      colorClasses =
+        "bg-green-100 text-green-700 border border-green-300";
     }
 
     return (
@@ -109,16 +157,51 @@ export default function EditableTable({ data, columns, onAdd, onEdit, onDelete }
     );
   };
 
+  const hasType = rows.some((r) => r.type);
+
   return (
     <>
-      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden">
-        <div className="flex justify-end p-3 border-b border-slate-200 bg-sky-50">
-          <span
+      <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden font-[Inter]">
+        <div className="flex justify-between items-center px-4 py-3 border-b border-slate-200 bg-sky-50 text-sm">
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-2">
+              <span className="text-slate-700">Exibir</span>
+              <select
+                value={recordsPerPage}
+                onChange={(e) => setRecordsPerPage(Number(e.target.value))}
+                className="border border-slate-300 rounded-md px-2 py-1 text-sm bg-white focus:ring-2 focus:ring-sky-300 focus:outline-none"
+              >
+                {[10, 20, 30, 40, 50].map((num) => (
+                  <option key={num} value={num}>
+                    {num}
+                  </option>
+                ))}
+              </select>
+              <span className="text-slate-700">registros</span>
+            </div>
+
+            {hasType && (
+              <div className="flex items-center gap-2 border-l border-slate-200 pl-4">
+                <span className="text-slate-700">Tipo:</span>
+                <select
+                  value={filterType}
+                  onChange={(e) => setFilterType(e.target.value)}
+                  className="border border-slate-300 rounded-md px-2 py-1 text-sm bg-white focus:ring-2 focus:ring-sky-300 focus:outline-none"
+                >
+                  {["Todos", "Medicamento", "Equipamento"].map((t) => (
+                    <option key={t}>{t}</option>
+                  ))}
+                </select>
+              </div>
+            )}
+          </div>
+
+          <button
             onClick={handleAddRow}
-            className="flex items-center gap-1 text-sky-700 text-sm font-medium cursor-pointer hover:text-sky-800 transition"
+            className="flex items-center gap-1 text-sky-700 text-sm font-medium hover:text-sky-800 transition"
           >
             <Plus size={16} /> Adicionar linha
-          </span>
+          </button>
         </div>
 
         <div className="overflow-x-auto relative">
@@ -129,86 +212,76 @@ export default function EditableTable({ data, columns, onAdd, onEdit, onDelete }
                   <th
                     key={col.key}
                     className={`px-4 py-3 text-sm font-semibold text-slate-800 ${
-                      index !== columns.length - 1 ? "border-r border-slate-200" : ""
+                      index !== columns.length - 1
+                        ? "border-r border-slate-200"
+                        : ""
                     }`}
                   >
-                    {col.label}
+                    {col.key === "itemName" ? "Nome do Produto" : col.label}
                   </th>
                 ))}
+                <th className="px-4 py-3 text-sm font-semibold text-slate-800 border-l border-slate-200">
+                  Ações
+                </th>
               </tr>
             </thead>
 
             <tbody>
-              {rows.map((row, i) => (
+              {rowsFiltered.slice(0, recordsPerPage).map((row, i) => (
                 <tr
                   key={i}
                   className="border-b border-slate-200 hover:bg-sky-50 transition-colors"
-                  onMouseEnter={() => setHoveredRow(i)}
-                  onMouseLeave={() => setHoveredRow(null)}
                 >
                   {columns.map((col, index) => (
                     <td
                       key={col.key}
-                      className={`px-4 py-3 text-xs text-slate-800 relative overflow-visible ${
-                        index !== columns.length - 1 ? "border-r border-slate-200" : ""
+                      className={`px-4 py-3 text-xs text-slate-800 ${
+                        index !== columns.length - 1
+                          ? "border-r border-slate-100"
+                          : ""
                       }`}
                     >
                       {editingIndex === i && col.editable ? (
-                        <div className="flex justify-center items-center">
-                          <input
-                            type="text"
-                            value={row[col.key]}
-                            onChange={(e) => handleChange(i, col.key, e.target.value)}
-                            className="border border-slate-300 rounded-md px-2 py-1 text-xs focus:ring-2 focus:ring-sky-300 focus:outline-none bg-white transition-all text-center"
-                          />
-                        </div>
+                        <input
+                          type="text"
+                          value={row[col.key]}
+                          onChange={(e) =>
+                            handleChange(i, col.key, e.target.value)
+                          }
+                          className="border border-slate-300 rounded-md px-2 py-1 text-xs focus:ring-2 focus:ring-sky-300 focus:outline-none bg-white text-center"
+                        />
                       ) : col.key === "expiry" ? (
                         renderExpiryTag(row[col.key])
                       ) : (
                         row[col.key]
                       )}
-
-                      {index === columns.length - 1 && hoveredRow === i && (
-                        <div
-                          className="absolute flex items-center gap-3 px-2"
-                          style={{
-                            right: "4px",
-                            top: "50%",
-                            transform: "translateY(-50%)",
-                          }}
-                        >
-                          {editingIndex === i ? (
-                            <button
-                              onClick={() => handleSave(i)}
-                              className="text-sky-700 font-semibold text-xs hover:text-sky-900 transition-colors"
-                            >
-                              Salvar
-                            </button>
-                          ) : (
-                            <button
-                              onClick={() => setEditingIndex(i)}
-                              className="text-sky-700 hover:text-sky-900 transition-colors"
-                            >
-                              <Pencil size={16} />
-                            </button>
-                          )}
-                          <button
-                            onClick={() => confirmDelete(i)}
-                            className="text-red-600 hover:text-red-800 transition-colors"
-                          >
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      )}
                     </td>
                   ))}
+
+                  <td className="px-3 py-2 flex justify-center gap-3 border-l border-slate-200">
+                    <button
+                      onClick={() => handleEditClick(row)}
+                      className="text-sky-700 hover:text-sky-900 transition-colors"
+                    >
+                      <Pencil size={16} />
+                    </button>
+                    <button
+                      onClick={() => confirmDelete(i)}
+                      className="text-red-600 hover:text-red-800 transition-colors"
+                    >
+                      <Trash2 size={16} />
+                    </button>
+                  </td>
                 </tr>
               ))}
 
-              {rows.length === 0 && (
+              {rowsFiltered.length === 0 && (
                 <tr>
-                  <td colSpan={columns.length} className="text-center py-4 text-sm text-slate-600">
-                    Nenhum item cadastrado.
+                  <td
+                    colSpan={columns.length + 1}
+                    className="text-center py-4 text-sm text-slate-600"
+                  >
+                    Nenhum item encontrado.
                   </td>
                 </tr>
               )}
@@ -220,8 +293,8 @@ export default function EditableTable({ data, columns, onAdd, onEdit, onDelete }
       <Dialog
         open={deleteIndex !== null}
         onClose={handleDeleteCancel}
-        PaperProps={{
-          sx: {
+        sx={{
+          "& .MuiDialog-paper": {
             padding: 2,
             minWidth: 300,
             fontFamily: "'Inter', sans-serif",
@@ -238,7 +311,12 @@ export default function EditableTable({ data, columns, onAdd, onEdit, onDelete }
           <Button onClick={handleDeleteCancel} color="inherit" size="small">
             Não
           </Button>
-          <Button onClick={handleDeleteConfirmed} color="error" size="small" variant="contained">
+          <Button
+            onClick={handleDeleteConfirmed}
+            color="error"
+            size="small"
+            variant="contained"
+          >
             Sim
           </Button>
         </DialogActions>
