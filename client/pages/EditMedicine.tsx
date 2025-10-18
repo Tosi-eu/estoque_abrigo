@@ -124,17 +124,6 @@ export default function EditMedicine() {
                 className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
               />
             </div>
-            <div className="flex-1">
-              <label className="block text-sm font-medium text-slate-700 mb-1">
-                Forma
-              </label>
-              <input
-                type="text"
-                value={formData.form}
-                onChange={(e) => handleChange("form", e.target.value)}
-                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
-              />
-            </div>
           </div>
 
           <div className="flex justify-between pt-4">

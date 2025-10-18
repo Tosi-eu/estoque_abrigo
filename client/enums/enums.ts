@@ -27,6 +27,17 @@ export enum StockCategory {
     MEDICINE = "Medicamento",
     EQUIPMENT = "Equipamento",
 }
+
+export enum StockType {
+    GERAL = "geral",
+    INDIVIDUAL = "individual",
+}
+
+export enum TransactionType {
+    COMPRA = "Compra",
+    DOACAO = "Doação",
+    REPOSICAO = "Reposição",
+}
   
   
   

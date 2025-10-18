@@ -161,35 +161,6 @@ export default function SignUpMedicine() {
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Fabricante
-            </label>
-            <input
-              type="text"
-              value={formData.manufacturer}
-              onChange={(e) =>
-                setFormData({ ...formData, manufacturer: e.target.value })
-              }
-              placeholder="EMS, Neo Química..."
-              className="
-                w-full
-                border border-slate-300
-                rounded-lg
-                p-2.5
-                text-sm
-                bg-white
-                text-slate-800
-                shadow-sm
-                transition
-                focus:outline-none
-                focus:ring-2
-                focus:ring-sky-300
-                hover:border-slate-400
-              "
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
               Dosagem
             </label>
             <div className="flex items-center gap-3">
@@ -245,39 +216,7 @@ export default function SignUpMedicine() {
                 <option value="mcg">mcg</option>
               </select>
             </div>
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Forma de administração
-            </label>
-            <input
-              type="text"
-              value={formData.administrationForm}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  administrationForm: e.target.value,
-                })
-              }
-              placeholder="Comprimido, xarope..."
-              className="
-                w-full
-                border border-slate-300
-                rounded-lg
-                p-2.5
-                text-sm
-                bg-white
-                text-slate-800
-                shadow-sm
-                transition
-                focus:outline-none
-                focus:ring-2
-                focus:ring-sky-300
-                hover:border-slate-400
-              "
-            />
-          </div>
+          </div>  
 
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">

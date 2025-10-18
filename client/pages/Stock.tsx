@@ -4,6 +4,8 @@ import EditableTable from "@/components/EditableTable";
 import { stock } from "../../mocks/stock";
 import { hospitalItems } from "../../mocks/hospitalItems";
 import { medicines } from "../../mocks/medicines";
+import { cabinets } from "../../mocks/cabinets";
+import { StockType } from "@/enums/enums";
 
 export default function Stock() {
   const [search, setSearch] = useState("");
@@ -13,6 +15,10 @@ export default function Stock() {
     expiry: "",
     form: "",
     quantity: "",
+    patient: "",
+    cabinet: "",
+    casela: "",
+    stockType: "",
   });
 
   const handleFilterChange = (field: string, value: string) => {
@@ -22,6 +28,8 @@ export default function Stock() {
   const items = useMemo(() => {
     const meds = stock.map((entry) => {
       const med = medicines.find((m) => m.name === entry.medicine.name);
+      const cabinet = cabinets.find((c) => c.id === entry.cabinet);
+
       return {
         type: "Medicamento",
         name: med?.name || entry.medicine.name,
@@ -29,17 +37,28 @@ export default function Stock() {
         form: med?.form || "-",
         expiry: entry.expiry,
         quantity: entry.quantity,
+        patient: entry.patientName || "-",
+        cabinet: cabinet?.description || "-",
+        casela: entry.casela || "-",
+        stockType: entry.stockType, 
       };
     });
 
-    const hosp = hospitalItems.map((h) => ({
-      type: "Equipamento",
-      name: h.name,
-      description: h.description || "Hospitalar",
-      form: "-",
-      expiry: "-",
-      quantity: h.quantity,
-    }));
+    const hosp = hospitalItems.map((h) => {
+      const cabinet = cabinets.find((c) => c.id === h.cabinet);
+      return {
+        type: "Equipamento",
+        name: h.name,
+        description: h.description || "Hospitalar",
+        form: "-",
+        expiry: "-",
+        quantity: h.quantity,
+        patient: "-",
+        cabinet: cabinet?.description || "-",
+        casela: "-",
+        stockType: StockType.GERAL,
+      };
+    });
 
     return [...meds, ...hosp];
   }, []);
@@ -49,11 +68,12 @@ export default function Stock() {
       const term = search.toLowerCase();
       if (search && !item.name.toLowerCase().includes(term)) return false;
 
-      if (filters.name && item.name !== filters.name) return false;
-      if (filters.description && item.description !== filters.description) return false;
-      if (filters.expiry && item.expiry !== filters.expiry) return false;
-      if (filters.form && item.form !== filters.form) return false;
-      if (filters.quantity && item.quantity !== Number(filters.quantity)) return false;
+      for (const key in filters) {
+        const val = (filters as any)[key];
+        if (val && String(item[key]).toLowerCase() !== String(val).toLowerCase()) {
+          return false;
+        }
+      }
 
       return true;
     });
@@ -61,15 +81,14 @@ export default function Stock() {
 
   const columns = [
     { key: "name", label: "Nome", editable: true },
-    {
-      key: "description",
-      label: "Descrição / Princípio Ativo",
-      editable: true,
-      render: (row: any) => (row.expiry == null ? "Descrição" : "Princípio Ativo"),
-    },
+    { key: "description", label: "Descrição / Princípio Ativo", editable: true },
     { key: "expiry", label: "Validade", editable: true },
     { key: "form", label: "Forma", editable: true },
     { key: "quantity", label: "Quantidade", editable: true },
+    { key: "stockType", label: "Tipo de Estoque", editable: false },
+    { key: "patient", label: "Residente", editable: false },
+    { key: "cabinet", label: "Armário", editable: false },
+    { key: "casela", label: "Casela", editable: false },
   ];
 
   const uniqueValues = (key: string) =>
@@ -85,70 +104,61 @@ export default function Stock() {
         </div>
 
         <div className="flex flex-wrap gap-4 bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
-          <div>
-            <input
-              list="names"
-              placeholder="Nome"
-              value={filters.name}
-              onChange={(e) => handleFilterChange("name", e.target.value)}
-              className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-            />
-            <datalist id="names">
-              {uniqueValues("name").map((v) => (
-                <option key={v} value={v} />
-              ))}
-            </datalist>
-          </div>
+        <select
+            value={filters.stockType}
+            onChange={(e) => handleFilterChange("stockType", e.target.value)}
+            className="px-3 py-2 bg-white border rounded-lg text-sm"
+          >
+            <option value="">Todos os tipos</option>
+            <option value={StockType.GERAL}>Geral</option>
+            <option value={StockType.INDIVIDUAL}>Individual</option>
+          </select>
 
-          <div>
-            <input
-              list="descriptions"
-              placeholder="Descrição / Princípio Ativo"
-              value={filters.description}
-              onChange={(e) => handleFilterChange("description", e.target.value)}
-              className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-            />
-            <datalist id="descriptions">
-              {uniqueValues("description").map((v) => (
-                <option key={v} value={v} />
-              ))}
-            </datalist>
-          </div>
+          <input
+            placeholder="Nome"
+            value={filters.name}
+            onChange={(e) => handleFilterChange("name", e.target.value)}
+            list="names"
+            className="px-3 py-2 border rounded-lg text-sm"
+          />
+          <datalist id="names">
+            {uniqueValues("name").map((v) => (
+              <option key={v} value={v} />
+            ))}
+          </datalist>
 
-          <div>
-            <input
-              type="date"
-              placeholder="Validade"
-              value={filters.expiry}
-              onChange={(e) => handleFilterChange("expiry", e.target.value)}
-              className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-            />
-          </div>
+          <input
+            placeholder="Paciente / Residente"
+            value={filters.patient}
+            onChange={(e) => handleFilterChange("patient", e.target.value)}
+            list="patients"
+            className="px-3 py-2 border rounded-lg text-sm"
+          />
+          <datalist id="patients">
+            {uniqueValues("patient").map((v) => (
+              <option key={v} value={v} />
+            ))}
+          </datalist>
 
-          <div>
-            <input
-              list="forms"
-              placeholder="Forma"
-              value={filters.form}
-              onChange={(e) => handleFilterChange("form", e.target.value)}
-              className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-            />
-            <datalist id="forms">
-              {uniqueValues("form").map((v) => (
-                <option key={v} value={v} />
-              ))}
-            </datalist>
-          </div>
+          <input
+            placeholder="Armário"
+            value={filters.cabinet}
+            onChange={(e) => handleFilterChange("cabinet", e.target.value)}
+            list="cabinets"
+            className="px-3 py-2 border rounded-lg text-sm"
+          />
+          <datalist id="cabinets">
+            {uniqueValues("cabinet").map((v) => (
+              <option key={v} value={v} />
+            ))}
+          </datalist>
 
-          <div>
-            <input
-              type="number"
-              placeholder="Quantidade"
-              value={filters.quantity}
-              onChange={(e) => handleFilterChange("quantity", e.target.value)}
-              className="px-3 py-2 border bg-white rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
-            />
-          </div>
+          <input
+            placeholder="Casela"
+            value={filters.casela}
+            onChange={(e) => handleFilterChange("casela", e.target.value)}
+            className="px-3 py-2 border rounded-lg text-sm"
+          />
         </div>
 
         <EditableTable

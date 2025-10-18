@@ -9,12 +9,7 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
-import Button from "@mui/material/Button";
+import DeletePopUp from "./DeletePopUp";
 
 const typeMap: Record<string, string> = {
   Medicamento: "medicines",
@@ -75,14 +70,20 @@ export default function EditableTable({
     const updated = rows.filter((_, i) => i !== deleteIndex);
     setRows(updated);
     if (onDelete) onDelete(deleteIndex);
+
+    toast({
+      title: "Item removido",
+      description: "O item foi excluído com sucesso.",
+      variant: "success", 
+    });
+
+    
     setDeleteIndex(null);
   };
 
   const handleDeleteCancel = () => setDeleteIndex(null);
 
   const handleEditClick = (row: any) => {
-    console.log(row);
-    console.log(entityType);
     const type = entityType || typeMap[row?.type];
 
     if (!type) {
@@ -112,7 +113,6 @@ export default function EditableTable({
       (expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
     );
 
-    let label = "";
     let tooltipText = "";
     let colorClasses = "";
 
@@ -155,23 +155,7 @@ export default function EditableTable({
       <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden font-[Inter]">
         <div className="flex justify-between items-center px-4 py-3 border-b border-slate-200 bg-sky-50 text-sm">
           <div className="flex items-center gap-4">
-            <div className="flex items-center gap-2">
-              <span className="text-slate-700">Exibir</span>
-              <select
-                value={recordsPerPage}
-                onChange={(e) => setRecordsPerPage(Number(e.target.value))}
-                className="border border-slate-300 rounded-md px-2 py-1 text-sm bg-white focus:ring-2 focus:ring-sky-300 focus:outline-none"
-              >
-                {[10, 20, 30, 40, 50].map((num) => (
-                  <option key={num} value={num}>
-                    {num}
-                  </option>
-                ))}
-              </select>
-              <span className="text-slate-700">registros</span>
-            </div>
-
-            {hasType && (
+            {hasType && entityType !== "equipments" && (
               <div className="flex items-center gap-2 border-l border-slate-200 pl-4">
                 <span className="text-slate-700">Tipo:</span>
                 <select
@@ -199,16 +183,30 @@ export default function EditableTable({
           <table className="w-full text-center border-collapse">
             <thead>
               <tr className="border-b-2 border-slate-300 bg-sky-100">
-                {columns.map((col, index) => (
-                  <th
-                    key={col.key}
-                    className={`px-4 py-3 text-sm font-semibold text-slate-800 ${
-                      index !== columns.length - 1 ? "border-r border-slate-200" : ""
-                    }`}
-                  >
-                    {col.key === "itemName" ? "Nome do Produto" : col.label}
-                  </th>
-                ))}
+                {columns.map((col, index) => {
+                  let label = col.label;
+
+                  if (col.key === "description" && entityType !== "equipments") {
+                    if (filterType === "Todos") {
+                      label = "Princípio Ativo / Descrição";
+                    } else {
+                      label = filterType === "Medicamento" ? "Princípio Ativo" : "Descrição";
+                    }
+                  }
+
+                  if (col.key === "itemName") label = "Nome do Produto";
+
+                  return (
+                    <th
+                      key={col.key}
+                      className={`px-4 py-3 text-sm font-semibold text-slate-800 ${
+                        index !== columns.length - 1 ? "border-r border-slate-200" : ""
+                      }`}
+                    >
+                      {label}
+                    </th>
+                  );
+                })}
                 <th className="px-4 py-3 text-sm font-semibold text-slate-800 border-l border-slate-200">
                   Ações
                 </th>
@@ -233,6 +231,13 @@ export default function EditableTable({
                           type="text"
                           value={row[col.key]}
                           onChange={(e) => handleChange(i, col.key, e.target.value)}
+                          placeholder={
+                            col.key === "description" && entityType !== "equipments"
+                              ? row.type === "Medicamento"
+                                ? "Princípio Ativo"
+                                : "Descrição"
+                              : col.label
+                          }
                           className="border border-slate-300 rounded-md px-2 py-1 text-xs focus:ring-2 focus:ring-sky-300 focus:outline-none bg-white text-center"
                         />
                       ) : col.key === "expiry" ? (
@@ -272,26 +277,11 @@ export default function EditableTable({
         </div>
       </div>
 
-      <Dialog
+      <DeletePopUp
         open={deleteIndex !== null}
-        onClose={handleDeleteCancel}
-        sx={{ "& .MuiDialog-paper": { padding: 2, minWidth: 300, fontFamily: "'Inter', sans-serif" } }}
-      >
-        <DialogTitle sx={{ fontSize: 18 }}>Confirmar exclusão</DialogTitle>
-        <DialogContent sx={{ py: 1 }}>
-          <DialogContentText sx={{ fontSize: 14 }}>
-            Tem certeza que deseja remover este item da tabela?
-          </DialogContentText>
-        </DialogContent>
-        <DialogActions sx={{ p: 1 }}>
-          <Button onClick={handleDeleteCancel} color="inherit" size="small">
-            Não
-          </Button>
-          <Button onClick={handleDeleteConfirmed} color="error" size="small" variant="contained">
-            Sim
-          </Button>
-        </DialogActions>
-      </Dialog>
+        onCancel={handleDeleteCancel}
+        onConfirm={handleDeleteConfirmed}
+      />
     </>
   );
 }
