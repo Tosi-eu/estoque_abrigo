@@ -38,6 +38,11 @@ export enum TransactionType {
     DOACAO = "Doação",
     REPOSICAO = "Reposição",
 }
+
+export enum MovementType {
+    IN = "entrada",
+    OUT = "saida",
+}
   
   
   

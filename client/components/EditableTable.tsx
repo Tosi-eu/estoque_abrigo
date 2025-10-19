@@ -34,14 +34,33 @@ export default function EditableTable({
 
   useEffect(() => setRows(data), [data]);
 
-  const handleAddRow = () => {
-    const newRow: Record<string, any> = {};
-    columns.forEach((col) => (newRow[col.key] = ""));
-    const updated = [...rows, newRow];
-    setRows(updated);
-    if (onAdd) onAdd(newRow);
-  };
+  console.log(entityType);
+  console.log(data)
 
+  const handleAddRow = () => {
+    if (entityType === "medicines") {
+      navigate("/medicines/register");
+    }  else if (entityType === "residents") {
+      navigate("/residents/register");
+    } else if (entityType === "equipments") {
+      navigate("/equipments/register");
+    } else if (entityType === "cabinets") {
+      navigate("/cabinets/register");
+    } else if (entityType === "transactions") {
+      if (filterType === "Medicamento") {
+        navigate("/medicines/register");
+      } else if (filterType === "Equipamento") {
+        navigate("/equipments/register");
+      } else {
+        toast({
+          title: "Seleção inválida",
+          description: 'Selecione "Medicamento" ou "Equipamento" antes de adicionar.',
+          variant: "error",
+        });
+      }
+    }
+  };
+  
   const handleChange = (rowIndex: number, key: string, value: string) => {
     const updated = [...rows];
     updated[rowIndex][key] = value;
@@ -74,10 +93,9 @@ export default function EditableTable({
     toast({
       title: "Item removido",
       description: "O item foi excluído com sucesso.",
-      variant: "success", 
+      variant: "success",
     });
 
-    
     setDeleteIndex(null);
   };
 
@@ -89,7 +107,7 @@ export default function EditableTable({
     if (!type) {
       toast({
         title: "Tipo indefinido",
-        description: "Nenhum tipo de entidade foi informado.",
+        description: "Nenhum tipo foi informado.",
         variant: "error",
       });
       return;
@@ -148,6 +166,45 @@ export default function EditableTable({
     );
   };
 
+  const renderQuantityTag = (row: any) => {
+    let colorClasses = "";
+    let tooltipText = "";
+
+    console.log(row)
+
+    if (row.minimumStock != null) {
+      tooltipText = `Estoque: ${row.quantity} unidades, mínimo: ${row.minimumStock} unidades`;
+
+      if (row.quantity < row.minimumStock) {
+        colorClasses = "bg-red-100 text-red-700 border border-red-300";
+      } else if (row.quantity <= row.minimumStock * 1.5) {
+        colorClasses = "bg-yellow-100 text-yellow-700 border border-yellow-300";
+      } else {
+        colorClasses = "bg-green-100 text-green-700 border border-green-300";
+      }
+    } else {
+      colorClasses = "bg-green-100 text-green-700 border border-green-300";
+      tooltipText = `Quantidade: ${row.quantity}`;
+    }
+
+    return (
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <span
+              className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-medium cursor-default ${colorClasses}`}
+            >
+              {row.quantity}
+            </span>
+          </TooltipTrigger>
+          <TooltipContent side="top" className="text-xs">
+            {tooltipText}
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
+    );
+  };
+
   const hasType = rows.some((r) => r.type);
 
   return (
@@ -190,7 +247,9 @@ export default function EditableTable({
                     if (filterType === "Todos") {
                       label = "Princípio Ativo / Descrição";
                     } else {
-                      label = filterType === "Medicamento" ? "Princípio Ativo" : "Descrição";
+                      label = filterType === "Medicamento"
+                        ? "Princípio Ativo"
+                        : "Descrição";
                     }
                   }
 
@@ -242,6 +301,8 @@ export default function EditableTable({
                         />
                       ) : col.key === "expiry" ? (
                         renderExpiryTag(row[col.key])
+                      ) : col.key === "quantity" ? (
+                        renderQuantityTag(row)
                       ) : (
                         row[col.key]
                       )}

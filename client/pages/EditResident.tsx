@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import Layout from "@/components/Layout";
-import { residents } from "../../mocks/residents";
+import { patients } from "../../mocks/patients";
 import { toast } from "@/hooks/use-toast";
 
 export default function EditResident() {
@@ -22,7 +22,7 @@ export default function EditResident() {
   }, [item]);
 
   const handleSelectChange = (value: string) => {
-    const resident = residents.find(
+    const resident = patients.find(
       (r) => r.name === value || r.casela.toString() === value
     );
     if (resident) {
@@ -76,7 +76,7 @@ export default function EditResident() {
             className="w-full border border-slate-300 rounded-lg p-2.5 text-sm bg-white text-slate-800 shadow-sm transition focus:outline-none focus:ring-2 focus:ring-sky-300 hover:border-slate-400"
           >
             <option value="">Escolha</option>
-            {residents.map((c) => (
+            {patients.map((c) => (
               <option key={c.casela} value={c.casela}>
                 {c.name}
               </option>

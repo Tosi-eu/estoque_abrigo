@@ -1,4 +1,4 @@
-import { TransactionType } from "@/enums/enums";
+import { CabinetCategory, MovementType, StockType } from "@/enums/enums";
 import { ReactNode } from "react";
 
 export interface Column {
@@ -50,7 +50,7 @@ export interface Medicine {
 
 export interface Cabinet {
   id: number;
-  category: string;
+  category: CabinetCategory | string;
   description?: string;
 }
 
@@ -66,23 +66,63 @@ export interface MedicineInventory {
   residentId?: number;
   cabinetId: number;
   quantity: number;
-  origin: string;
+  expiry: string;
+  origin: StockType;
 }
 
 export interface EquipmentInventory {
   id: number;
-  equipmentId?: number;
+  equipmentId: number;
   cabinetId: number;
   quantity: number;
 }
 
 export interface Movement {
   id: number;
-  type: TransactionType;
+  type: MovementType;
   date: string;
-  userId: number;
+  user: string;
   medicineId?: number;
   equipmentId?: number;
-  cabinetId?: number;
+  cabinetId: number;
   patientId?: number;
 }
+
+export interface EquipmentMovementRow {
+  equipmentName: string;
+  description: string;
+  quantity?: number;
+  cabinet: string;
+  operator?: string;
+  movementDate: string;
+  movementType: string;
+}
+
+export interface MovementRow {
+  type: "Medicamento" | "Equipamento";
+  name: string;           
+  description: string;    
+  expiry?: string;       
+  quantity?: number;
+  minimumStock?: number;  
+  stockType?: string;     
+  patient?: string;       
+  casela?: number;        
+  cabinet?: string;
+  operator?: string;
+  movementDate: string;
+  movementType: string;
+}
+
+export interface PrepareMovementsParams {
+  movements: Movement[];
+  medicines: Medicine[];
+  equipments: Equipment[];
+  patients: Patient[];
+  cabinets: Cabinet[];
+  users: User[];
+  medicineInventory: MedicineInventory[];
+  equipmentInventory: EquipmentInventory[];
+}
+
+

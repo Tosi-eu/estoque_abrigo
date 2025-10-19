@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { medicines } from "../../mocks/medicines";
+import { medicines } from "../../mocks/medicines"; 
 
 export default function EditMedicine() {
   const location = useLocation();
@@ -11,19 +11,22 @@ export default function EditMedicine() {
   const [selectedMedicine, setSelectedMedicine] = useState<string>("");
   const [formData, setFormData] = useState({
     name: "",
-    active: "",
+    substance: "",
     dosage: "",
-    form: "",
+    measuremeUnit: "",
+    minimumStock: 0,
   });
 
   useEffect(() => {
     if (location.state?.item) {
       const item = location.state.item;
+
       const normalized = {
         name: item.name || item.itemName || "",
-        active: item.active || item.activeIngredient || "",
+        substance: item.substance || item.active || "",
         dosage: item.dosage || item.dose || "",
-        form: item.form || item.presentation || "",
+        measuremeUnit: item.measuremeUnit || item.unit || "",
+        minimumStock: item.minimumStock || 0,
       };
 
       setSelectedMedicine(normalized.name);
@@ -36,18 +39,25 @@ export default function EditMedicine() {
       const med = medicines.find((m) => m.name === selectedMedicine);
       if (med) {
         setFormData({
-          name: med.name || "",
-          active: med.active || "",
-          dosage: med.dosage || "",
-          form: med.form || "",
+          name: med.name,
+          substance: med.substance,
+          dosage: med.dosage,
+          measuremeUnit: med.measuremeUnit,
+          minimumStock: med.minimumStock,
         });
       }
     } else {
-      setFormData({ name: "", active: "", dosage: "", form: "" });
+      setFormData({
+        name: "",
+        substance: "",
+        dosage: "",
+        measuremeUnit: "",
+        minimumStock: 0,
+      });
     }
   }, [selectedMedicine]);
 
-  const handleChange = (field: string, value: string) => {
+  const handleChange = (field: string, value: string | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
@@ -57,14 +67,14 @@ export default function EditMedicine() {
     if (!formData.name) {
       toast({
         title: "Seleção obrigatória",
-        description: "Escolha ou digite um medicamento.",
+        description: "Escolha um medicamento para editar.",
         variant: "warning",
       });
       return;
     }
 
     toast({
-      title: "Registro atualizado",
+      title: "Medicamento atualizado",
       description: `${formData.name} foi atualizado com sucesso.`,
       variant: "success",
     });
@@ -72,16 +82,15 @@ export default function EditMedicine() {
     navigate("/transactions");
   };
 
-  console.log(formData);
-
   return (
-    <Layout title="Editar Medicamento">
+    <Layout title="Edição de Medicamento">
       <div className="max-w-lg mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-8 shadow-sm font-[Inter]">
         <h2 className="text-lg font-semibold text-slate-800 mb-6">
-          Edição de Medicamento
+          Editar Medicamento
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Selecionar medicamento */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Nome do medicamento
@@ -93,25 +102,27 @@ export default function EditMedicine() {
             >
               <option value="">Escolha</option>
               {medicines.map((m) => (
-                <option key={m.name} value={m.name}>
+                <option key={m.id} value={m.name}>
                   {m.name}
                 </option>
               ))}
             </select>
           </div>
 
+          {/* Substância ativa */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Nome Ativo
+              Substância ativa
             </label>
             <input
               type="text"
-              value={formData.active}
-              onChange={(e) => handleChange("active", e.target.value)}
+              value={formData.substance}
+              onChange={(e) => handleChange("substance", e.target.value)}
               className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
             />
           </div>
 
+          {/* Dosagem e unidade */}
           <div className="flex gap-2">
             <div className="flex-1">
               <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -124,6 +135,32 @@ export default function EditMedicine() {
                 className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
               />
             </div>
+            <div className="flex-1">
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                Unidade de medida
+              </label>
+              <input
+                type="text"
+                value={formData.measuremeUnit}
+                onChange={(e) => handleChange("measuremeUnit", e.target.value)}
+                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+              />
+            </div>
+          </div>
+
+          {/* Estoque mínimo */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Estoque mínimo
+            </label>
+            <input
+              type="number"
+              value={formData.minimumStock}
+              onChange={(e) =>
+                handleChange("minimumStock", Number(e.target.value))
+              }
+              className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+            />
           </div>
 
           <div className="flex justify-between pt-4">

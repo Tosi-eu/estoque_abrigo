@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { hospitalItems } from "../../mocks/hospitalItems";
+import { equipments } from "../../mocks/equipments"; 
 
 export default function EditEquipment() {
   const location = useLocation();
@@ -11,8 +11,7 @@ export default function EditEquipment() {
   const [selectedEquipment, setSelectedEquipment] = useState<string>("");
   const [formData, setFormData] = useState({
     name: "",
-    description: "",
-    quantity: 0,
+    description: ""
   });
 
   useEffect(() => {
@@ -21,8 +20,7 @@ export default function EditEquipment() {
 
       const normalized = {
         name: item.name || item.itemName || "",
-        description: item.description || "",
-        quantity: item.quantity || 0,
+        description: item.description || ""
       };
 
       setSelectedEquipment(normalized.name);
@@ -32,10 +30,15 @@ export default function EditEquipment() {
 
   useEffect(() => {
     if (selectedEquipment) {
-      const eq = hospitalItems.find((e) => e.name === selectedEquipment);
-      if (eq) setFormData(eq);
+      const eq = equipments.find((e) => e.name === selectedEquipment);
+      if (eq) {
+        setFormData({
+          name: eq.name,
+          description: eq.description || ""
+        });
+      }
     } else {
-      setFormData({ name: "", description: "", quantity: 0 });
+      setFormData({ name: "", description: "" });
     }
   }, [selectedEquipment]);
 
@@ -72,6 +75,7 @@ export default function EditEquipment() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Seleção do equipamento */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Nome do equipamento
@@ -82,14 +86,15 @@ export default function EditEquipment() {
               className="w-full border bg-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
             >
               <option value="">Escolha</option>
-              {hospitalItems.map((m) => (
-                <option key={m.name} value={m.name}>
-                  {m.name}
+              {equipments.map((e) => (
+                <option key={e.id} value={e.name}>
+                  {e.name}
                 </option>
               ))}
             </select>
           </div>
 
+          {/* Descrição */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Descrição
@@ -98,18 +103,6 @@ export default function EditEquipment() {
               type="text"
               value={formData.description}
               onChange={(e) => handleChange("description", e.target.value)}
-              className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">
-              Quantidade
-            </label>
-            <input
-              type="number"
-              value={formData.quantity}
-              onChange={(e) => handleChange("quantity", Number(e.target.value))}
               className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
             />
           </div>

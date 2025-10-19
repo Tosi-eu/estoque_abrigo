@@ -1,11 +1,12 @@
 import Layout from "@/components/Layout";
 import { useState, useMemo } from "react";
 import EditableTable from "@/components/EditableTable";
-import { stock } from "../../mocks/stock";
-import { hospitalItems } from "../../mocks/hospitalItems";
+import { StockType } from "@/enums/enums";
 import { medicines } from "../../mocks/medicines";
 import { cabinets } from "../../mocks/cabinets";
-import { StockType } from "@/enums/enums";
+import { equipments } from "../../mocks/equipments";
+import { medicineInventory } from "../../mocks/stock";
+import { equipmentInventory } from "../../mocks/stock";
 
 export default function Stock() {
   const [search, setSearch] = useState("");
@@ -13,7 +14,6 @@ export default function Stock() {
     name: "",
     description: "",
     expiry: "",
-    form: "",
     quantity: "",
     patient: "",
     cabinet: "",
@@ -26,33 +26,33 @@ export default function Stock() {
   };
 
   const items = useMemo(() => {
-    const meds = stock.map((entry) => {
-      const med = medicines.find((m) => m.name === entry.medicine.name);
-      const cabinet = cabinets.find((c) => c.id === entry.cabinet);
+    const meds = medicineInventory.map((entry) => {
+      const med = medicines.find((m) => m.id === entry.medicineId);
+      const cabinet = cabinets.find((c) => c.id === entry.cabinetId);
 
       return {
         type: "Medicamento",
-        name: med?.name || entry.medicine.name,
-        description: med?.active || "-",
-        form: med?.form || "-",
-        expiry: entry.expiry,
+        name: med?.name || "-",
+        description: med?.substance || "-",
+        expiry: entry.expiry, 
         quantity: entry.quantity,
-        patient: entry.patientName || "-",
+        patient: entry.residentId ? `Residente ${entry.residentId}` : "-",
         cabinet: cabinet?.description || "-",
-        casela: entry.casela || "-",
-        stockType: entry.stockType, 
+        casela: entry.residentId || "-",
+        stockType: entry.origin === "individual" ? StockType.INDIVIDUAL : StockType.GERAL,
       };
     });
 
-    const hosp = hospitalItems.map((h) => {
-      const cabinet = cabinets.find((c) => c.id === h.cabinet);
+    const eqs = equipmentInventory.map((entry) => {
+      const eq = equipments.find((e) => e.id === entry.equipmentId);
+      const cabinet = cabinets.find((c) => c.id === entry.cabinetId);
+
       return {
         type: "Equipamento",
-        name: h.name,
-        description: h.description || "Hospitalar",
-        form: "-",
+        name: eq?.name || "-",
+        description: eq?.description || "-",
         expiry: "-",
-        quantity: h.quantity,
+        quantity: entry.quantity,
         patient: "-",
         cabinet: cabinet?.description || "-",
         casela: "-",
@@ -60,7 +60,7 @@ export default function Stock() {
       };
     });
 
-    return [...meds, ...hosp];
+    return [...meds, ...eqs];
   }, []);
 
   const filteredStock = useMemo(() => {
@@ -80,10 +80,10 @@ export default function Stock() {
   }, [items, search, filters]);
 
   const columns = [
+    { key: "type", label: "Tipo", editable: false },
     { key: "name", label: "Nome", editable: true },
-    { key: "description", label: "Descrição / Princípio Ativo", editable: true },
+    { key: "description", label: "Descrição / Substância Ativa", editable: true },
     { key: "expiry", label: "Validade", editable: true },
-    { key: "form", label: "Forma", editable: true },
     { key: "quantity", label: "Quantidade", editable: true },
     { key: "stockType", label: "Tipo de Estoque", editable: false },
     { key: "patient", label: "Residente", editable: false },
@@ -95,7 +95,7 @@ export default function Stock() {
     [...new Set(items.map((i) => i[key]))].filter((v) => v && v !== "-");
 
   return (
-    <Layout title="Estoque de Medicamentos e Itens Hospitalares">
+    <Layout title="Estoque de Medicamentos e Equipamentos">
       <div className="space-y-6">
         <div className="flex flex-wrap gap-3">
           <button className="px-6 py-3 bg-sky-600 text-white rounded-lg font-semibold hover:bg-sky-700 transition">
@@ -104,7 +104,7 @@ export default function Stock() {
         </div>
 
         <div className="flex flex-wrap gap-4 bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
-        <select
+          <select
             value={filters.stockType}
             onChange={(e) => handleFilterChange("stockType", e.target.value)}
             className="px-3 py-2 bg-white border rounded-lg text-sm"
@@ -128,7 +128,7 @@ export default function Stock() {
           </datalist>
 
           <input
-            placeholder="Paciente / Residente"
+            placeholder="Residente"
             value={filters.patient}
             onChange={(e) => handleFilterChange("patient", e.target.value)}
             list="patients"
