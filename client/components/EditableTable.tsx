@@ -40,7 +40,7 @@ export default function EditableTable({
     } else if (entityType === "residents") {
       navigate("/residents/register");
     } else if (entityType === "equipments") {
-      navigate("/equipments/register"); 
+      navigate("/equipments/register");
     } else if (entityType === "cabinets") {
       navigate("/cabinets/register");
     } else if (entityType === "transactions") {
@@ -171,10 +171,10 @@ export default function EditableTable({
   const renderQuantityTag = (row: any) => {
     let colorClasses = "";
     let tooltipText = "";
-  
+
     if (row.minimumStock != null) {
       const margin = row.minimumStock * 0.2;
-  
+
       if (row.quantity > row.minimumStock * 2) {
         colorClasses = "bg-green-100 text-green-700 border border-green-300";
         tooltipText = `Estoque saudável: ${row.quantity} unidades, mínimo ${row.minimumStock}`;

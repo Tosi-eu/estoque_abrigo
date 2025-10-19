@@ -63,7 +63,6 @@ export default function SignUpMedicine() {
 
     const selected = medicines.find((m) => m.name === value);
     if (selected) {
-      // Separa valor e unidade da dosagem (ex: "500mg" → "500" e "mg")
       const match = selected.dosage.match(/^(\d+(?:,\d+)?)([a-zA-Z]+)$/);
       const dosageValue = match ? match[1] : "";
       const measuremeUnit = match ? match[2] : "";
@@ -88,7 +87,6 @@ export default function SignUpMedicine() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Nome do medicamento */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Nome do medicamento
@@ -159,7 +157,6 @@ export default function SignUpMedicine() {
             </div>
           </div>
 
-          {/* Estoque mínimo */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Estoque mínimo
@@ -175,7 +172,6 @@ export default function SignUpMedicine() {
             />
           </div>
 
-          {/* Botões */}
           <div className="flex justify-between pt-4">
             <button
               type="button"

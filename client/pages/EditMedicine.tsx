@@ -13,20 +13,22 @@ export default function EditMedicine() {
     name: "",
     substance: "",
     dosage: "",
-    measurementUnit: "",
+    measuremeUnit: "",
     minimumStock: 0,
   });
 
   useEffect(() => {
     if (location.state?.item) {
       const item = location.state.item;
-      const { dosageNumber, dosageUnit } = parseDosage(item.dosage || item.dose || "");
+      const { dosageNumber, dosageUnit } = parseDosage(
+        item.dosage || item.dose || "",
+      );
 
       const normalized = {
         name: item.name || item.itemName || "",
         substance: item.substance || item.active || "",
         dosage: dosageNumber,
-        measurementUnit: dosageUnit || item.measurementUnit || item.unit || "",
+        measuremeUnit: dosageUnit || item.measurementUnit || item.unit || "",
         minimumStock: item.minimumStock || 0,
       };
 
@@ -44,7 +46,7 @@ export default function EditMedicine() {
           name: med.name,
           substance: med.substance,
           dosage: dosageNumber,
-          measurementUnit: dosageUnit || med.measuremeUnit,
+          measuremeUnit: dosageUnit || med.measuremeUnit,
           minimumStock: med.minimumStock,
         });
       }
@@ -53,7 +55,7 @@ export default function EditMedicine() {
         name: "",
         substance: "",
         dosage: "",
-        measurementUnit: "",
+        measuremeUnit: "",
         minimumStock: 0,
       });
     }
@@ -74,13 +76,24 @@ export default function EditMedicine() {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
+  const handleMedicineSelect = (value: string) => {
+    const med = medicines.find((m) => m.name === value);
+    if (med) {
+      setSelectedMedicine(med.name);
+      setFormData(med);
+    } else {
+      setSelectedMedicine(value);
+      setFormData({ ...formData, name: value });
+    }
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!formData.name) {
       toast({
         title: "Seleção obrigatória",
-        description: "Escolha um medicamento para editar.",
+        description: "Escolha ou digite um medicamento.",
         variant: "warning",
       });
       return;
@@ -150,8 +163,10 @@ export default function EditMedicine() {
                 Unidade de medida
               </label>
               <select
-                value={formData.measurementUnit}
-                onChange={(e) => handleChange("measurementUnit", e.target.value)}
+                value={formData.measuremeUnit}
+                onChange={(e) =>
+                  handleChange("measurementUnit", e.target.value)
+                }
                 className="w-full border bg-white border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
               >
                 <option value="">Selecione</option>
