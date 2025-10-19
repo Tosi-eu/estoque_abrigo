@@ -6,7 +6,7 @@ import { medicines } from "../../mocks/medicines";
 import { cabinets } from "../../mocks/cabinets";
 import { equipments } from "../../mocks/equipments";
 import { medicineInventory, equipmentInventory } from "../../mocks/stock";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 export default function Stock() {
   const navigate = useNavigate();

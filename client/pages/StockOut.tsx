@@ -5,8 +5,10 @@ import { OperationType } from "@/enums/enums";
 import { MedicineForm } from "@/components/MedicineForm";
 import { EquipmentForm } from "@/components/EquipmentForm";
 
-export default function StockOut() {  
-  const [operationType, setOperationType] = useState<OperationType | "Selecione">("Selecione");
+export default function StockOut() {
+  const [operationType, setOperationType] = useState<
+    OperationType | "Selecione"
+  >("Selecione");
   const navigate = useNavigate();
 
   return (
@@ -54,9 +56,7 @@ export default function StockOut() {
             <h3 className="text-md font-semibold text-slate-800 mb-3">
               Medicamento
             </h3>
-            <MedicineForm
-              onSubmit={() => navigate('/stock')}
-            />
+            <MedicineForm onSubmit={() => navigate("/stock")} />
           </div>
         )}
 
@@ -65,9 +65,7 @@ export default function StockOut() {
             <h3 className="text-md font-semibold text-slate-800 mb-3">
               Equipamento
             </h3>
-            <EquipmentForm
-              onSubmit={() => navigate('/stock')}
-            />
+            <EquipmentForm onSubmit={() => navigate("/stock")} />
           </div>
         )}
       </div>
