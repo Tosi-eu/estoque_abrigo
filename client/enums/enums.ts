@@ -22,6 +22,11 @@ export enum CabinetCategory {
     MEDICAMENTOS_DOADOS = "Medicamentos doados / Fitas / Dersane / Clorexidina",
     DIVERSOS = "Lactulose / Hipratrópio / Pomadas / Domperidona / Materiais de glicemia"
 }
+
+export enum StockCategory {
+    MEDICINE = "Medicamento",
+    EQUIPMENT = "Equipamento",
+}
   
   
   

@@ -1,3 +1,4 @@
+// --- Layout.tsx ---
 import { ReactNode, useState, useRef } from "react";
 import { Link, useLocation } from "react-router-dom";
 import { ChevronDownIcon } from "@heroicons/react/24/solid";
@@ -20,7 +21,6 @@ export default function Layout({ children, title }: LayoutProps) {
       name: "Medicamentos",
       href: "/medicines",
       subRoutes: [
-        { name: "Registrar Novo Medicamento", href: "/medicines/register/new" },
         { name: "Cadastrar Medicamento", href: "/medicines/register" },
         { name: "Editar Medicamento", href: "/medicines/edit" },
         { name: "Deletar Medicamento", href: "/medicines/delete" },
@@ -30,7 +30,6 @@ export default function Layout({ children, title }: LayoutProps) {
       name: "Equipamentos",
       href: "/equipments",
       subRoutes: [
-        { name: "Registrar Novo Equipamento", href: "/equipments/register/new" },
         { name: "Cadastrar Equipamento", href: "/equipments/register" },
         { name: "Editar Equipamento", href: "/equipments/edit" },
         { name: "Deletar Equipamento", href: "/equipments/delete" },
@@ -54,13 +53,14 @@ export default function Layout({ children, title }: LayoutProps) {
       ],
     },
     {
-      name: "Outros",
+      name: "Armários",
       href: "#",
       subRoutes: [
-        { name: "Notificar", href: "/notify" },
-        { name: "Cadastrar Armário", href: "/cabinet/register" }
+        { name: "Cadastrar Armário", href: "/cabinet/register" },
+        { name: "Editar Armário", href: "/cabinet/edit" },
+        { name: "Deletar Armário", href: "/cabinet/delete" },
       ],
-    }
+    },
   ];
 
   const handleMouseEnter = (name: string) => {
@@ -73,20 +73,19 @@ export default function Layout({ children, title }: LayoutProps) {
   };
 
   return (
-    <div className="min-h-screen bg-white">
-      <header className="bg-gray-50 border-b border-gray-300 relative z-20">
+    <div className="min-h-screen bg-white text-slate-800">
+      <header className="bg-sky-50 border-b border-slate-200 shadow-sm relative z-20">
         <div className="max-w-[1651px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <Link to="/dashboard">
-              <img src={logo} alt="Logo" className="h-20 w-auto" />
+              <img src={logo} alt="Logo" className="h-16 w-auto drop-shadow-sm" />
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
               {navigation.map((item) => {
                 const isActive =
                   location.pathname === item.href ||
-                  (item.href !== "/dashboard" &&
-                    location.pathname.startsWith(item.href));
+                  (item.href !== "/dashboard" && location.pathname.startsWith(item.href));
 
                 if (item.subRoutes) {
                   const isOpen = openDropdown === item.name;
@@ -100,10 +99,10 @@ export default function Layout({ children, title }: LayoutProps) {
                     >
                       <Link
                         to={item.href}
-                        className={`inline-flex items-center text-lg font-normal transition-colors px-4 py-3 ${
+                        className={`inline-flex items-center text-base px-4 py-3 rounded-lg transition-all duration-200 ${
                           isActive
-                            ? "text-gray-900 font-medium"
-                            : "text-gray-900 hover:text-gray-700"
+                            ? "text-sky-700 bg-sky-100 font-semibold"
+                            : "text-slate-700 hover:text-sky-700 hover:bg-sky-50"
                         }`}
                       >
                         {item.name}
@@ -111,7 +110,7 @@ export default function Layout({ children, title }: LayoutProps) {
                       </Link>
 
                       <div
-                        className={`absolute left-0 w-60 bg-white border border-gray-200 rounded-md shadow-lg z-30 transition-opacity duration-200 ${
+                        className={`absolute left-0 w-60 bg-white border border-slate-200 rounded-lg shadow-md transition-all duration-300 ${
                           isOpen ? "opacity-100 visible" : "opacity-0 invisible"
                         }`}
                       >
@@ -119,7 +118,7 @@ export default function Layout({ children, title }: LayoutProps) {
                           <Link
                             key={sub.name}
                             to={sub.href}
-                            className="block px-4 py-2 text-gray-900 hover:bg-gray-100"
+                            className="block px-4 py-2 text-slate-700 hover:bg-sky-50 hover:text-sky-700 text-sm"
                           >
                             {sub.name}
                           </Link>
@@ -133,10 +132,10 @@ export default function Layout({ children, title }: LayoutProps) {
                   <Link
                     key={item.name}
                     to={item.href}
-                    className={`text-lg font-normal transition-colors px-4 py-3 ${
+                    className={`text-base px-4 py-3 rounded-lg transition-all duration-200 ${
                       isActive
-                        ? "text-gray-900 font-medium"
-                        : "text-gray-900 hover:text-gray-700"
+                        ? "text-sky-700 bg-sky-100 font-semibold"
+                        : "text-slate-700 hover:text-sky-700 hover:bg-sky-50"
                     }`}
                   >
                     {item.name}
@@ -150,7 +149,7 @@ export default function Layout({ children, title }: LayoutProps) {
 
       {title && (
         <div className="max-w-[1651px] mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          <h1 className="text-2xl font-bold text-gray-900">{title}</h1>
+          <h1 className="text-2xl font-semibold text-slate-800">{title}</h1>
         </div>
       )}
 
