@@ -148,7 +148,7 @@ export default function Dashboard() {
                         outerRadius={70}
                         label={false}
                       >
-                        {stockDistribution.map((entry, index) => (
+                        {stockDistribution.map((_, index) => (
                           <Cell
                             key={`cell-${index}`}
                             fill={COLORS[index % COLORS.length]}

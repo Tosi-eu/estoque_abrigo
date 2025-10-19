@@ -13,19 +13,20 @@ export default function EditMedicine() {
     name: "",
     substance: "",
     dosage: "",
-    measuremeUnit: "",
+    measurementUnit: "",
     minimumStock: 0,
   });
 
   useEffect(() => {
     if (location.state?.item) {
       const item = location.state.item;
+      const { dosageNumber, dosageUnit } = parseDosage(item.dosage || item.dose || "");
 
       const normalized = {
         name: item.name || item.itemName || "",
         substance: item.substance || item.active || "",
-        dosage: item.dosage || item.dose || "",
-        measuremeUnit: item.measuremeUnit || item.unit || "",
+        dosage: dosageNumber,
+        measurementUnit: dosageUnit || item.measurementUnit || item.unit || "",
         minimumStock: item.minimumStock || 0,
       };
 
@@ -38,11 +39,12 @@ export default function EditMedicine() {
     if (selectedMedicine) {
       const med = medicines.find((m) => m.name === selectedMedicine);
       if (med) {
+        const { dosageNumber, dosageUnit } = parseDosage(med.dosage || "");
         setFormData({
           name: med.name,
           substance: med.substance,
-          dosage: med.dosage,
-          measuremeUnit: med.measuremeUnit,
+          dosage: dosageNumber,
+          measurementUnit: dosageUnit || med.measuremeUnit,
           minimumStock: med.minimumStock,
         });
       }
@@ -51,11 +53,22 @@ export default function EditMedicine() {
         name: "",
         substance: "",
         dosage: "",
-        measuremeUnit: "",
+        measurementUnit: "",
         minimumStock: 0,
       });
     }
   }, [selectedMedicine]);
+
+  const parseDosage = (value: string) => {
+    const match = value.trim().match(/^(\d+(?:[.,]\d+)?)([a-zA-Zμµ]*)$/);
+    if (match) {
+      return {
+        dosageNumber: match[1],
+        dosageUnit: match[2] || "",
+      };
+    }
+    return { dosageNumber: value, dosageUnit: "" };
+  };
 
   const handleChange = (field: string, value: string | number) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
@@ -126,7 +139,7 @@ export default function EditMedicine() {
                 Dosagem
               </label>
               <input
-                type="text"
+                type="number"
                 value={formData.dosage}
                 onChange={(e) => handleChange("dosage", e.target.value)}
                 className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
@@ -136,12 +149,17 @@ export default function EditMedicine() {
               <label className="block text-sm font-medium text-slate-700 mb-1">
                 Unidade de medida
               </label>
-              <input
-                type="text"
-                value={formData.measuremeUnit}
-                onChange={(e) => handleChange("measuremeUnit", e.target.value)}
-                className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
-              />
+              <select
+                value={formData.measurementUnit}
+                onChange={(e) => handleChange("measurementUnit", e.target.value)}
+                className="w-full border bg-white border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+              >
+                <option value="">Selecione</option>
+                <option value="mg">mg</option>
+                <option value="g">g</option>
+                <option value="mcg">mcg</option>
+                <option value="ml">ml</option>
+              </select>
             </div>
           </div>
 
