@@ -36,6 +36,7 @@ export default function Stock() {
         description: med?.substance || "-",
         expiry: entry.expiry, 
         quantity: entry.quantity,
+        minimumStock: med?.minimumStock,
         patient: entry.residentId ? `Residente ${entry.residentId}` : "-",
         cabinet: cabinet?.description || "-",
         casela: entry.residentId || "-",
@@ -82,7 +83,7 @@ export default function Stock() {
   const columns = [
     { key: "type", label: "Tipo", editable: false },
     { key: "name", label: "Nome", editable: true },
-    { key: "description", label: "Descrição / Substância Ativa", editable: true },
+    { key: "description", label: "Descrição / Princípio Ativo", editable: true },
     { key: "expiry", label: "Validade", editable: true },
     { key: "quantity", label: "Quantidade", editable: true },
     { key: "stockType", label: "Tipo de Estoque", editable: false },

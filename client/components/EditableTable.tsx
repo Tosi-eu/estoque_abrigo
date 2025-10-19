@@ -34,9 +34,6 @@ export default function EditableTable({
 
   useEffect(() => setRows(data), [data]);
 
-  console.log(entityType);
-  console.log(data)
-
   const handleAddRow = () => {
     if (entityType === "medicines") {
       navigate("/medicines/register");
@@ -102,7 +99,12 @@ export default function EditableTable({
   const handleDeleteCancel = () => setDeleteIndex(null);
 
   const handleEditClick = (row: any) => {
-    const type = entityType || typeMap[row?.type];
+
+    let type = typeMap[row?.type];
+
+  if(['equipments', 'medicines', 'residents', 'cabinets'].includes(entityType)) {
+      type = entityType
+    }
 
     if (!type) {
       toast({
@@ -169,8 +171,6 @@ export default function EditableTable({
   const renderQuantityTag = (row: any) => {
     let colorClasses = "";
     let tooltipText = "";
-
-    console.log(row)
 
     if (row.minimumStock != null) {
       tooltipText = `Estoque: ${row.quantity} unidades, mínimo: ${row.minimumStock} unidades`;

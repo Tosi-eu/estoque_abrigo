@@ -186,7 +186,7 @@ export default function Dashboard() {
                 <thead>
                   <tr className="border-b border-slate-200 bg-sky-100">
                     <th className="px-3 py-2 text-center font-semibold text-slate-800">Medicamento</th>
-                    <th className="px-3 py-2 text-center font-semibold text-slate-800">Substância</th>
+                    <th className="px-3 py-2 text-center font-semibold text-slate-800">Princípio Ativo</th>
                     <th className="px-3 py-2 text-center font-semibold text-slate-800">Quantidade</th>
                     <th className="px-3 py-2 text-center font-semibold text-slate-800">Validade</th>
                   </tr>

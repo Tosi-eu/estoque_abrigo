@@ -90,7 +90,6 @@ export default function EditMedicine() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Selecionar medicamento */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Nome do medicamento
@@ -109,10 +108,9 @@ export default function EditMedicine() {
             </select>
           </div>
 
-          {/* Substância ativa */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Substância ativa
+              Princípio Ativo
             </label>
             <input
               type="text"
@@ -122,7 +120,6 @@ export default function EditMedicine() {
             />
           </div>
 
-          {/* Dosagem e unidade */}
           <div className="flex gap-2">
             <div className="flex-1">
               <label className="block text-sm font-medium text-slate-700 mb-1">
@@ -148,7 +145,6 @@ export default function EditMedicine() {
             </div>
           </div>
 
-          {/* Estoque mínimo */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Estoque mínimo

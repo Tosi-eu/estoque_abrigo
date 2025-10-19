@@ -10,7 +10,7 @@ export default function RegisterResident() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     console.log({ nome, casela });
-    navigate("/resident");
+    navigate("/residents");
   };
 
   return (
@@ -44,7 +44,7 @@ export default function RegisterResident() {
           <div className="flex justify-between pt-4">
             <button
               type="button"
-              onClick={() => navigate("/resident")}
+              onClick={() => navigate("/residents")}
               className="px-5 py-2 border border-slate-400 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
             >
               Cancelar

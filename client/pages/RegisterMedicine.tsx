@@ -100,10 +100,9 @@ export default function SignUpMedicine() {
             </datalist>
           </div>
 
-          {/* Substância ativa */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Substância ativa
+              Princípio Ativo
             </label>
             <input
               type="text"
