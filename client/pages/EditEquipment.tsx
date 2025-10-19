@@ -75,7 +75,6 @@ export default function EditEquipment() {
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Seleção do equipamento */}
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
               Nome do equipamento
