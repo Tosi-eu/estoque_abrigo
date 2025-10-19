@@ -68,7 +68,7 @@ export default function EditResident() {
 
         <div>
           <label className="block text-sm font-medium text-slate-700 mb-1">
-            Selecionar Armário
+            Selecionar Residente
           </label>
           <select
             value={selectedResident?.casela || ""}
