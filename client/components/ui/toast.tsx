@@ -14,7 +14,7 @@ const ToastViewport = React.forwardRef<
     ref={ref}
     className={cn(
       "fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]",
-      className
+      className,
     )}
     {...props}
   />
@@ -33,20 +33,23 @@ const toastVariants = cva(
           "border-red-500/20 bg-red-50 text-red-900 dark:bg-red-900/20 dark:text-red-200",
         warning:
           "border-yellow-500/20 bg-yellow-50 text-yellow-900 dark:bg-yellow-900/20 dark:text-yellow-200",
-        info:
-          "border-blue-500/20 bg-blue-50 text-blue-900 dark:bg-blue-900/20 dark:text-blue-200",
+        info: "border-blue-500/20 bg-blue-50 text-blue-900 dark:bg-blue-900/20 dark:text-blue-200",
       },
     },
     defaultVariants: {
       variant: "default",
     },
-  }
+  },
 );
 
 const iconMap: Record<string, React.ReactNode> = {
-  success: <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />,
+  success: (
+    <CheckCircle2 className="h-5 w-5 text-green-600 dark:text-green-400" />
+  ),
   error: <XCircle className="h-5 w-5 text-red-600 dark:text-red-400" />,
-  warning: <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />,
+  warning: (
+    <AlertTriangle className="h-5 w-5 text-yellow-600 dark:text-yellow-400" />
+  ),
   info: <Info className="h-5 w-5 text-blue-600 dark:text-blue-400" />,
   default: <Info className="h-5 w-5 text-muted-foreground" />,
 };
@@ -78,7 +81,7 @@ const ToastAction = React.forwardRef<
     ref={ref}
     className={cn(
       "inline-flex h-8 shrink-0 items-center justify-center rounded-md border bg-transparent px-3 text-sm font-medium ring-offset-background transition-colors hover:bg-secondary focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:opacity-50",
-      className
+      className,
     )}
     {...props}
   />
@@ -93,7 +96,7 @@ const ToastClose = React.forwardRef<
     ref={ref}
     className={cn(
       "absolute right-2 top-2 rounded-md p-1 text-foreground/50 opacity-0 transition-opacity hover:text-foreground focus:opacity-100 focus:outline-none focus:ring-2 group-hover:opacity-100",
-      className
+      className,
     )}
     {...props}
   >

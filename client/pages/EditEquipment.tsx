@@ -1,25 +1,50 @@
 import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
-import { useNavigate } from "react-router";
+import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { hospitalItems } from "../../mocks/hospitalItems";
+import { equipments } from "../../mocks/equipments";
 
 export default function EditEquipment() {
-  const [selectedEquipment, setSelectedEquipment] = useState("");
-  const [formData, setFormData] = useState({
-    name: "",
-    category: "",
-    expiry: "",
-    unit: "",
-    form: "",
-    quantity: 0,
-  });
+  const location = useLocation();
   const navigate = useNavigate();
 
+  const [selectedEquipment, setSelectedEquipment] = useState<string>("");
+  const [formData, setFormData] = useState({
+    name: "",
+    description: "",
+  });
+
   useEffect(() => {
-    const eq = hospitalItems.find((e) => e.name === selectedEquipment);
-    if (eq) setFormData(eq);
+    if (location.state?.item) {
+      const item = location.state.item;
+
+      const normalized = {
+        name: item.name || item.itemName || "",
+        description: item.description || "",
+      };
+
+      setSelectedEquipment(normalized.name);
+      setFormData(normalized);
+    }
+  }, [location.state]);
+
+  useEffect(() => {
+    if (selectedEquipment) {
+      const eq = equipments.find((e) => e.name === selectedEquipment);
+      if (eq) {
+        setFormData({
+          name: eq.name,
+          description: eq.description || "",
+        });
+      }
+    } else {
+      setFormData({ name: "", description: "" });
+    }
   }, [selectedEquipment]);
+
+  const handleChange = (field: string, value: string | number) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -44,59 +69,55 @@ export default function EditEquipment() {
 
   return (
     <Layout title="Edição de Equipamento">
-      <div className="max-w-lg mx-auto mt-10 bg-gray-50 border border-gray-300 rounded-xl p-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">Editar Equipamento</h2>
+      <div className="max-w-lg mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
+        <h2 className="text-lg font-semibold text-slate-800 mb-6">
+          Editar Equipamento
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Seleção do equipamento */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Selecione o equipamento</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Nome do equipamento
+            </label>
             <select
               value={selectedEquipment}
               onChange={(e) => setSelectedEquipment(e.target.value)}
-              className="w-full border border-gray-400 rounded-md p-2 text-sm"
+              className="w-full border bg-white rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
             >
-              <option value="">-- Escolha --</option>
-              {hospitalItems.map((eq) => (
-                <option key={eq.name} value={eq.name}>
-                  {eq.name}
+              <option value="">Escolha</option>
+              {equipments.map((e) => (
+                <option key={e.id} value={e.name}>
+                  {e.name}
                 </option>
               ))}
             </select>
           </div>
 
-          {selectedEquipment && (
-            <>
-              {[
-                { label: "Categoria", field: "category", type: "text" },
-                { label: "Validade", field: "expiry", type: "date" },
-                { label: "Unidade", field: "unit", type: "text" },
-                { label: "Material/Composição", field: "form", type: "text" },
-                { label: "Quantidade", field: "quantity", type: "number" },
-              ].map(({ label, field, type }) => (
-                <div key={field}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">{label}</label>
-                  <input
-                    type={type}
-                    value={formData[field as keyof typeof formData]}
-                    onChange={(e) => setFormData({ ...formData, [field]: e.target.value })}
-                    className="w-full border border-gray-400 rounded-md p-2 text-sm"
-                  />
-                </div>
-              ))}
-            </>
-          )}
+          {/* Descrição */}
+          <div>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Descrição
+            </label>
+            <input
+              type="text"
+              value={formData.description}
+              onChange={(e) => handleChange("description", e.target.value)}
+              className="w-full border border-slate-300 rounded-lg p-2.5 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+            />
+          </div>
 
           <div className="flex justify-between pt-4">
             <button
               type="button"
               onClick={() => navigate("/equipments")}
-              className="px-5 py-2 border border-gray-600 rounded-md text-sm font-semibold hover:bg-gray-100"
+              className="px-5 py-2 border border-slate-400 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-100 transition"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-5 py-2 bg-gray-800 text-white rounded-md text-sm font-semibold hover:bg-gray-900"
+              className="px-5 py-2 bg-sky-600 text-white rounded-lg text-sm font-semibold hover:bg-sky-700 transition"
             >
               Salvar Alterações
             </button>

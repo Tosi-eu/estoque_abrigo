@@ -1,93 +1,86 @@
 import { useState } from "react";
 import Layout from "@/components/Layout";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { useNavigate } from "react-router";
 
 export default function RegisterEquipment() {
-  const [equipment, setEquipment] = useState("");
-  const [category, setCategory] = useState("");
-  const [material, setMaterial] = useState("");
-  const [unit, setUnit] = useState("unidade");
-  const [quantity, setQuantity] = useState("");
   const navigate = useNavigate();
+  const [formData, setFormData] = useState({
+    name: "",
+    category: "",
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!equipment || !category || !material || !unit || !quantity) {
+    if (!formData.name || !formData.category) {
       toast({
         title: "Campos obrigatórios",
-        description: "Preencha todos os campos para continuar.",
+        description: "Preencha todos os campos para cadastrar o equipamento.",
         variant: "warning",
       });
       return;
     }
 
     toast({
-      title: "Equipamento registrado!",
-      description: `${equipment} (${quantity} ${unit}) foi adicionado ao estoque.`,
+      title: "Equipamento cadastrado",
+      description: `${formData.name} foi adicionado ao sistema.`,
       variant: "success",
     });
 
-    setEquipment("");
-    setCategory("");
-    setMaterial("");
-    setUnit("unidade");
-    setQuantity("");
+    setFormData({ name: "", category: "" });
     navigate("/equipments");
   };
 
   return (
-    <Layout title="Cadastro de Novo Equipamento">
-      <div className="max-w-lg mx-auto mt-10 bg-gray-50 border border-gray-300 rounded-xl p-8">
-        <h2 className="text-lg font-semibold text-gray-900 mb-6">
-          Registro de Equipamento
+    <Layout title="Cadastro de Equipamento">
+      <div className="max-w-lg mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
+        <h2 className="text-lg font-semibold text-slate-800 mb-6">
+          Cadastrar Equipamento
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Nome do Equipamento
-            </label>
-            <input
-              type="text"
-              value={equipment}
-              onChange={(e) => setEquipment(e.target.value)}
-              className="w-full border border-gray-400 rounded-md p-2 text-sm"
-              placeholder="Seringa 5ml"
-            />
-          </div>
+          {[
+            {
+              label: "Nome do Equipamento",
+              field: "name",
+              placeholder: "Seringa 5ml",
+            },
+            {
+              label: "Categoria",
+              field: "category",
+              placeholder: "Material de Injeção",
+            },
+          ].map(({ label, field, placeholder }) => (
+            <div key={field}>
+              <label className="block text-sm font-medium text-slate-700 mb-1">
+                {label}
+              </label>
+              <input
+                type="text"
+                value={formData[field as keyof typeof formData]}
+                onChange={(e) =>
+                  setFormData({ ...formData, [field]: e.target.value })
+                }
+                placeholder={placeholder}
+                className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:outline-none focus:ring-2 focus:ring-sky-300"
+              />
+            </div>
+          ))}
 
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              Categoria
-            </label>
-            <input
-              type="text"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full border border-gray-400 rounded-md p-2 text-sm"
-              placeholder="Material de Injeção"
-            />
-          </div>
-
-          <div className="flex justify-center gap-4 mt-6">
+          <div className="flex justify-between pt-4">
             <button
               type="button"
-              onClick={() => {
-                setEquipment("");
-                setCategory("");
-                navigate("/equipments");
-              }}
-              className="px-5 py-2 border border-gray-600 rounded-md text-sm font-semibold hover:bg-gray-100"
+              onClick={() => navigate("/equipments")}
+              className="px-5 py-2 border border-slate-400 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-100 transition"
             >
               Cancelar
             </button>
             <button
               type="submit"
-              className="px-5 py-2 bg-gray-800 text-white rounded-md text-sm font-semibold hover:bg-gray-900"
+              className="px-5 py-2 bg-sky-600 text-white rounded-lg text-sm font-semibold hover:bg-sky-700 transition"
             >
-              Registrar Equipamento
+              Cadastrar
             </button>
           </div>
         </form>

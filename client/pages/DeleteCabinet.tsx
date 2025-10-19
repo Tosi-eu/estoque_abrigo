@@ -2,47 +2,47 @@ import { useState } from "react";
 import Layout from "@/components/Layout";
 import { toast } from "@/hooks/use-toast";
 import { useNavigate } from "react-router-dom";
-import { patients } from "../../mocks/patients";
+import { cabinets } from "../../mocks/cabinets";
 
-export default function DeleteMedicine() {
-  const [selectedResident, setSelectedResident] = useState("");
+export default function DeleteCabinet() {
+  const [selectedCabinet, setSelectedCabinet] = useState("");
   const navigate = useNavigate();
 
   const handleDelete = () => {
-    if (!selectedResident) {
+    if (!selectedCabinet) {
       toast({
         title: "Seleção obrigatória",
-        description: "Escolha um residente para deletar.",
+        description: "Escolha um armário para deletar.",
         variant: "warning",
       });
       return;
     }
 
     toast({
-      title: "residente deletado",
-      description: `Residente ${selectedResident} foi removido do sistema.`,
+      title: "Armário deletado",
+      description: `Armário ${selectedCabinet} foi removido com sucesso.`,
       variant: "success",
     });
 
-    setSelectedResident("");
+    setSelectedCabinet("");
     navigate("/transactions");
   };
 
   return (
-    <Layout title="Deleção de Residente">
+    <Layout title="Deleção de Armário">
       <div className="max-w-lg mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
         <h2 className="text-lg font-semibold text-slate-800 mb-6">
-          Deletar Residente
+          Deletar Armário
         </h2>
 
         <div className="space-y-6">
           <div>
             <label className="block text-sm font-medium text-slate-700 mb-1">
-              Selecione o residente
+              Selecione o armário
             </label>
             <select
-              value={selectedResident}
-              onChange={(e) => setSelectedResident(e.target.value)}
+              value={selectedCabinet}
+              onChange={(e) => setSelectedCabinet(e.target.value)}
               className="
                 w-full
                 border border-slate-300
@@ -60,9 +60,9 @@ export default function DeleteMedicine() {
               "
             >
               <option value="">Escolha</option>
-              {patients.map((m) => (
-                <option key={m.name} value={m.name}>
-                  {m.name}
+              {cabinets.map((m) => (
+                <option key={m.id} value={m.id}>
+                  {m.id} - {m.description}
                 </option>
               ))}
             </select>
@@ -72,7 +72,7 @@ export default function DeleteMedicine() {
             <button
               type="button"
               onClick={() => navigate("/transactions")}
-              className="px-5 py-2 border border-slate-400 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-100 transition"
+              className="px-5 py-2 border border-slate-400 rounded-lg text-sm font-semibold text-slate-700 hover:bg-slate-100 transition"
             >
               Cancelar
             </button>
