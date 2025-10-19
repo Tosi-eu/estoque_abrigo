@@ -16,11 +16,15 @@ export default function RegisterResident() {
   return (
     <Layout title="Cadastro de Residente e Casela">
       <div className="max-w-lg mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
-        <h2 className="text-lg font-semibold text-slate-800 mb-6">Cadastro de Residente</h2>
+        <h2 className="text-lg font-semibold text-slate-800 mb-6">
+          Cadastro de Residente
+        </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Nome do Residente</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Nome do Residente
+            </label>
             <input
               type="text"
               value={nome}
@@ -31,7 +35,9 @@ export default function RegisterResident() {
           </div>
 
           <div>
-            <label className="block text-sm font-medium text-slate-700 mb-1">Casela</label>
+            <label className="block text-sm font-medium text-slate-700 mb-1">
+              Casela
+            </label>
             <input
               type="text"
               value={casela}

@@ -37,7 +37,7 @@ export default function EditableTable({
   const handleAddRow = () => {
     if (entityType === "medicines") {
       navigate("/medicines/register");
-    }  else if (entityType === "residents") {
+    } else if (entityType === "residents") {
       navigate("/residents/register");
     } else if (entityType === "equipments") {
       navigate("/equipments/register");
@@ -51,13 +51,14 @@ export default function EditableTable({
       } else {
         toast({
           title: "Seleção inválida",
-          description: 'Selecione "Medicamento" ou "Equipamento" antes de adicionar.',
+          description:
+            'Selecione "Medicamento" ou "Equipamento" antes de adicionar.',
           variant: "error",
         });
       }
     }
   };
-  
+
   const handleChange = (rowIndex: number, key: string, value: string) => {
     const updated = [...rows];
     updated[rowIndex][key] = value;
@@ -99,11 +100,12 @@ export default function EditableTable({
   const handleDeleteCancel = () => setDeleteIndex(null);
 
   const handleEditClick = (row: any) => {
-
     let type = typeMap[row?.type];
 
-  if(['equipments', 'medicines', 'residents', 'cabinets'].includes(entityType)) {
-      type = entityType
+    if (
+      ["equipments", "medicines", "residents", "cabinets"].includes(entityType)
+    ) {
+      type = entityType;
     }
 
     if (!type) {
@@ -119,9 +121,7 @@ export default function EditableTable({
   };
 
   const rowsFiltered =
-    filterType === "Todos"
-      ? rows
-      : rows.filter((r) => r.type === filterType);
+    filterType === "Todos" ? rows : rows.filter((r) => r.type === filterType);
 
   const renderExpiryTag = (value: string) => {
     if (!value) return "-";
@@ -130,7 +130,7 @@ export default function EditableTable({
     if (isNaN(expiryDate.getTime())) return value;
 
     const diffDays = Math.ceil(
-      (expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+      (expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
     );
 
     let tooltipText = "";
@@ -243,13 +243,17 @@ export default function EditableTable({
                 {columns.map((col, index) => {
                   let label = col.label;
 
-                  if (col.key === "description" && entityType !== "equipments") {
+                  if (
+                    col.key === "description" &&
+                    entityType !== "equipments"
+                  ) {
                     if (filterType === "Todos") {
                       label = "Princípio Ativo / Descrição";
                     } else {
-                      label = filterType === "Medicamento"
-                        ? "Princípio Ativo"
-                        : "Descrição";
+                      label =
+                        filterType === "Medicamento"
+                          ? "Princípio Ativo"
+                          : "Descrição";
                     }
                   }
 
@@ -259,7 +263,9 @@ export default function EditableTable({
                     <th
                       key={col.key}
                       className={`px-4 py-3 text-sm font-semibold text-slate-800 ${
-                        index !== columns.length - 1 ? "border-r border-slate-200" : ""
+                        index !== columns.length - 1
+                          ? "border-r border-slate-200"
+                          : ""
                       }`}
                     >
                       {label}
@@ -282,16 +288,21 @@ export default function EditableTable({
                     <td
                       key={col.key}
                       className={`px-4 py-3 text-xs text-slate-800 ${
-                        index !== columns.length - 1 ? "border-r border-slate-100" : ""
+                        index !== columns.length - 1
+                          ? "border-r border-slate-100"
+                          : ""
                       }`}
                     >
                       {editingIndex === i && col.editable ? (
                         <input
                           type="text"
                           value={row[col.key]}
-                          onChange={(e) => handleChange(i, col.key, e.target.value)}
+                          onChange={(e) =>
+                            handleChange(i, col.key, e.target.value)
+                          }
                           placeholder={
-                            col.key === "description" && entityType !== "equipments"
+                            col.key === "description" &&
+                            entityType !== "equipments"
                               ? row.type === "Medicamento"
                                 ? "Princípio Ativo"
                                 : "Descrição"
@@ -328,7 +339,10 @@ export default function EditableTable({
 
               {rowsFiltered.length === 0 && (
                 <tr>
-                  <td colSpan={columns.length + 1} className="text-center py-4 text-sm text-slate-600">
+                  <td
+                    colSpan={columns.length + 1}
+                    className="text-center py-4 text-sm text-slate-600"
+                  >
                     Nenhum item encontrado.
                   </td>
                 </tr>

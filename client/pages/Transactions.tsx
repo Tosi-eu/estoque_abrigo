@@ -4,7 +4,7 @@ import { movements } from "../../mocks/movements";
 import { equipments } from "../../mocks/equipments";
 import { cabinets } from "../../mocks/cabinets";
 import { users } from "../../mocks/users";
-import { equipmentInventory, medicineInventory } from "../../mocks/stock"; 
+import { equipmentInventory, medicineInventory } from "../../mocks/stock";
 import { prepareMovements } from "@/utils/utils";
 import { medicines } from "../../mocks/medicines";
 
@@ -18,19 +18,19 @@ export default function EquipmentMovements() {
     { key: "operator", label: "Operador", editable: false },
     { key: "movementDate", label: "Data", editable: false },
   ];
-    
+
   return (
     <Layout title="Movimentações">
       <div className="space-y-6">
-      <EditableTable
+        <EditableTable
           data={prepareMovements({
             movements,
-            medicines, 
+            medicines,
             equipments,
-            patients: [], 
+            patients: [],
             cabinets,
             users,
-            medicineInventory, 
+            medicineInventory,
             equipmentInventory,
           })}
           columns={columns}

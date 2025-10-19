@@ -11,7 +11,11 @@ export default function Cabinets() {
   return (
     <Layout title="Armários">
       <div className="max-w-3xl mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-        <EditableTable data={cabinets} columns={columns} entityType="cabinets" />
+        <EditableTable
+          data={cabinets}
+          columns={columns}
+          entityType="cabinets"
+        />
       </div>
     </Layout>
   );

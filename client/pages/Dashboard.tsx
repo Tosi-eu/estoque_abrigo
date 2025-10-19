@@ -9,7 +9,14 @@ import { useMemo } from "react";
 import { equipmentInventory, medicineInventory } from "../../mocks/stock";
 import { prepareMovements } from "@/utils/utils";
 import { equipments } from "../../mocks/equipments";
-import { PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  Legend,
+  ResponsiveContainer,
+} from "recharts";
 
 const daysBetween = (date1: string, date2: string) => {
   const d1 = new Date(date1);
@@ -57,8 +64,13 @@ export default function Dashboard() {
   }, []);
 
   const stats = useMemo(() => {
-    const totalStock = medicineInventory.reduce((acc, m) => acc + m.quantity, 0);
-    const expired = medicineInventory.filter((m) => new Date(m.expiry) < new Date()).length;
+    const totalStock = medicineInventory.reduce(
+      (acc, m) => acc + m.quantity,
+      0,
+    );
+    const expired = medicineInventory.filter(
+      (m) => new Date(m.expiry) < new Date(),
+    ).length;
     const belowMin = medicines.filter((m) => {
       const inv = medicineInventory.find((mi) => mi.medicineId === m.id);
       return inv && inv.quantity <= m.minimumStock;
@@ -80,7 +92,10 @@ export default function Dashboard() {
       .filter((m) => m.origin === StockType.INDIVIDUAL)
       .reduce((acc, m) => acc + m.quantity, 0);
 
-    const equipmentCount = equipmentInventory.reduce((acc, e) => acc + e.quantity, 0);
+    const equipmentCount = equipmentInventory.reduce(
+      (acc, e) => acc + e.quantity,
+      0,
+    );
 
     return [
       { name: "Estoque Geral", value: generalMedicines },
@@ -95,7 +110,9 @@ export default function Dashboard() {
     <Layout>
       <div className="space-y-10">
         <section>
-          <h2 className="text-2xl font-semibold text-slate-800 mb-6">Visão Geral</h2>
+          <h2 className="text-2xl font-semibold text-slate-800 mb-6">
+            Visão Geral
+          </h2>
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
             {stats.map((stat, index) => (
@@ -112,65 +129,80 @@ export default function Dashboard() {
                 </div>
               </div>
             ))}
-        <div
-          className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col"
-          style={{ minHeight: 200 }}
-        >
-          <h4 className="text-xs font-medium text-slate-600 mb-3 text-center">
-            Proporção de Estoque
-          </h4>
+            <div
+              className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col"
+              style={{ minHeight: 200 }}
+            >
+              <h4 className="text-xs font-medium text-slate-600 mb-3 text-center">
+                Proporção de Estoque
+              </h4>
 
-          <div className="flex items-center justify-center w-full">
-            <div className="w-1/2 h-44">
-              <ResponsiveContainer width="100%" height="100%">
-                <PieChart>
-                  <Pie
-                    data={stockDistribution}
-                    dataKey="value"
-                    nameKey="name"
-                    outerRadius={70}
-                    label={false}
-                  >
-                    {stockDistribution.map((entry, index) => (
-                      <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                    ))}
-                  </Pie>
-                  <Tooltip
-                    contentStyle={{
-                      fontSize: 12,
-                      borderRadius: 8,
-                    }}
-                    formatter={(value: number) => [`${value}`, "Quantidade"]}
-                  />
-                </PieChart>
-              </ResponsiveContainer>
-            </div>
+              <div className="flex items-center justify-center w-full">
+                <div className="w-1/2 h-44">
+                  <ResponsiveContainer width="100%" height="100%">
+                    <PieChart>
+                      <Pie
+                        data={stockDistribution}
+                        dataKey="value"
+                        nameKey="name"
+                        outerRadius={70}
+                        label={false}
+                      >
+                        {stockDistribution.map((entry, index) => (
+                          <Cell
+                            key={`cell-${index}`}
+                            fill={COLORS[index % COLORS.length]}
+                          />
+                        ))}
+                      </Pie>
+                      <Tooltip
+                        contentStyle={{
+                          fontSize: 12,
+                          borderRadius: 8,
+                        }}
+                        formatter={(value: number) => [
+                          `${value}`,
+                          "Quantidade",
+                        ]}
+                      />
+                    </PieChart>
+                  </ResponsiveContainer>
+                </div>
 
-            <div className="w-1/2 pl-4 text-xs text-slate-700 space-y-2">
-              <div className="flex items-center gap-2">
-                <span
-                  className="inline-block w-3 h-3 rounded-full"
-                  style={{ backgroundColor: COLORS[0] }}
-                ></span>
-                <span>{stockDistribution[0].name}: {stockDistribution[0]?.value ?? 0}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span
-                  className="inline-block w-3 h-3 rounded-full"
-                  style={{ backgroundColor: COLORS[1] }}
-                ></span>
-                <span>{stockDistribution[1].name}: {stockDistribution[1]?.value ?? 0}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <span
-                  className="inline-block w-3 h-3 rounded-full"
-                  style={{ backgroundColor: COLORS[2] }}
-                ></span>
-                <span>{stockDistribution[2].name}: {stockDistribution[2]?.value ?? 0}</span>
+                <div className="w-1/2 pl-4 text-xs text-slate-700 space-y-2">
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="inline-block w-3 h-3 rounded-full"
+                      style={{ backgroundColor: COLORS[0] }}
+                    ></span>
+                    <span>
+                      {stockDistribution[0].name}:{" "}
+                      {stockDistribution[0]?.value ?? 0}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="inline-block w-3 h-3 rounded-full"
+                      style={{ backgroundColor: COLORS[1] }}
+                    ></span>
+                    <span>
+                      {stockDistribution[1].name}:{" "}
+                      {stockDistribution[1]?.value ?? 0}
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className="inline-block w-3 h-3 rounded-full"
+                      style={{ backgroundColor: COLORS[2] }}
+                    ></span>
+                    <span>
+                      {stockDistribution[2].name}:{" "}
+                      {stockDistribution[2]?.value ?? 0}
+                    </span>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
           </div>
         </section>
 
@@ -185,19 +217,38 @@ export default function Dashboard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-slate-200 bg-sky-100">
-                    <th className="px-3 py-2 text-center font-semibold text-slate-800">Medicamento</th>
-                    <th className="px-3 py-2 text-center font-semibold text-slate-800">Princípio Ativo</th>
-                    <th className="px-3 py-2 text-center font-semibold text-slate-800">Quantidade</th>
-                    <th className="px-3 py-2 text-center font-semibold text-slate-800">Validade</th>
+                    <th className="px-3 py-2 text-center font-semibold text-slate-800">
+                      Medicamento
+                    </th>
+                    <th className="px-3 py-2 text-center font-semibold text-slate-800">
+                      Princípio Ativo
+                    </th>
+                    <th className="px-3 py-2 text-center font-semibold text-slate-800">
+                      Quantidade
+                    </th>
+                    <th className="px-3 py-2 text-center font-semibold text-slate-800">
+                      Validade
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {expiringMedicines.map((med, i) => (
-                    <tr key={i} className="border-b border-slate-100 hover:bg-sky-50 transition-colors">
-                      <td className="px-3 py-2 text-center text-xs text-slate-700">{med.name}</td>
-                      <td className="px-3 py-2 text-center text-xs text-slate-700">{med.substance}</td>
-                      <td className="px-3 py-2 text-center text-xs text-slate-700">{med.quantity}</td>
-                      <td className="px-3 py-2 text-center text-xs text-slate-700">{new Date(med.expiry).toLocaleDateString('pt-BR')}</td>
+                    <tr
+                      key={i}
+                      className="border-b border-slate-100 hover:bg-sky-50 transition-colors"
+                    >
+                      <td className="px-3 py-2 text-center text-xs text-slate-700">
+                        {med.name}
+                      </td>
+                      <td className="px-3 py-2 text-center text-xs text-slate-700">
+                        {med.substance}
+                      </td>
+                      <td className="px-3 py-2 text-center text-xs text-slate-700">
+                        {med.quantity}
+                      </td>
+                      <td className="px-3 py-2 text-center text-xs text-slate-700">
+                        {new Date(med.expiry).toLocaleDateString("pt-BR")}
+                      </td>
                     </tr>
                   ))}
                 </tbody>
@@ -215,25 +266,58 @@ export default function Dashboard() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-slate-200 bg-sky-100">
-                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">Medicamento</th>
-                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">Tipo</th>
-                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">Operador</th>
-                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">Casela</th>
-                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">Quantidade</th>
-                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">Paciente</th>
-                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">Validade</th>
+                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">
+                      Medicamento
+                    </th>
+                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">
+                      Tipo
+                    </th>
+                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">
+                      Operador
+                    </th>
+                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">
+                      Casela
+                    </th>
+                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">
+                      Quantidade
+                    </th>
+                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">
+                      Paciente
+                    </th>
+                    <th className="px-2 py-2 text-center font-semibold text-slate-800 text-xs">
+                      Validade
+                    </th>
                   </tr>
                 </thead>
                 <tbody>
                   {recentMovements.map((mov, i) => (
-                    <tr key={i} className="border-b border-slate-100 hover:bg-sky-50 transition-colors">
-                      <td className="px-2 py-2 text-center text-xs text-slate-700">{mov.name}</td>
-                      <td className="px-2 py-2 text-center text-xs text-slate-700">{mov.type}</td>
-                      <td className="px-2 py-2 text-center text-xs text-slate-700">{mov.operator}</td>
-                      <td className="px-2 py-2 text-center text-xs text-slate-700">{mov.casela ?? '-'}</td>
-                      <td className="px-2 py-2 text-center text-xs text-slate-700">{mov.quantity}</td>
-                      <td className="px-2 py-2 text-center text-xs text-slate-700">{mov.patient ?? '-'}</td>
-                      <td className="px-2 py-2 text-center text-xs text-slate-700">{mov.expiry ? new Date(mov.expiry).toLocaleDateString('pt-BR') : '-'}</td>
+                    <tr
+                      key={i}
+                      className="border-b border-slate-100 hover:bg-sky-50 transition-colors"
+                    >
+                      <td className="px-2 py-2 text-center text-xs text-slate-700">
+                        {mov.name}
+                      </td>
+                      <td className="px-2 py-2 text-center text-xs text-slate-700">
+                        {mov.type}
+                      </td>
+                      <td className="px-2 py-2 text-center text-xs text-slate-700">
+                        {mov.operator}
+                      </td>
+                      <td className="px-2 py-2 text-center text-xs text-slate-700">
+                        {mov.casela ?? "-"}
+                      </td>
+                      <td className="px-2 py-2 text-center text-xs text-slate-700">
+                        {mov.quantity}
+                      </td>
+                      <td className="px-2 py-2 text-center text-xs text-slate-700">
+                        {mov.patient ?? "-"}
+                      </td>
+                      <td className="px-2 py-2 text-center text-xs text-slate-700">
+                        {mov.expiry
+                          ? new Date(mov.expiry).toLocaleDateString("pt-BR")
+                          : "-"}
+                      </td>
                     </tr>
                   ))}
                 </tbody>

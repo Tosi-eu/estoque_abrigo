@@ -100,14 +100,14 @@ export interface EquipmentMovementRow {
 
 export interface MovementRow {
   type: "Medicamento" | "Equipamento";
-  name: string;           
-  description: string;    
-  expiry?: string;       
+  name: string;
+  description: string;
+  expiry?: string;
   quantity?: number;
-  minimumStock?: number;  
-  stockType?: string;     
-  patient?: string;       
-  casela?: number;        
+  minimumStock?: number;
+  stockType?: string;
+  patient?: string;
+  casela?: number;
   cabinet?: string;
   operator?: string;
   movementDate: string;
@@ -124,5 +124,3 @@ export interface PrepareMovementsParams {
   medicineInventory: MedicineInventory[];
   equipmentInventory: EquipmentInventory[];
 }
-
-

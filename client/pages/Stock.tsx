@@ -34,13 +34,16 @@ export default function Stock() {
         type: "Medicamento",
         name: med?.name || "-",
         description: med?.substance || "-",
-        expiry: entry.expiry, 
+        expiry: entry.expiry,
         quantity: entry.quantity,
         minimumStock: med?.minimumStock,
         patient: entry.residentId ? `Residente ${entry.residentId}` : "-",
         cabinet: cabinet?.description || "-",
         casela: entry.residentId || "-",
-        stockType: entry.origin === "individual" ? StockType.INDIVIDUAL : StockType.GERAL,
+        stockType:
+          entry.origin === "individual"
+            ? StockType.INDIVIDUAL
+            : StockType.GERAL,
       };
     });
 
@@ -71,7 +74,10 @@ export default function Stock() {
 
       for (const key in filters) {
         const val = (filters as any)[key];
-        if (val && String(item[key]).toLowerCase() !== String(val).toLowerCase()) {
+        if (
+          val &&
+          String(item[key]).toLowerCase() !== String(val).toLowerCase()
+        ) {
           return false;
         }
       }
@@ -83,7 +89,11 @@ export default function Stock() {
   const columns = [
     { key: "type", label: "Tipo", editable: false },
     { key: "name", label: "Nome", editable: true },
-    { key: "description", label: "Descrição / Princípio Ativo", editable: true },
+    {
+      key: "description",
+      label: "Descrição / Princípio Ativo",
+      editable: true,
+    },
     { key: "expiry", label: "Validade", editable: true },
     { key: "quantity", label: "Quantidade", editable: true },
     { key: "stockType", label: "Tipo de Estoque", editable: false },

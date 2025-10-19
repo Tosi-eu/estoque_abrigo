@@ -15,7 +15,9 @@ export function EquipmentForm({ onSubmit }: { onSubmit: (data: any) => void }) {
   return (
     <div className="space-y-6 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Nome do Equipamento</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1">
+          Nome do Equipamento
+        </label>
         <input
           type="text"
           value={formData.name}
@@ -26,11 +28,15 @@ export function EquipmentForm({ onSubmit }: { onSubmit: (data: any) => void }) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Categoria</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1">
+          Categoria
+        </label>
         <input
           type="text"
           value={formData.category}
-          onChange={(e) => setFormData({ ...formData, category: e.target.value })}
+          onChange={(e) =>
+            setFormData({ ...formData, category: e.target.value })
+          }
           placeholder="Material Hospitalar"
           className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
         />
@@ -38,16 +44,22 @@ export function EquipmentForm({ onSubmit }: { onSubmit: (data: any) => void }) {
 
       <div className="flex gap-4">
         <div className="flex-1">
-          <label className="block text-sm font-medium text-slate-700 mb-1">Quantidade</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Quantidade
+          </label>
           <input
             type="number"
             value={formData.quantity}
-            onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, quantity: e.target.value })
+            }
             className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
           />
         </div>
         <div className="flex-1">
-          <label className="block text-sm font-medium text-slate-700 mb-1">Unidade</label>
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Unidade
+          </label>
           <input
             type="text"
             value={formData.unit}
@@ -59,10 +71,14 @@ export function EquipmentForm({ onSubmit }: { onSubmit: (data: any) => void }) {
       </div>
 
       <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">Validade</label>
+        <label className="block text-sm font-medium text-slate-700 mb-1">
+          Validade
+        </label>
         <DatePicker
           selected={formData.expiry}
-          onChange={(date: Date | null) => setFormData({ ...formData, expiry: date })}
+          onChange={(date: Date | null) =>
+            setFormData({ ...formData, expiry: date })
+          }
           locale={ptBR}
           dateFormat="dd/MM/yyyy"
           placeholderText="Selecione a data"

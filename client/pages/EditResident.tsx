@@ -23,7 +23,7 @@ export default function EditResident() {
 
   const handleSelectChange = (value: string) => {
     const resident = patients.find(
-      (r) => r.name === value || r.casela.toString() === value
+      (r) => r.name === value || r.casela.toString() === value,
     );
     if (resident) {
       setSelectedResident(resident);

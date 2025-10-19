@@ -21,14 +21,19 @@ export default function Layout({ children, title }: LayoutProps) {
         <div className="max-w-[1651px] mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-20">
             <Link to="/dashboard">
-              <img src={logo} alt="Logo" className="h-20 w-auto drop-shadow-sm" />
+              <img
+                src={logo}
+                alt="Logo"
+                className="h-20 w-auto drop-shadow-sm"
+              />
             </Link>
 
             <nav className="hidden md:flex items-center gap-6">
               {navigation.map((item) => {
                 const isActive =
                   location.pathname === item.href ||
-                  (item.href !== "/dashboard" && location.pathname.startsWith(item.href));
+                  (item.href !== "/dashboard" &&
+                    location.pathname.startsWith(item.href));
 
                 return (
                   <Link

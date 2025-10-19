@@ -16,19 +16,28 @@ export default function DeletePopUp({
     <Dialog
       open={open}
       onClose={onCancel}
-      sx={{ "& .MuiDialog-paper": { padding: 2, minWidth: 300, fontFamily: "'Inter', sans-serif" } }}
+      sx={{
+        "& .MuiDialog-paper": {
+          padding: 2,
+          minWidth: 300,
+          fontFamily: "'Inter', sans-serif",
+        },
+      }}
     >
       <DialogTitle sx={{ fontSize: 18 }}>Confirmar Exclusão</DialogTitle>
       <DialogContent sx={{ py: 1 }}>
-        <DialogContentText sx={{ fontSize: 14 }}>
-          {message}
-        </DialogContentText>
+        <DialogContentText sx={{ fontSize: 14 }}>{message}</DialogContentText>
       </DialogContent>
       <DialogActions sx={{ p: 1 }}>
         <Button onClick={onCancel} color="inherit" size="small">
           Não
         </Button>
-        <Button onClick={onConfirm} color="error" size="small" variant="contained">
+        <Button
+          onClick={onConfirm}
+          color="error"
+          size="small"
+          variant="contained"
+        >
           Sim
         </Button>
       </DialogActions>

@@ -87,10 +87,7 @@ export default function Login() {
                   <span className="text-sm text-slate-700">Lembrar de mim</span>
                 </label>
 
-                <a
-                  href="#"
-                  className="text-sm text-sky-600 hover:underline"
-                >
+                <a href="#" className="text-sm text-sky-600 hover:underline">
                   Esqueci minha senha
                 </a>
               </div>

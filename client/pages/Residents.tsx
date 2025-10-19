@@ -11,7 +11,11 @@ export default function Resident() {
   return (
     <Layout title="Residentes">
       <div className="max-w-3xl mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-6 shadow-sm">
-        <EditableTable data={patients} columns={columns} entityType="residents" />
+        <EditableTable
+          data={patients}
+          columns={columns}
+          entityType="residents"
+        />
       </div>
     </Layout>
   );

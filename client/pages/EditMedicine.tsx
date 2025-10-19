@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { medicines } from "../../mocks/medicines"; 
+import { medicines } from "../../mocks/medicines";
 
 export default function EditMedicine() {
   const location = useLocation();

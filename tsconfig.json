@@ -37,7 +37,8 @@
     "server/**/*",
     "shared/**/*",
     "vite.config.ts",
-    "vite.config.server.ts"
-, "client/enums"  ],
+    "vite.config.server.ts",
+    "client/enums"
+  ],
   "exclude": ["node_modules", "dist"]
 }

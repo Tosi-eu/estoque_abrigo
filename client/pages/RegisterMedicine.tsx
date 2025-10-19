@@ -2,7 +2,7 @@ import Layout from "@/components/Layout";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { medicines } from "../../mocks/medicines"; 
+import { medicines } from "../../mocks/medicines";
 
 export default function SignUpMedicine() {
   const navigate = useNavigate();
@@ -18,9 +18,16 @@ export default function SignUpMedicine() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const { name, substance, dosageValue, measuremeUnit, minimumStock } = formData;
+    const { name, substance, dosageValue, measuremeUnit, minimumStock } =
+      formData;
 
-    if (!name || !substance || !dosageValue || !measuremeUnit || !minimumStock) {
+    if (
+      !name ||
+      !substance ||
+      !dosageValue ||
+      !measuremeUnit ||
+      !minimumStock
+    ) {
       toast({
         title: "Campos obrigatórios",
         description: "Preencha todos os campos antes de continuar.",

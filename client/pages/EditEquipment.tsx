@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Layout from "@/components/Layout";
 import { useNavigate, useLocation } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { equipments } from "../../mocks/equipments"; 
+import { equipments } from "../../mocks/equipments";
 
 export default function EditEquipment() {
   const location = useLocation();
@@ -11,7 +11,7 @@ export default function EditEquipment() {
   const [selectedEquipment, setSelectedEquipment] = useState<string>("");
   const [formData, setFormData] = useState({
     name: "",
-    description: ""
+    description: "",
   });
 
   useEffect(() => {
@@ -20,7 +20,7 @@ export default function EditEquipment() {
 
       const normalized = {
         name: item.name || item.itemName || "",
-        description: item.description || ""
+        description: item.description || "",
       };
 
       setSelectedEquipment(normalized.name);
@@ -34,7 +34,7 @@ export default function EditEquipment() {
       if (eq) {
         setFormData({
           name: eq.name,
-          description: eq.description || ""
+          description: eq.description || "",
         });
       }
     } else {

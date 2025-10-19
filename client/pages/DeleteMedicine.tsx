@@ -61,7 +61,7 @@ export default function DeleteMedicine() {
             >
               <option value="">Escolha</option>
               {medicines.map((m) => (
-                <option key={m.name} value={m.name}>  
+                <option key={m.name} value={m.name}>
                   {m.name}
                 </option>
               ))}

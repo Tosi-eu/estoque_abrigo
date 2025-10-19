@@ -7,7 +7,7 @@ import { EquipmentForm } from "@/components/EquipmentForm";
 
 export default function StockOut() {
   const [operationType, setOperationType] = useState<OperationType | "">(
-    OperationType.EQUIPMENT
+    OperationType.EQUIPMENT,
   );
   const navigate = useNavigate();
 
@@ -42,8 +42,12 @@ export default function StockOut() {
             "
           >
             <option value="">Selecione</option>
-            <option value={OperationType.MEDICINE}>{OperationType.MEDICINE}</option>
-            <option value={OperationType.EQUIPMENT}>{OperationType.EQUIPMENT}</option>
+            <option value={OperationType.MEDICINE}>
+              {OperationType.MEDICINE}
+            </option>
+            <option value={OperationType.EQUIPMENT}>
+              {OperationType.EQUIPMENT}
+            </option>
           </select>
         </div>
 

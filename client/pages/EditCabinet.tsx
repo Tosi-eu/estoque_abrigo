@@ -42,7 +42,9 @@ export default function EditCabinet() {
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
+  ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
@@ -64,7 +66,6 @@ export default function EditCabinet() {
     });
     return;
   };
-
 
   return (
     <Layout title="Editar Armário">

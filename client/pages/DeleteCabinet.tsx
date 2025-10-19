@@ -61,7 +61,7 @@ export default function DeleteCabinet() {
             >
               <option value="">Escolha</option>
               {cabinets.map((m) => (
-                <option key={m.id} value={m.id}>  
+                <option key={m.id} value={m.id}>
                   {m.id} - {m.description}
                 </option>
               ))}

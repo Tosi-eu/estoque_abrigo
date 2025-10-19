@@ -61,7 +61,7 @@ export default function DeleteEquipment() {
             >
               <option value="">Escolha</option>
               {equipments.map((m) => (
-                <option key={m.name} value={m.name}>  
+                <option key={m.name} value={m.name}>
                   {m.name}
                 </option>
               ))}
