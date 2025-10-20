@@ -9,12 +9,12 @@ import { useMemo } from "react";
 import { equipmentInventory, medicineInventory } from "../../mocks/stock";
 import { prepareMovements } from "@/utils/utils";
 import { equipments } from "../../mocks/equipments";
+import { useNavigate } from "react-router-dom";
 import {
   PieChart,
   Pie,
   Cell,
   Tooltip,
-  Legend,
   ResponsiveContainer,
 } from "recharts";
 
@@ -26,10 +26,14 @@ const daysBetween = (date1: string, date2: string) => {
 
 export default function Dashboard() {
   const today = new Date().toISOString().split("T")[0];
+  const navigate = useNavigate();
 
   const expiringMedicines = useMemo(() => {
     return medicineInventory
-      .filter((m) => daysBetween(m.expiry, today) <= 60)
+      .filter((m) => {
+        const days = daysBetween(m.expiry, today);
+        return days >= 0 && days <= 60;
+      })
       .map((m) => {
         const med = medicines.find((x) => x.id === m.medicineId);
         return {
@@ -77,11 +81,25 @@ export default function Dashboard() {
     }).length;
 
     return [
-      { label: "Quantidade total em estoque", value: totalStock.toString() },
-      { label: "Medicamentos vencidos", value: expired.toString() },
-      { label: "Próximos do estoque mínimo", value: belowMin.toString() },
+      {
+        label: "Quantidade total em estoque",
+        value: totalStock.toString(),
+        onClick: () => navigate("/stock"),
+      },
+      {
+        label: "Medicamentos vencidos",
+        value: expired.toString(),
+        onClick: () =>
+          navigate("/stock", { state: { filterType: "expired" } }),
+      },
+      {
+        label: "Próximos do estoque mínimo",
+        value: belowMin.toString(),
+        onClick: () =>
+          navigate("/stock", { state: { filterType: "belowMin" } }),
+      },
     ];
-  }, []);
+  }, [navigate]);
 
   const stockDistribution = useMemo(() => {
     const generalMedicines = medicineInventory
@@ -118,7 +136,8 @@ export default function Dashboard() {
             {stats.map((stat, index) => (
               <div
                 key={index}
-                className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col items-center justify-center"
+                onClick={stat.onClick}
+                className="bg-white border border-slate-200 rounded-xl p-6 shadow-sm hover:shadow-md transition-all duration-200 flex flex-col items-center justify-center cursor-pointer hover:bg-sky-50"
                 style={{ minHeight: 150 }}
               >
                 <div className="text-sm font-medium text-slate-600 mb-2 text-center">
@@ -129,6 +148,8 @@ export default function Dashboard() {
                 </div>
               </div>
             ))}
+
+            {/* Card de proporção de estoque (sem navegação) */}
             <div
               className="bg-white border border-slate-200 rounded-xl p-4 shadow-sm flex flex-col"
               style={{ minHeight: 200 }}
@@ -170,36 +191,17 @@ export default function Dashboard() {
                 </div>
 
                 <div className="w-1/2 pl-4 text-xs text-slate-700 space-y-2">
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="inline-block w-3 h-3 rounded-full"
-                      style={{ backgroundColor: COLORS[0] }}
-                    ></span>
-                    <span>
-                      {stockDistribution[0].name}:{" "}
-                      {stockDistribution[0]?.value ?? 0}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="inline-block w-3 h-3 rounded-full"
-                      style={{ backgroundColor: COLORS[1] }}
-                    ></span>
-                    <span>
-                      {stockDistribution[1].name}:{" "}
-                      {stockDistribution[1]?.value ?? 0}
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span
-                      className="inline-block w-3 h-3 rounded-full"
-                      style={{ backgroundColor: COLORS[2] }}
-                    ></span>
-                    <span>
-                      {stockDistribution[2].name}:{" "}
-                      {stockDistribution[2]?.value ?? 0}
-                    </span>
-                  </div>
+                  {stockDistribution.map((item, i) => (
+                    <div key={i} className="flex items-center gap-2">
+                      <span
+                        className="inline-block w-3 h-3 rounded-full"
+                        style={{ backgroundColor: COLORS[i] }}
+                      ></span>
+                      <span>
+                        {item.name}: {item.value ?? 0}
+                      </span>
+                    </div>
+                  ))}
                 </div>
               </div>
             </div>
