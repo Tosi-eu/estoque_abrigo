@@ -38,6 +38,8 @@ export function prepareMovements({
           operator: user?.email,
           movementDate: movement.date,
           movementType: movement.type,
+          destinationSector: movement.destinationSector,
+          originSector: movement.originSector,
         };
       }
 
@@ -58,6 +60,8 @@ export function prepareMovements({
           operator: user?.email,
           movementDate: movement.date,
           movementType: movement.type,
+          destinationSector: movement.destinationSector,
+          originSector: movement.originSector,
         };
       }
 

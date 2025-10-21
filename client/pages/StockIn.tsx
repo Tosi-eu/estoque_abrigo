@@ -3,11 +3,15 @@ import { useState } from "react";
 import { MedicineForm } from "@/components/MedicineForm";
 import { EquipmentForm } from "@/components/EquipmentForm";
 import { OperationType } from "@/enums/enums";
+import { useLocation } from "react-router-dom";
 
 export default function StockIn() {
+  const location = useLocation();
+  const previousData = location.state?.previousData;
+  const type = previousData?.filter(item => item.type === 'Medicamento')[0]?.type;
   const [operationType, setOperationType] = useState<
     OperationType | "Selecione"
-  >("Selecione");
+  >(type || "Selecione");
 
   return (
     <Layout title="Entrada de Estoque">

@@ -84,7 +84,6 @@ export default function Stock() {
     return [...meds, ...eqs];
   }, []);
 
-  // Aplica filtro automático baseado no filtro vindo do Dashboard
   useEffect(() => {
     if (filterType === "expired") {
       setFilters((prev) => ({ ...prev, expiry: "expired" }));

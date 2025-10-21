@@ -34,30 +34,36 @@ export default function EditableTable({
 
   useEffect(() => setRows(data), [data]);
 
-  const handleAddRow = () => {
-    if (entityType === "medicines") {
+const handleAddRow = () => {
+  if (entityType === "entries") {
+    console.log(rows)
+    navigate("/stock/in", { state: { previousData: rows } });
+  } else if (entityType === "exits") {
+    navigate("/stock/out", { state: { previousData: rows } });
+  } else if (entityType === "medicines") {
+    navigate("/medicines/register");
+  } else if (entityType === "residents") {
+    navigate("/residents/register");
+  } else if (entityType === "equipments") {
+    navigate("/equipments/register");
+  } else if (entityType === "cabinets") {
+    navigate("/cabinets/register");
+  } else if (entityType === "transactions") {
+    if (filterType === "Medicamento") {
       navigate("/medicines/register");
-    } else if (entityType === "residents") {
-      navigate("/residents/register");
-    } else if (entityType === "equipments") {
+    } else if (filterType === "Equipamento") {
       navigate("/equipments/register");
-    } else if (entityType === "cabinets") {
-      navigate("/cabinets/register");
-    } else if (entityType === "transactions") {
-      if (filterType === "Medicamento") {
-        navigate("/medicines/register");
-      } else if (filterType === "Equipamento") {
-        navigate("/equipments/register");
-      } else {
-        toast({
-          title: "Seleção inválida",
-          description:
-            'Selecione "Medicamento" ou "Equipamento" antes de adicionar.',
-          variant: "error",
-        });
-      }
+    } else {
+      toast({
+        title: "Seleção inválida",
+        description:
+          'Selecione "Medicamento" ou "Equipamento" antes de adicionar.',
+        variant: "error",
+      });
     }
-  };
+  }
+};
+
 
   const handleChange = (rowIndex: number, key: string, value: string) => {
     const updated = [...rows];
