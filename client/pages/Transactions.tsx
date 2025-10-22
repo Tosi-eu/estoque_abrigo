@@ -22,13 +22,19 @@ export default function EquipmentMovements() {
     { key: "name", label: "Nome do Produto", editable: false },
     { key: "description", label: "Descrição", editable: false },
     { key: "quantity", label: "Quantidade", editable: false },
-    { key: "cabinet", label: "Armário", editable: false },
     { key: "operator", label: "Operador", editable: false },
-    { key: "movementDate", label: "Data", editable: false },
+    { key: "movementDate", label: "Data da Transação", editable: false },
+    { key: "cabinet", label: "Armário", editable: false },
   ];
 
-  const entryColumns = [...columnsBase, { key: "originSector", label: "Setor de Origem", editable: false }];
-  const exitColumns = [...columnsBase, { key: "destinationSector", label: "Setor de Destino", editable: false }];
+  const entryColumns = [
+    ...columnsBase,
+    { key: "originSector", label: "Setor de Origem", editable: false },
+  ];
+  const exitColumns = [
+    ...columnsBase,
+    { key: "destinationSector", label: "Setor de Destino", editable: false },
+  ];
 
   const allMovements = prepareMovements({
     movements,
@@ -44,13 +50,17 @@ export default function EquipmentMovements() {
   const entries = allMovements
     .filter((m) => m.movementType === MovementType.IN)
     .filter((m) =>
-      entryFilter ? m.name.toLowerCase().includes(entryFilter.toLowerCase()) : true
+      entryFilter
+        ? m.name.toLowerCase().includes(entryFilter.toLowerCase())
+        : true,
     );
 
   const exits = allMovements
     .filter((m) => m.movementType === MovementType.OUT)
     .filter((m) =>
-      exitFilter ? m.name.toLowerCase().includes(exitFilter.toLowerCase()) : true
+      exitFilter
+        ? m.name.toLowerCase().includes(exitFilter.toLowerCase())
+        : true,
     );
 
   const uniqueNames = Array.from(new Set(allMovements.map((m) => m.name)));
@@ -87,18 +97,16 @@ export default function EquipmentMovements() {
             )}
           </div>
 
-          <EditableTable data={entries} columns={entryColumns} entityType="entries" />
+          <EditableTable
+            data={entries}
+            columns={entryColumns}
+            entityType="entries"
+          />
         </div>
 
         <div>
           <div className="flex justify-between items-center mb-4">
             <h2 className="text-2xl font-bold text-gray-700">Saídas</h2>
-            <button
-              onClick={() => navigate("/estoque/out")}
-              className="flex items-center gap-2 text-sky-600 hover:text-sky-800 font-medium"
-            >
-              Ir para Estoque <ArrowRight size={16} />
-            </button>
           </div>
 
           <div className="mb-4 flex items-center gap-2">
@@ -125,7 +133,11 @@ export default function EquipmentMovements() {
             )}
           </div>
 
-          <EditableTable data={exits} columns={exitColumns} entityType="exits" />
+          <EditableTable
+            data={exits}
+            columns={exitColumns}
+            entityType="exits"
+          />
         </div>
       </div>
     </Layout>

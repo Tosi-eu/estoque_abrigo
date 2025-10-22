@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import { ptBR } from "date-fns/locale";
 import CreatableSelect from "react-select/creatable";
 import "react-datepicker/dist/react-datepicker.css";
-import { EntryType, OriginType, SectorType, StockType } from "@/enums/enums";
+import { EntryType, OriginType, SectorType } from "@/enums/enums";
 
 export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
   const [formData, setFormData] = useState({
@@ -17,7 +17,7 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
     resident: "",
     casela: "",
     cabinet: "",
-    sector: ""
+    sector: "",
   });
 
   const handleStockTypeChange = (type: "geral" | "individual") => {

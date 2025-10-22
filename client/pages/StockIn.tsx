@@ -8,7 +8,8 @@ import { useLocation } from "react-router-dom";
 export default function StockIn() {
   const location = useLocation();
   const previousData = location.state?.previousData;
-  const type = previousData?.filter(item => item.type === 'Medicamento')[0]?.type;
+  const type = previousData?.filter((item) => item.type === "Medicamento")[0]
+    ?.type;
   const [operationType, setOperationType] = useState<
     OperationType | "Selecione"
   >(type || "Selecione");

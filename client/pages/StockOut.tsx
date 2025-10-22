@@ -8,7 +8,8 @@ import { EquipmentForm } from "@/components/EquipmentForm";
 export default function StockOut() {
   const location = useLocation();
   const previousData = location.state?.previousData;
-  const type = previousData?.filter(item => item.type === 'Equipamento')[0]?.type;
+  const type = previousData?.filter((item) => item.type === "Equipamento")[0]
+    ?.type;
   const [operationType, setOperationType] = useState<
     OperationType | "Selecione"
   >(type || "Selecione");

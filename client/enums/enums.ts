@@ -44,7 +44,7 @@ export enum MovementType {
   OUT = "saida",
 }
 
-export enum  SectorType {
+export enum SectorType {
   ENFERMAGEM = "Enfermagem",
   NUTRICAO = "Nutrição",
   ADMINISTRATIVO = "Administrativo",

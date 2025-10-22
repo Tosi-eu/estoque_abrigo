@@ -32,7 +32,39 @@ export default function EditableTable({
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  useEffect(() => setRows(data), [data]);
+  useEffect(() => {
+  if (!data) return;
+
+  const convertToBRT = (dateString: string) => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString; 
+    // converte para UTC-3
+    const brtDate = new Date(date.getTime() - 3 * 60 * 60 * 1000);
+    return brtDate.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
+  const formatted = data.map((row) => {
+    const updatedRow: Record<string, any> = {};
+    for (const key in row) {
+      const value = row[key];
+      if (
+        typeof value === "string" &&
+        /^\d{4}-\d{2}-\d{2}/.test(value)
+      ) {
+        updatedRow[key] = convertToBRT(value);
+      } else {
+        updatedRow[key] = value;
+      }
+    }
+    return updatedRow;
+  });
+
+  setRows(formatted);
+}, [data]);
 
 const handleAddRow = () => {
   if (entityType === "entries") {
@@ -69,21 +101,6 @@ const handleAddRow = () => {
     const updated = [...rows];
     updated[rowIndex][key] = value;
     setRows(updated);
-  };
-
-  const handleSave = (index: number) => {
-    const row = rows[index];
-    const emptyField = columns.find((col) => col.editable && !row[col.key]);
-    if (emptyField) {
-      toast({
-        title: "Campo obrigatório vazio",
-        description: `Preencha o campo "${emptyField.label}" antes de salvar.`,
-        variant: "error",
-      });
-      return;
-    }
-    setEditingIndex(null);
-    if (onEdit) onEdit(row, index);
   };
 
   const confirmDelete = (index: number) => setDeleteIndex(index);
@@ -131,12 +148,14 @@ const handleAddRow = () => {
 
   const renderExpiryTag = (value: string) => {
     if (!value) return "-";
-    const today = new Date();
-    const expiryDate = new Date(value);
+
+    const [day, month, year] = value.split("/").map(Number);
+    const expiryDate = new Date(year, month - 1, day);
     if (isNaN(expiryDate.getTime())) return value;
 
+    const today = new Date();
     const diffDays = Math.ceil(
-      (expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+      (expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
     );
 
     let tooltipText = "";
@@ -163,7 +182,7 @@ const handleAddRow = () => {
             <span
               className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-medium cursor-default ${colorClasses}`}
             >
-              {expiryDate.toLocaleDateString("pt-BR")}
+              {value}
             </span>
           </TooltipTrigger>
           <TooltipContent side="top" className="text-xs">

@@ -12,7 +12,7 @@ export const movements: Movement[] = [
     medicineId: 1,
     cabinetId: 1,
     patientId: 1,
-    originSector: SectorType.ADMINISTRATIVO, 
+    originSector: SectorType.ADMINISTRATIVO,
   },
   {
     id: 2,
@@ -41,7 +41,7 @@ export const movements: Movement[] = [
     user: users[1].email,
     equipmentId: 4,
     cabinetId: 1,
-    destinationSector: SectorType.PSICOLOGIA, 
+    destinationSector: SectorType.PSICOLOGIA,
   },
   {
     id: 5,

@@ -7,19 +7,7 @@ import { medicines } from "../../mocks/medicines";
 import { cabinets } from "../../mocks/cabinets";
 import { equipments } from "../../mocks/equipments";
 import { medicineInventory, equipmentInventory } from "../../mocks/stock";
-
-interface StockItem {
-  type: "Medicamento" | "Equipamento";
-  name: string;
-  description: string;
-  expiry: string;
-  quantity: number;
-  minimumStock?: number;
-  patient?: string;
-  cabinet?: string;
-  casela?: string | number;
-  stockType: StockType;
-}
+import { StockItem } from "@/interfaces/interfaces";
 
 export default function Stock() {
   const navigate = useNavigate();
@@ -36,35 +24,50 @@ export default function Stock() {
     cabinet: "",
     casela: "",
     stockType: "",
+    origin: ""
   });
 
-  const handleFilterChange = (field: string, value: string) => {
-    setFilters((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const items: StockItem[] = useMemo(() => {
-    const meds: StockItem[] = medicineInventory.map((entry) => {
-      const med = medicines.find((m) => m.id === entry.medicineId);
-      const cabinet = cabinets.find((c) => c.id === entry.cabinetId);
+  const meds: StockItem[] = useMemo(() => {
+    return medicineInventory.flatMap((inv) => {
+      const med = medicines.find((m) => m.id === inv.medicineId);
+      const cabinet = cabinets.find((c) => c.id === inv.cabinetId);
 
       return {
         type: "Medicamento",
         name: med?.name || "-",
         description: med?.substance || "-",
-        expiry: entry.expiry,
-        quantity: entry.quantity,
+        expiry: inv.expiry,
+        quantity: inv.quantity,
         minimumStock: med?.minimumStock,
-        patient: entry.residentId ? `Residente ${entry.residentId}` : "-",
-        cabinet: cabinet?.description || "-",
-        casela: entry.residentId || "-",
+        patient: inv.residentId ? `Residente ${inv.residentId}` : "-",
+        cabinet: cabinet?.id || "-",
+        casela: inv.residentId || "-",
         stockType:
-          entry.origin === "individual"
-            ? StockType.INDIVIDUAL
-            : StockType.GERAL,
+          inv.stockType === "individual" ? StockType.INDIVIDUAL : StockType.GERAL,
+        origin: inv.origin
       };
     });
+  }, []);
 
-    const eqs: StockItem[] = equipmentInventory.map((entry) => {
+  const medsWithoutStock: StockItem[] = useMemo(() => {
+    return medicines
+      .filter((m) => !medicineInventory.some((inv) => inv.medicineId === m.id))
+      .map((med) => ({
+        type: "Medicamento",
+        name: med.name,
+        description: med.substance,
+        expiry: "-",
+        quantity: 0,
+        minimumStock: med.minimumStock,
+        patient: "-",
+        cabinet: "-",
+        casela: "-",
+        stockType: StockType.GERAL,
+      }));
+  }, []);
+
+  const eqs: StockItem[] = useMemo(() => {
+    return equipmentInventory.map((entry) => {
       const eq = equipments.find((e) => e.id === entry.equipmentId);
       const cabinet = cabinets.find((c) => c.id === entry.cabinetId);
 
@@ -72,58 +75,89 @@ export default function Stock() {
         type: "Equipamento",
         name: eq?.name || "-",
         description: eq?.description || "-",
-        expiry: "-", 
+        expiry: "-",
         quantity: entry.quantity,
         stockType: StockType.GERAL,
         patient: "-",
-        cabinet: cabinet?.description || "-",
+        cabinet: cabinet?.id || "-",
         casela: "-",
       };
     });
-
-    return [...meds, ...eqs];
   }, []);
 
+  const items = useMemo(
+    () => [...meds, ...medsWithoutStock, ...eqs],
+    [meds, medsWithoutStock, eqs],
+  );
+
   useEffect(() => {
-    if (filterType === "expired") {
-      setFilters((prev) => ({ ...prev, expiry: "expired" }));
-    } else if (filterType === "belowMin") {
-      setFilters((prev) => ({ ...prev, expiry: "belowMin" }));
+    switch (filterType) {
+      case "expired":
+        setFilters((prev) => ({ ...prev, expiry: "expired" }));
+        break;
+      case "belowMin":
+        setFilters((prev) => ({ ...prev, expiry: "belowMin" }));
+        break;
+      case "expiringSoon":
+        setFilters((prev) => ({ ...prev, expiry: "expiringSoon" }));
+        break;
+      case "noStock":
+        setFilters((prev) => ({ ...prev, quantity: "0" }));
+        break;
     }
   }, [filterType]);
 
   const filteredStock = useMemo(() => {
     let filtered = [...items];
+    const today = new Date();
 
     if (filters.expiry === "expired") {
       filtered = filtered.filter(
         (item) =>
           item.type === "Medicamento" &&
-          new Date(item.expiry) < new Date()
+          item.expiry !== "-" &&
+          new Date(item.expiry) < today,
       );
     } else if (filters.expiry === "belowMin") {
       filtered = filtered.filter(
         (item) =>
           item.type === "Medicamento" &&
+          item.quantity > 0 &&
           item.minimumStock !== undefined &&
-          item.quantity <= item.minimumStock
+          item.quantity <= item.minimumStock,
+      );
+    } else if (filters.expiry === "expiringSoon") {
+      const limitDate = new Date();
+      limitDate.setDate(today.getDate() + 60);
+      filtered = filtered.filter(
+        (item) =>
+          item.type === "Medicamento" &&
+          item.expiry !== "-" &&
+          new Date(item.expiry) >= today &&
+          new Date(item.expiry) <= limitDate,
+      );
+    }
+
+    if (filters.quantity === "0") {
+      filtered = filtered.filter(
+        (item) => item.type === "Medicamento" && item.quantity === 0,
       );
     }
 
     const term = search.toLowerCase();
     if (search) {
       filtered = filtered.filter((item) =>
-        item.name.toLowerCase().includes(term)
+        item.name.toLowerCase().includes(term),
       );
     }
 
     for (const key in filters) {
       const val = (filters as any)[key];
-      if (val && !["expired", "belowMin"].includes(val)) {
+      if (val && !["expired", "belowMin", "expiringSoon", "0"].includes(val)) {
         filtered = filtered.filter((item) =>
           String(item[key as keyof StockItem] || "")
             .toLowerCase()
-            .includes(String(val).toLowerCase())
+            .includes(String(val).toLowerCase()),
         );
       }
     }
@@ -132,17 +166,21 @@ export default function Stock() {
   }, [items, search, filters]);
 
   const columns = [
+    { key: "stockType", label: "Tipo de Estoque", editable: false },
     { key: "type", label: "Tipo", editable: false },
     { key: "name", label: "Nome", editable: true },
-    { key: "description", label: "Descrição / Princípio Ativo", editable: true },
+    {
+      key: "description",
+      label: "Descrição / Princípio Ativo",
+      editable: true,
+    },
     { key: "expiry", label: "Validade", editable: true },
     { key: "quantity", label: "Quantidade", editable: true },
-    { key: "stockType", label: "Tipo de Estoque", editable: false },
     { key: "patient", label: "Residente", editable: false },
     { key: "cabinet", label: "Armário", editable: false },
     { key: "casela", label: "Casela", editable: false },
+    { key: "origin", label: "Origem", editable: false },
   ];
-
   return (
     <Layout title="Estoque de Medicamentos e Equipamentos">
       <div className="space-y-6">
@@ -166,6 +204,7 @@ export default function Stock() {
           </button>
         </div>
 
+        <h2 className="text-lg font-semibold mt-6">Estoque Geral</h2>
         <EditableTable
           data={filteredStock}
           columns={columns}
