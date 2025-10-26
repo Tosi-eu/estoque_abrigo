@@ -1,14 +1,19 @@
 import Layout from "@/components/Layout";
-import { useState, useMemo } from "react";
 import EditableTable from "@/components/EditableTable";
+import { useState, useMemo, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { StockType } from "@/enums/enums";
 import { medicines } from "../../mocks/medicines";
 import { cabinets } from "../../mocks/cabinets";
-import { equipments } from "../../mocks/equipments";
-import { medicineInventory } from "../../mocks/stock";
-import { equipmentInventory } from "../../mocks/stock";
+import { inputs } from "../../mocks/inputs";
+import { medicineInventory, inputInventory } from "../../mocks/stock";
+import { StockItem } from "@/interfaces/interfaces";
 
 export default function Stock() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const filterType = (location.state as any)?.filterType;
+
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState({
     name: "",
@@ -19,74 +24,149 @@ export default function Stock() {
     cabinet: "",
     casela: "",
     stockType: "",
+    origin: ""
   });
 
-  const handleFilterChange = (field: string, value: string) => {
-    setFilters((prev) => ({ ...prev, [field]: value }));
-  };
-
-  const items = useMemo(() => {
-    const meds = medicineInventory.map((entry) => {
-      const med = medicines.find((m) => m.id === entry.medicineId);
-      const cabinet = cabinets.find((c) => c.id === entry.cabinetId);
+  const meds: StockItem[] = useMemo(() => {
+    return medicineInventory.flatMap((inv) => {
+      const med = medicines.find((m) => m.id === inv.medicineId);
+      const cabinet = cabinets.find((c) => c.id === inv.cabinetId);
 
       return {
         type: "Medicamento",
         name: med?.name || "-",
         description: med?.substance || "-",
-        expiry: entry.expiry,
-        quantity: entry.quantity,
+        expiry: inv.expiry,
+        quantity: inv.quantity,
         minimumStock: med?.minimumStock,
-        patient: entry.residentId ? `Residente ${entry.residentId}` : "-",
-        cabinet: cabinet?.description || "-",
-        casela: entry.residentId || "-",
+        patient: inv.residentId ? `Residente ${inv.residentId}` : "-",
+        cabinet: cabinet?.id || "-",
+        casela: inv.residentId || "-",
         stockType:
-          entry.origin === "individual"
-            ? StockType.INDIVIDUAL
-            : StockType.GERAL,
+          inv.stockType === "individual" ? StockType.INDIVIDUAL : StockType.GERAL,
+        origin: inv.origin
       };
     });
+  }, []);
 
-    const eqs = equipmentInventory.map((entry) => {
-      const eq = equipments.find((e) => e.id === entry.equipmentId);
+  const medsWithoutStock: StockItem[] = useMemo(() => {
+    return medicines
+      .filter((m) => !medicineInventory.some((inv) => inv.medicineId === m.id))
+      .map((med) => ({
+        type: "Medicamento",
+        name: med.name,
+        description: med.substance,
+        expiry: "-",
+        quantity: 0,
+        minimumStock: med.minimumStock,
+        patient: "-",
+        cabinet: "-",
+        casela: "-",
+        stockType: StockType.GERAL,
+      }));
+  }, []);
+
+  const eqs: StockItem[] = useMemo(() => {
+    return inputInventory.map((entry) => {
+      const eq = inputs.find((e) => e.id === entry.inputId);
       const cabinet = cabinets.find((c) => c.id === entry.cabinetId);
 
       return {
-        type: "Equipamento",
+        type: "Insumo",
         name: eq?.name || "-",
         description: eq?.description || "-",
         expiry: "-",
         quantity: entry.quantity,
-        patient: "-",
-        cabinet: cabinet?.description || "-",
-        casela: "-",
         stockType: StockType.GERAL,
+        patient: "-",
+        cabinet: cabinet?.id || "-",
+        casela: "-",
       };
     });
-
-    return [...meds, ...eqs];
   }, []);
 
+  const items = useMemo(
+    () => [...meds, ...medsWithoutStock, ...eqs],
+    [meds, medsWithoutStock, eqs],
+  );
+
+  useEffect(() => {
+    switch (filterType) {
+      case "expired":
+        setFilters((prev) => ({ ...prev, expiry: "expired" }));
+        break;
+      case "belowMin":
+        setFilters((prev) => ({ ...prev, expiry: "belowMin" }));
+        break;
+      case "expiringSoon":
+        setFilters((prev) => ({ ...prev, expiry: "expiringSoon" }));
+        break;
+      case "noStock":
+        setFilters((prev) => ({ ...prev, quantity: "0" }));
+        break;
+    }
+  }, [filterType]);
+
   const filteredStock = useMemo(() => {
-    return items.filter((item) => {
-      const term = search.toLowerCase();
-      if (search && !item.name.toLowerCase().includes(term)) return false;
+    let filtered = [...items];
+    const today = new Date();
 
-      for (const key in filters) {
-        const val = (filters as any)[key];
-        if (
-          val &&
-          String(item[key]).toLowerCase() !== String(val).toLowerCase()
-        ) {
-          return false;
-        }
+    if (filters.expiry === "expired") {
+      filtered = filtered.filter(
+        (item) =>
+          item.type === "Medicamento" &&
+          item.expiry !== "-" &&
+          new Date(item.expiry) < today,
+      );
+    } else if (filters.expiry === "belowMin") {
+      filtered = filtered.filter(
+        (item) =>
+          item.type === "Medicamento" &&
+          item.quantity > 0 &&
+          item.minimumStock !== undefined &&
+          item.quantity <= item.minimumStock,
+      );
+    } else if (filters.expiry === "expiringSoon") {
+      const limitDate = new Date();
+      limitDate.setDate(today.getDate() + 60);
+      filtered = filtered.filter(
+        (item) =>
+          item.type === "Medicamento" &&
+          item.expiry !== "-" &&
+          new Date(item.expiry) >= today &&
+          new Date(item.expiry) <= limitDate,
+      );
+    }
+
+    if (filters.quantity === "0") {
+      filtered = filtered.filter(
+        (item) => item.type === "Medicamento" && item.quantity === 0,
+      );
+    }
+
+    const term = search.toLowerCase();
+    if (search) {
+      filtered = filtered.filter((item) =>
+        item.name.toLowerCase().includes(term),
+      );
+    }
+
+    for (const key in filters) {
+      const val = (filters as any)[key];
+      if (val && !["expired", "belowMin", "expiringSoon", "0"].includes(val)) {
+        filtered = filtered.filter((item) =>
+          String(item[key as keyof StockItem] || "")
+            .toLowerCase()
+            .includes(String(val).toLowerCase()),
+        );
       }
+    }
 
-      return true;
-    });
+    return filtered;
   }, [items, search, filters]);
 
   const columns = [
+    { key: "stockType", label: "Tipo de Estoque", editable: false },
     { key: "type", label: "Tipo", editable: false },
     { key: "name", label: "Nome", editable: true },
     {
@@ -96,17 +176,13 @@ export default function Stock() {
     },
     { key: "expiry", label: "Validade", editable: true },
     { key: "quantity", label: "Quantidade", editable: true },
-    { key: "stockType", label: "Tipo de Estoque", editable: false },
     { key: "patient", label: "Residente", editable: false },
     { key: "cabinet", label: "Armário", editable: false },
     { key: "casela", label: "Casela", editable: false },
+    { key: "origin", label: "Origem", editable: false },
   ];
-
-  const uniqueValues = (key: string) =>
-    [...new Set(items.map((i) => i[key]))].filter((v) => v && v !== "-");
-
   return (
-    <Layout title="Estoque de Medicamentos e Equipamentos">
+    <Layout title="Estoque de Medicamentos e Insumos">
       <div className="space-y-6">
         <div className="flex flex-wrap gap-3">
           <button className="px-6 py-3 bg-sky-600 text-white rounded-lg font-semibold hover:bg-sky-700 transition">
@@ -114,64 +190,7 @@ export default function Stock() {
           </button>
         </div>
 
-        <div className="flex flex-wrap gap-4 bg-white border border-slate-200 p-4 rounded-xl shadow-sm">
-          <select
-            value={filters.stockType}
-            onChange={(e) => handleFilterChange("stockType", e.target.value)}
-            className="px-3 py-2 bg-white border rounded-lg text-sm"
-          >
-            <option value="">Todos os tipos</option>
-            <option value={StockType.GERAL}>Geral</option>
-            <option value={StockType.INDIVIDUAL}>Individual</option>
-          </select>
-
-          <input
-            placeholder="Nome"
-            value={filters.name}
-            onChange={(e) => handleFilterChange("name", e.target.value)}
-            list="names"
-            className="px-3 py-2 border rounded-lg text-sm"
-          />
-          <datalist id="names">
-            {uniqueValues("name").map((v) => (
-              <option key={v} value={v} />
-            ))}
-          </datalist>
-
-          <input
-            placeholder="Residente"
-            value={filters.patient}
-            onChange={(e) => handleFilterChange("patient", e.target.value)}
-            list="patients"
-            className="px-3 py-2 border rounded-lg text-sm"
-          />
-          <datalist id="patients">
-            {uniqueValues("patient").map((v) => (
-              <option key={v} value={v} />
-            ))}
-          </datalist>
-
-          <input
-            placeholder="Armário"
-            value={filters.cabinet}
-            onChange={(e) => handleFilterChange("cabinet", e.target.value)}
-            list="cabinets"
-            className="px-3 py-2 border rounded-lg text-sm"
-          />
-          <datalist id="cabinets">
-            {uniqueValues("cabinet").map((v) => (
-              <option key={v} value={v} />
-            ))}
-          </datalist>
-
-          <input
-            placeholder="Casela"
-            value={filters.casela}
-            onChange={(e) => handleFilterChange("casela", e.target.value)}
-            className="px-3 py-2 border rounded-lg text-sm"
-          />
-        </div>
-
+        <h2 className="text-lg font-semibold mt-6">Estoque Geral</h2>
         <EditableTable
           data={filteredStock}
           columns={columns}

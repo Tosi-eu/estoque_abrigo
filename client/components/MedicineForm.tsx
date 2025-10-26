@@ -3,7 +3,7 @@ import DatePicker from "react-datepicker";
 import { ptBR } from "date-fns/locale";
 import CreatableSelect from "react-select/creatable";
 import "react-datepicker/dist/react-datepicker.css";
-import { EntryType, OriginType } from "@/enums/enums";
+import { EntryType, OriginType, SectorType } from "@/enums/enums";
 
 export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
   const [formData, setFormData] = useState({
@@ -17,6 +17,7 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
     resident: "",
     casela: "",
     cabinet: "",
+    sector: "",
   });
 
   const handleStockTypeChange = (type: "geral" | "individual") => {
@@ -201,18 +202,38 @@ export function MedicineForm({ onSubmit }: { onSubmit: (data: any) => void }) {
         </div>
       </div>
 
-      <div>
-        <label className="block text-sm font-medium text-slate-700 mb-1">
-          Data
-        </label>
-        <DatePicker
-          selected={formData.date}
-          onChange={(date: Date | null) => setFormData({ ...formData, date })}
-          locale={ptBR}
-          dateFormat="dd/MM/yyyy"
-          placeholderText="Selecione a data"
-          className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
-        />
+      <div className="flex gap-4">
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Data
+          </label>
+          <DatePicker
+            selected={formData.date}
+            onChange={(date: Date | null) => setFormData({ ...formData, date })}
+            locale={ptBR}
+            dateFormat="dd/MM/yyyy"
+            placeholderText="Selecione a data"
+            className="w-full border border-slate-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+          />
+        </div>
+
+        <div className="flex-1">
+          <label className="block text-sm font-medium text-slate-700 mb-1">
+            Setor
+          </label>
+          <select
+            value={formData.sector}
+            onChange={(e) =>
+              setFormData({ ...formData, sector: e.target.value })
+            }
+            className="w-full border bg-white rounded-lg p-2 text-sm focus:ring-2 focus:ring-sky-300 focus:outline-none"
+          >
+            <option value="">Selecione</option>
+            {Object.values(SectorType).map((v) => (
+              <option key={v}>{v}</option>
+            ))}
+          </select>
+        </div>
       </div>
 
       <div className="flex justify-end">

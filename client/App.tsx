@@ -20,7 +20,7 @@ import EditResident from "./pages/EditResident";
 import StockOut from "./pages/StockOut";
 import EditMedicine from "./pages/EditMedicine";
 import DeleteMedicine from "./pages/DeleteMedicine";
-import Equipments from "./pages/Equipments";
+import Equipments from "./pages/Inputs";
 import EditEquipment from "./pages/EditEquipment";
 import DeleteEquipment from "./pages/DeleteEquipment";
 import Medicines from "./pages/Medicines";
@@ -54,10 +54,10 @@ const App = () => (
           <Route path="/residents/register" element={<RegisterResident />} />
           <Route path="/residents/edit" element={<EditResident />} />
           <Route path="/residents/delete" element={<DeleteResident />} />
-          <Route path="/equipments" element={<Equipments />} />
-          <Route path="/equipments/register" element={<RegisterEquipment />} />
-          <Route path="/equipments/edit" element={<EditEquipment />} />
-          <Route path="/equipments/delete" element={<DeleteEquipment />} />
+          <Route path="/inputs" element={<Equipments />} />
+          <Route path="/inputs/register" element={<RegisterEquipment />} />
+          <Route path="/inputs/edit" element={<EditEquipment />} />
+          <Route path="/inputs/delete" element={<DeleteEquipment />} />
           <Route path="/cabinets" element={<Cabinets />} />
           <Route path="/cabinets/register" element={<RegisterCabinet />} />
           <Route path="/cabinets/edit" element={<EditCabinet />} />

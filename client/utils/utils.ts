@@ -3,12 +3,12 @@ import { MovementRow, PrepareMovementsParams } from "@/interfaces/interfaces";
 export function prepareMovements({
   movements,
   medicines,
-  equipments,
+  inputs,
   patients,
   cabinets,
   users,
   medicineInventory,
-  equipmentInventory,
+  inputInventory,
 }: PrepareMovementsParams): MovementRow[] {
   return movements
     .map((movement) => {
@@ -34,30 +34,34 @@ export function prepareMovements({
           stockType: inventory?.origin,
           patient: patient?.name,
           casela: patient?.casela,
-          cabinet: cabinet?.description,
+          cabinet: cabinet?.id,
           operator: user?.email,
           movementDate: movement.date,
           movementType: movement.type,
+          destinationSector: movement.destinationSector,
+          originSector: movement.originSector,
         };
       }
 
-      if (movement.equipmentId) {
-        const eq = equipments.find((e) => e.id === movement.equipmentId);
-        const inventory = equipmentInventory.find(
+      if (movement.inputId) {
+        const eq = inputs.find((e) => e.id === movement.inputId);
+        const inventory = inputInventory.find(
           (inv) =>
-            inv.equipmentId === movement.equipmentId &&
+            inv.inputId === movement.inputId &&
             inv.cabinetId === movement.cabinetId,
         );
 
         return {
-          type: "Equipamento",
+          type: "Insumo",
           name: eq?.name || "-",
           description: eq?.description || "-",
           quantity: inventory?.quantity,
-          cabinet: cabinet?.description,
+          cabinet: cabinet?.id,
           operator: user?.email,
           movementDate: movement.date,
           movementType: movement.type,
+          destinationSector: movement.destinationSector,
+          originSector: movement.originSector,
         };
       }
 

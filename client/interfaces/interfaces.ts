@@ -1,4 +1,10 @@
-import { CabinetCategory, MovementType, StockType } from "@/enums/enums";
+import {
+  CabinetCategory,
+  MovementType,
+  OriginType,
+  SectorType,
+  StockType,
+} from "@/enums/enums";
 import { ReactNode } from "react";
 
 export interface Column {
@@ -54,7 +60,7 @@ export interface Cabinet {
   description?: string;
 }
 
-export interface Equipment {
+export interface Input {
   id: number;
   name: string;
   description?: string;
@@ -67,12 +73,13 @@ export interface MedicineInventory {
   cabinetId: number;
   quantity: number;
   expiry: string;
-  origin: StockType;
+  origin: OriginType;
+  stockType: StockType;
 }
 
-export interface EquipmentInventory {
+export interface InputInventory {
   id: number;
-  equipmentId: number;
+  inputId: number;
   cabinetId: number;
   quantity: number;
 }
@@ -83,13 +90,15 @@ export interface Movement {
   date: string;
   user: string;
   medicineId?: number;
-  equipmentId?: number;
+  inputId?: number;
   cabinetId: number;
   patientId?: number;
+  originSector?: SectorType;
+  destinationSector?: SectorType;
 }
 
-export interface EquipmentMovementRow {
-  equipmentName: string;
+export interface InputMovementRow {
+  inputName: string;
   description: string;
   quantity?: number;
   cabinet: string;
@@ -99,7 +108,7 @@ export interface EquipmentMovementRow {
 }
 
 export interface MovementRow {
-  type: "Medicamento" | "Equipamento";
+  type: "Medicamento" | "Insumo";
   name: string;
   description: string;
   expiry?: string;
@@ -108,19 +117,34 @@ export interface MovementRow {
   stockType?: string;
   patient?: string;
   casela?: number;
-  cabinet?: string;
+  cabinet?: number | string;
   operator?: string;
   movementDate: string;
   movementType: string;
+  originSector?: string;
+  destinationSector?: string;
 }
 
 export interface PrepareMovementsParams {
   movements: Movement[];
   medicines: Medicine[];
-  equipments: Equipment[];
+  inputs: Input[];
   patients: Patient[];
   cabinets: Cabinet[];
   users: User[];
   medicineInventory: MedicineInventory[];
-  equipmentInventory: EquipmentInventory[];
+  inputInventory: InputInventory[];
+}
+
+export interface StockItem {
+  type: "Medicamento" | "Insumo";
+  name: string;
+  description: string;
+  expiry: string;
+  quantity: number;
+  minimumStock?: number;
+  patient?: string;
+  cabinet?: number | string;
+  casela?: string | number;
+  stockType: StockType;
 }

@@ -3,11 +3,16 @@ import { useState } from "react";
 import { MedicineForm } from "@/components/MedicineForm";
 import { EquipmentForm } from "@/components/EquipmentForm";
 import { OperationType } from "@/enums/enums";
+import { useLocation } from "react-router-dom";
 
 export default function StockIn() {
+  const location = useLocation();
+  const previousData = location.state?.previousData;
+  const type = previousData?.filter((item) => item.type === "Medicamento")[0]
+    ?.type;
   const [operationType, setOperationType] = useState<
     OperationType | "Selecione"
-  >("Selecione");
+  >(type || "Selecione");
 
   return (
     <Layout title="Entrada de Estoque">
@@ -43,8 +48,8 @@ export default function StockIn() {
             <option value={OperationType.MEDICINE}>
               {OperationType.MEDICINE}
             </option>
-            <option value={OperationType.EQUIPMENT}>
-              {OperationType.EQUIPMENT}
+            <option value={OperationType.INPUT}>
+              {OperationType.INPUT}
             </option>
           </select>
         </div>
@@ -60,13 +65,13 @@ export default function StockIn() {
           </div>
         )}
 
-        {operationType === OperationType.EQUIPMENT && (
+        {operationType === OperationType.INPUT && (
           <div>
             <h3 className="text-md font-semibold text-slate-800 mb-3">
-              Equipamento
+              Insumo
             </h3>
             <EquipmentForm
-              onSubmit={(data) => console.log("Entrada de equipamento:", data)}
+              onSubmit={(data) => console.log("Entrada de Insumo:", data)}
             />
           </div>
         )}

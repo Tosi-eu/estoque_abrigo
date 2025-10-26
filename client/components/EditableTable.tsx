@@ -13,7 +13,7 @@ import DeletePopUp from "./DeletePopUp";
 
 const typeMap: Record<string, string> = {
   Medicamento: "medicines",
-  Equipamento: "equipments",
+  Insumo: "inputs",
 };
 
 export default function EditableTable({
@@ -32,52 +32,75 @@ export default function EditableTable({
   const { toast } = useToast();
   const navigate = useNavigate();
 
-  useEffect(() => setRows(data), [data]);
+  useEffect(() => {
+  if (!data) return;
 
-  const handleAddRow = () => {
-    if (entityType === "medicines") {
-      navigate("/medicines/register");
-    } else if (entityType === "residents") {
-      navigate("/residents/register");
-    } else if (entityType === "equipments") {
-      navigate("/equipments/register");
-    } else if (entityType === "cabinets") {
-      navigate("/cabinets/register");
-    } else if (entityType === "transactions") {
-      if (filterType === "Medicamento") {
-        navigate("/medicines/register");
-      } else if (filterType === "Equipamento") {
-        navigate("/equipments/register");
+  const convertToBRT = (dateString: string) => {
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return dateString; 
+    // converte para UTC-3
+    const brtDate = new Date(date.getTime() - 3 * 60 * 60 * 1000);
+    return brtDate.toLocaleDateString("pt-BR", {
+      day: "2-digit",
+      month: "2-digit",
+      year: "numeric",
+    });
+  };
+
+  const formatted = data.map((row) => {
+    const updatedRow: Record<string, any> = {};
+    for (const key in row) {
+      const value = row[key];
+      if (
+        typeof value === "string" &&
+        /^\d{4}-\d{2}-\d{2}/.test(value)
+      ) {
+        updatedRow[key] = convertToBRT(value);
       } else {
-        toast({
-          title: "Seleção inválida",
-          description:
-            'Selecione "Medicamento" ou "Equipamento" antes de adicionar.',
-          variant: "error",
-        });
+        updatedRow[key] = value;
       }
     }
-  };
+    return updatedRow;
+  });
+
+  setRows(formatted);
+}, [data]);
+
+const handleAddRow = () => {
+  if (entityType === "entries") {
+    console.log(rows)
+    navigate("/stock/in", { state: { previousData: rows } });
+  } else if (entityType === "exits") {
+    navigate("/stock/out", { state: { previousData: rows } });
+  } else if (entityType === "medicines") {
+    navigate("/medicines/register");
+  } else if (entityType === "residents") {
+    navigate("/residents/register");
+  } else if (entityType === "equipments") {
+    navigate("/inputs/register");
+  } else if (entityType === "cabinets") {
+    navigate("/cabinets/register");
+  } else if (entityType === "transactions") {
+    if (filterType === "Medicamento") {
+      navigate("/medicines/register");
+    } else if (filterType === "Insumo") {
+      navigate("/inputs/register");
+    } else {
+      toast({
+        title: "Seleção inválida",
+        description:
+          'Selecione "Medicamento" ou "Insumo" antes de adicionar.',
+        variant: "error",
+      });
+    }
+  }
+};
+
 
   const handleChange = (rowIndex: number, key: string, value: string) => {
     const updated = [...rows];
     updated[rowIndex][key] = value;
     setRows(updated);
-  };
-
-  const handleSave = (index: number) => {
-    const row = rows[index];
-    const emptyField = columns.find((col) => col.editable && !row[col.key]);
-    if (emptyField) {
-      toast({
-        title: "Campo obrigatório vazio",
-        description: `Preencha o campo "${emptyField.label}" antes de salvar.`,
-        variant: "error",
-      });
-      return;
-    }
-    setEditingIndex(null);
-    if (onEdit) onEdit(row, index);
   };
 
   const confirmDelete = (index: number) => setDeleteIndex(index);
@@ -125,12 +148,14 @@ export default function EditableTable({
 
   const renderExpiryTag = (value: string) => {
     if (!value) return "-";
-    const today = new Date();
-    const expiryDate = new Date(value);
+
+    const [day, month, year] = value.split("/").map(Number);
+    const expiryDate = new Date(year, month - 1, day);
     if (isNaN(expiryDate.getTime())) return value;
 
+    const today = new Date();
     const diffDays = Math.ceil(
-      (expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24),
+      (expiryDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
     );
 
     let tooltipText = "";
@@ -157,7 +182,7 @@ export default function EditableTable({
             <span
               className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[11px] font-medium cursor-default ${colorClasses}`}
             >
-              {expiryDate.toLocaleDateString("pt-BR")}
+              {value}
             </span>
           </TooltipTrigger>
           <TooltipContent side="top" className="text-xs">
@@ -223,7 +248,7 @@ export default function EditableTable({
                   onChange={(e) => setFilterType(e.target.value)}
                   className="border border-slate-300 rounded-md px-2 py-1 text-sm bg-white focus:ring-2 focus:ring-sky-300 focus:outline-none"
                 >
-                  {["Todos", "Medicamento", "Equipamento"].map((t) => (
+                  {["Todos", "Medicamento", "Insumo"].map((t) => (
                     <option key={t}>{t}</option>
                   ))}
                 </select>

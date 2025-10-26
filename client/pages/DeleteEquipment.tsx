@@ -2,7 +2,7 @@ import { useState } from "react";
 import Layout from "@/components/Layout";
 import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast";
-import { equipments } from "../../mocks/equipments";
+import { inputs } from "../../mocks/inputs";
 
 export default function DeleteEquipment() {
   const [selectedEquipment, setSelectedEquipment] = useState("");
@@ -60,7 +60,7 @@ export default function DeleteEquipment() {
               "
             >
               <option value="">Escolha</option>
-              {equipments.map((m) => (
+              {inputs.map((m) => (
                 <option key={m.name} value={m.name}>
                   {m.name}
                 </option>

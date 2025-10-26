@@ -1,6 +1,6 @@
 export enum OperationType {
   MEDICINE = "Medicamento",
-  EQUIPMENT = "Equipamento",
+  INPUT = "Insumo",
 }
 
 export enum OriginType {
@@ -25,7 +25,7 @@ export enum CabinetCategory {
 
 export enum StockCategory {
   MEDICINE = "Medicamento",
-  EQUIPMENT = "Equipamento",
+  INPUT = "Insumo",
 }
 
 export enum StockType {
@@ -42,4 +42,12 @@ export enum TransactionType {
 export enum MovementType {
   IN = "entrada",
   OUT = "saida",
+}
+
+export enum SectorType {
+  ENFERMAGEM = "Enfermagem",
+  NUTRICAO = "Nutrição",
+  ADMINISTRATIVO = "Administrativo",
+  PSICOLOGIA = "Psicologia",
+  COZINHA = "Cozinha",
 }

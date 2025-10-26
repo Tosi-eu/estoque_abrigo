@@ -15,7 +15,7 @@ export default function RegisterCabinet() {
 
     if (id === "" || id <= 0) {
       toast({
-        title: "Campos obrigatórios",
+        title: "Campos obrigaórios",
         description: "Selecione um armário",
         variant: "warning",
       });
