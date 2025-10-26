@@ -185,20 +185,6 @@ export default function Stock() {
     <Layout title="Estoque de Medicamentos e Insumos">
       <div className="space-y-6">
         <div className="flex flex-wrap gap-3">
-          <button
-            onClick={() => navigate("/stock/in")}
-            className="px-6 py-3 bg-green-600 text-white rounded-lg font-semibold hover:bg-green-700 transition"
-          >
-            Entrada de Estoque
-          </button>
-
-          <button
-            onClick={() => navigate("/stock/out")}
-            className="px-6 py-3 bg-red-600 text-white rounded-lg font-semibold hover:bg-red-700 transition"
-          >
-            Saída de Estoque
-          </button>
-
           <button className="px-6 py-3 bg-sky-600 text-white rounded-lg font-semibold hover:bg-sky-700 transition">
             Gerar Relatório
           </button>
