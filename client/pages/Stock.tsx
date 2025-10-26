@@ -5,8 +5,8 @@ import { useNavigate, useLocation } from "react-router-dom";
 import { StockType } from "@/enums/enums";
 import { medicines } from "../../mocks/medicines";
 import { cabinets } from "../../mocks/cabinets";
-import { equipments } from "../../mocks/equipments";
-import { medicineInventory, equipmentInventory } from "../../mocks/stock";
+import { inputs } from "../../mocks/inputs";
+import { medicineInventory, inputInventory } from "../../mocks/stock";
 import { StockItem } from "@/interfaces/interfaces";
 
 export default function Stock() {
@@ -67,12 +67,12 @@ export default function Stock() {
   }, []);
 
   const eqs: StockItem[] = useMemo(() => {
-    return equipmentInventory.map((entry) => {
-      const eq = equipments.find((e) => e.id === entry.equipmentId);
+    return inputInventory.map((entry) => {
+      const eq = inputs.find((e) => e.id === entry.inputId);
       const cabinet = cabinets.find((c) => c.id === entry.cabinetId);
 
       return {
-        type: "Equipamento",
+        type: "Insumo",
         name: eq?.name || "-",
         description: eq?.description || "-",
         expiry: "-",
@@ -182,7 +182,7 @@ export default function Stock() {
     { key: "origin", label: "Origem", editable: false },
   ];
   return (
-    <Layout title="Estoque de Medicamentos e Equipamentos">
+    <Layout title="Estoque de Medicamentos e Insumos">
       <div className="space-y-6">
         <div className="flex flex-wrap gap-3">
           <button

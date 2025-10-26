@@ -16,7 +16,7 @@ export function EquipmentForm({ onSubmit }: { onSubmit: (data: any) => void }) {
     <div className="space-y-6 bg-white p-6 rounded-xl shadow-sm border border-slate-200">
       <div>
         <label className="block text-sm font-medium text-slate-700 mb-1">
-          Nome do Equipamento
+          Nome do Insumo
         </label>
         <input
           type="text"

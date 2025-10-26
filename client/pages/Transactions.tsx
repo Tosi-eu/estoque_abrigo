@@ -3,14 +3,13 @@ import { useNavigate } from "react-router-dom";
 import Layout from "@/components/Layout";
 import EditableTable from "@/components/EditableTable";
 import { movements } from "../../mocks/movements";
-import { equipments } from "../../mocks/equipments";
+import { inputs } from "../../mocks/inputs";
 import { cabinets } from "../../mocks/cabinets";
 import { users } from "../../mocks/users";
-import { medicineInventory, equipmentInventory } from "../../mocks/stock";
+import { medicineInventory, inputInventory } from "../../mocks/stock";
 import { prepareMovements } from "@/utils/utils";
 import { medicines } from "../../mocks/medicines";
 import { MovementType } from "@/enums/enums";
-import { ArrowRight } from "lucide-react";
 
 export default function EquipmentMovements() {
   const navigate = useNavigate();
@@ -39,12 +38,12 @@ export default function EquipmentMovements() {
   const allMovements = prepareMovements({
     movements,
     medicines,
-    equipments,
+    inputs,
     patients: [],
     cabinets,
     users,
     medicineInventory,
-    equipmentInventory,
+    inputInventory,
   });
 
   const entries = allMovements

@@ -6,9 +6,9 @@ import { patients } from "../../mocks/patients";
 import { cabinets } from "../../mocks/cabinets";
 import { StockType } from "@/enums/enums";
 import { useMemo, useState } from "react";
-import { equipmentInventory, medicineInventory } from "../../mocks/stock";
+import { inputInventory, medicineInventory } from "../../mocks/stock";
 import { prepareMovements } from "@/utils/utils";
-import { equipments } from "../../mocks/equipments";
+import { inputs } from "../../mocks/inputs";
 import { useNavigate } from "react-router-dom";
 import {
   PieChart,
@@ -56,12 +56,12 @@ export default function Dashboard() {
     const allMovements = prepareMovements({
       movements,
       medicines,
-      equipments,
+      inputs,
       patients,
       cabinets,
       users,
       medicineInventory,
-      equipmentInventory,
+      inputInventory,
     });
 
     const todayDate = new Date();
@@ -126,7 +126,7 @@ export default function Dashboard() {
       .filter((m) => m.stockType === StockType.INDIVIDUAL)
       .reduce((acc, m) => acc + m.quantity, 0);
 
-    const equipmentCount = equipmentInventory.reduce(
+    const equipmentCount = inputInventory.reduce(
       (acc, e) => acc + e.quantity,
       0,
     );
@@ -145,7 +145,7 @@ export default function Dashboard() {
         rawValue: individualMedicines,
       },
       {
-        name: "Equipamentos",
+        name: "Insumos",
         value: Math.round((equipmentCount / total) * 100),
         rawValue: equipmentCount,
       },
@@ -154,7 +154,7 @@ export default function Dashboard() {
 
   const cabinetStockData = useMemo(() => {
     return cabinets.map((cab) => {
-      const total = equipmentInventory
+      const total = inputInventory
         .filter((m) => m.cabinetId === cab.id)
         .reduce((acc, m) => acc + m.quantity, 0);
       return { cabinet: cab.id, total };

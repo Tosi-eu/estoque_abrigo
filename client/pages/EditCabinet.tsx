@@ -53,7 +53,7 @@ export default function EditCabinet() {
     if (!selectedCabinet) {
       toast({
         title: "Campos obrigatórios",
-        description: "Preencha todos os campos para cadastrar o equipamento.",
+        description: "Preencha todos os campos para cadastrar o Insumo.",
         variant: "warning",
       });
       return;

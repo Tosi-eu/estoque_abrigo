@@ -60,7 +60,7 @@ export interface Cabinet {
   description?: string;
 }
 
-export interface Equipment {
+export interface Input {
   id: number;
   name: string;
   description?: string;
@@ -77,9 +77,9 @@ export interface MedicineInventory {
   stockType: StockType;
 }
 
-export interface EquipmentInventory {
+export interface InputInventory {
   id: number;
-  equipmentId: number;
+  inputId: number;
   cabinetId: number;
   quantity: number;
 }
@@ -90,16 +90,15 @@ export interface Movement {
   date: string;
   user: string;
   medicineId?: number;
-  equipmentId?: number;
+  inputId?: number;
   cabinetId: number;
   patientId?: number;
-
   originSector?: SectorType;
   destinationSector?: SectorType;
 }
 
-export interface EquipmentMovementRow {
-  equipmentName: string;
+export interface InputMovementRow {
+  inputName: string;
   description: string;
   quantity?: number;
   cabinet: string;
@@ -109,7 +108,7 @@ export interface EquipmentMovementRow {
 }
 
 export interface MovementRow {
-  type: "Medicamento" | "Equipamento";
+  type: "Medicamento" | "Insumo";
   name: string;
   description: string;
   expiry?: string;
@@ -129,16 +128,16 @@ export interface MovementRow {
 export interface PrepareMovementsParams {
   movements: Movement[];
   medicines: Medicine[];
-  equipments: Equipment[];
+  inputs: Input[];
   patients: Patient[];
   cabinets: Cabinet[];
   users: User[];
   medicineInventory: MedicineInventory[];
-  equipmentInventory: EquipmentInventory[];
+  inputInventory: InputInventory[];
 }
 
 export interface StockItem {
-  type: "Medicamento" | "Equipamento";
+  type: "Medicamento" | "Insumo";
   name: string;
   description: string;
   expiry: string;

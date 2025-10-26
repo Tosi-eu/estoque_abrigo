@@ -8,7 +8,7 @@ import { EquipmentForm } from "@/components/EquipmentForm";
 export default function StockOut() {
   const location = useLocation();
   const previousData = location.state?.previousData;
-  const type = previousData?.filter((item) => item.type === "Equipamento")[0]
+  const type = previousData?.filter((item) => item.type === "Insumo")[0]
     ?.type;
   const [operationType, setOperationType] = useState<
     OperationType | "Selecione"
@@ -49,8 +49,8 @@ export default function StockOut() {
             <option value={OperationType.MEDICINE}>
               {OperationType.MEDICINE}
             </option>
-            <option value={OperationType.EQUIPMENT}>
-              {OperationType.EQUIPMENT}
+            <option value={OperationType.INPUT}>
+              {OperationType.INPUT}
             </option>
           </select>
         </div>
@@ -64,10 +64,10 @@ export default function StockOut() {
           </div>
         )}
 
-        {operationType === OperationType.EQUIPMENT && (
+        {operationType === OperationType.INPUT && (
           <div>
             <h3 className="text-md font-semibold text-slate-800 mb-3">
-              Equipamento
+              Insumo
             </h3>
             <EquipmentForm onSubmit={() => navigate("/stock")} />
           </div>

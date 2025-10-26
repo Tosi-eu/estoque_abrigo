@@ -1,6 +1,6 @@
 import Layout from "@/components/Layout";
 import EditableTable from "@/components/EditableTable";
-import { equipments } from "../../mocks/equipments";
+import { inputs } from "../../mocks/inputs";
 
 export default function Equipments() {
   const columns = [
@@ -9,10 +9,10 @@ export default function Equipments() {
   ];
 
   return (
-    <Layout title="Equipamentos">
+    <Layout title="Insumos">
       <div className="space-y-6">
         <EditableTable
-          data={equipments}
+          data={inputs}
           columns={columns}
           entityType="equipments"
         />

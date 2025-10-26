@@ -9,7 +9,7 @@ export default function Layout({ children, title }: LayoutProps) {
     { name: "Painel", href: "/dashboard" },
     { name: "Movimentações", href: "/transactions" },
     { name: "Medicamentos", href: "/medicines" },
-    { name: "Equipamentos", href: "/equipments" },
+    { name: "Insumos", href: "/inputs" },
     { name: "Estoque", href: "/stock" },
     { name: "Residentes", href: "/residents" },
     { name: "Armários", href: "/cabinets" },

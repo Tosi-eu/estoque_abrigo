@@ -13,7 +13,7 @@ import DeletePopUp from "./DeletePopUp";
 
 const typeMap: Record<string, string> = {
   Medicamento: "medicines",
-  Equipamento: "equipments",
+  Insumo: "inputs",
 };
 
 export default function EditableTable({
@@ -77,19 +77,19 @@ const handleAddRow = () => {
   } else if (entityType === "residents") {
     navigate("/residents/register");
   } else if (entityType === "equipments") {
-    navigate("/equipments/register");
+    navigate("/inputs/register");
   } else if (entityType === "cabinets") {
     navigate("/cabinets/register");
   } else if (entityType === "transactions") {
     if (filterType === "Medicamento") {
       navigate("/medicines/register");
-    } else if (filterType === "Equipamento") {
-      navigate("/equipments/register");
+    } else if (filterType === "Insumo") {
+      navigate("/inputs/register");
     } else {
       toast({
         title: "Seleção inválida",
         description:
-          'Selecione "Medicamento" ou "Equipamento" antes de adicionar.',
+          'Selecione "Medicamento" ou "Insumo" antes de adicionar.',
         variant: "error",
       });
     }
@@ -248,7 +248,7 @@ const handleAddRow = () => {
                   onChange={(e) => setFilterType(e.target.value)}
                   className="border border-slate-300 rounded-md px-2 py-1 text-sm bg-white focus:ring-2 focus:ring-sky-300 focus:outline-none"
                 >
-                  {["Todos", "Medicamento", "Equipamento"].map((t) => (
+                  {["Todos", "Medicamento", "Insumo"].map((t) => (
                     <option key={t}>{t}</option>
                   ))}
                 </select>

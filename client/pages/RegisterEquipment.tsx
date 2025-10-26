@@ -16,33 +16,33 @@ export default function RegisterEquipment() {
     if (!formData.name || !formData.category) {
       toast({
         title: "Campos obrigatórios",
-        description: "Preencha todos os campos para cadastrar o equipamento.",
+        description: "Preencha todos os campos para cadastrar o Insumo.",
         variant: "warning",
       });
       return;
     }
 
     toast({
-      title: "Equipamento cadastrado",
+      title: "Insumo cadastrado",
       description: `${formData.name} foi adicionado ao sistema.`,
       variant: "success",
     });
 
     setFormData({ name: "", category: "" });
-    navigate("/equipments");
+    navigate("/inputs");
   };
 
   return (
-    <Layout title="Cadastro de Equipamento">
+    <Layout title="Cadastro de Insumo">
       <div className="max-w-lg mx-auto mt-10 bg-white border border-slate-200 rounded-xl p-8 shadow-sm">
         <h2 className="text-lg font-semibold text-slate-800 mb-6">
-          Cadastrar Equipamento
+          Cadastrar Insumo
         </h2>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           {[
             {
-              label: "Nome do Equipamento",
+              label: "Nome do Insumo",
               field: "name",
               placeholder: "Seringa 5ml",
             },
@@ -71,7 +71,7 @@ export default function RegisterEquipment() {
           <div className="flex justify-between pt-4">
             <button
               type="button"
-              onClick={() => navigate("/equipments")}
+              onClick={() => navigate("/inputs")}
               className="px-5 py-2 border border-slate-400 text-slate-700 rounded-lg text-sm font-semibold hover:bg-slate-100 transition"
             >
               Cancelar

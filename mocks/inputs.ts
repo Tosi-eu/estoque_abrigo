@@ -1,6 +1,6 @@
-import { Equipment } from "@/interfaces/interfaces";
+import { Input } from "@/interfaces/interfaces";
 
-export const equipments: Equipment[] = [
+export const inputs: Input[] = [
   { id: 1, name: "Seringa 5ml", description: "Material de injeção" },
   { id: 2, name: "Luva Cirúrgica M", description: "EPI" },
   { id: 3, name: "Máscara Cirúrgica Tripla", description: "EPI" },
