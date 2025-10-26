@@ -1,6 +1,6 @@
 import { useState } from "react";
 import Layout from "@/components/Layout";
-import { useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterResident() {
   const [nome, setNome] = useState("");
